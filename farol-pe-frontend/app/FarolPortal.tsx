@@ -134,6 +134,8 @@ function SearchDialog({
 }
 
 function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void }) {
+  const [homeMenuOpen, setHomeMenuOpen] = useState(false);
+
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll<HTMLElement>(".reveal-on-scroll"));
     if (!elements.length) return;
@@ -157,22 +159,45 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
   return (
     <div className="home-page">
       <main id="main-content" className="reference-home">
+        <button
+          className={`home-nav-scrim ${homeMenuOpen ? "is-open" : ""}`}
+          onClick={() => setHomeMenuOpen(false)}
+          aria-label="Fechar menu"
+        />
         <header className="home-header">
           <button className="brand-button" onClick={() => navigate("/")} aria-label="Farol PE — início">
             <Brand />
           </button>
-          <nav aria-label="Navegação principal">
+          <nav className={homeMenuOpen ? "is-open" : ""} aria-label="Navegação principal">
             {mainLinks.map((item) => (
               <button
                 key={item.href}
                 className={item.href === "/" ? "is-active" : ""}
-                onClick={() => navigate(item.href)}
+                onClick={() => {
+                  setHomeMenuOpen(false);
+                  navigate(item.href);
+                }}
               >
                 {item.label}
               </button>
             ))}
           </nav>
-          <button className="search-trigger" onClick={onSearch} aria-label="Pesquisar no portal">
+          <button
+            className={`home-menu-toggle ${homeMenuOpen ? "is-open" : ""}`}
+            onClick={() => setHomeMenuOpen((value) => !value)}
+            aria-label={homeMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={homeMenuOpen}
+          >
+            <i /><i /><i />
+          </button>
+          <button
+            className="search-trigger"
+            onClick={() => {
+              setHomeMenuOpen(false);
+              onSearch();
+            }}
+            aria-label="Pesquisar no portal"
+          >
             <span>Pesquisar</span>
             <b>⌕</b>
           </button>
@@ -425,6 +450,11 @@ function AppShell({
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("drawer-open", drawerOpen);
+    return () => document.body.classList.remove("drawer-open");
+  }, [drawerOpen]);
 
   return (
     <div className="portal-shell">
