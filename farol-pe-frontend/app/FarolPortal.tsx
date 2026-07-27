@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   dataRequestUrl,
@@ -49,7 +49,7 @@ function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`brand-lockup ${compact ? "is-compact" : ""}`}>
       <span className="brand-beacon" aria-hidden="true">
-        <i />
+        <img src="/lighthouse-icon.svg" alt="" />
       </span>
       <span>
         <b>
@@ -134,39 +134,58 @@ function SearchDialog({
 }
 
 function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void }) {
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll<HTMLElement>(".reveal-on-scroll"));
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -48px" },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="home-page">
-      <header className="home-header">
-        <button className="brand-button" onClick={() => navigate("/")} aria-label="Farol PE — início">
-          <Brand />
-        </button>
-        <nav aria-label="Navegação principal">
-          {mainLinks.map((item) => (
-            <button
-              key={item.href}
-              className={item.href === "/" ? "is-active" : ""}
-              onClick={() => navigate(item.href)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-        <button className="search-trigger" onClick={onSearch} aria-label="Pesquisar no portal">
-          <span>Pesquisar</span>
-          <b>⌕</b>
-        </button>
-      </header>
+      <main id="main-content" className="reference-home">
+        <header className="home-header">
+          <button className="brand-button" onClick={() => navigate("/")} aria-label="Farol PE — início">
+            <Brand />
+          </button>
+          <nav aria-label="Navegação principal">
+            {mainLinks.map((item) => (
+              <button
+                key={item.href}
+                className={item.href === "/" ? "is-active" : ""}
+                onClick={() => navigate(item.href)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+          <button className="search-trigger" onClick={onSearch} aria-label="Pesquisar no portal">
+            <span>Pesquisar</span>
+            <b>⌕</b>
+          </button>
+        </header>
 
-      <main id="main-content">
         <section className="hero">
-          <div className="hero-grid" aria-hidden="true" />
           <div className="hero-copy">
-            <p className="eyebrow">Observatório Socioeconômico de Pernambuco</p>
             <h1>
               Conhecer hoje.
               <strong>Decidir melhor.</strong>
               Transformar amanhã.
             </h1>
+            <span className="pe-color-rule" aria-hidden="true"><i /><i /><i /></span>
             <p className="hero-lead">
               Inteligência de dados e análises para orientar políticas,
               investimentos e o desenvolvimento de Pernambuco.
@@ -181,52 +200,57 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
             </div>
           </div>
 
-          <div className="hero-visual" aria-label="Farol de Pernambuco">
-            <div className="photo-frame">
-              <img src="/farol.jpg" alt="Farol vermelho e branco no litoral de Pernambuco" />
-              <span className="photo-caption">Pernambuco em perspectiva</span>
-            </div>
+          <div className="hero-data-art" aria-hidden="true">
+            <span /><span /><span /><span /><span /><span /><span />
+            <i /><i />
           </div>
-        </section>
 
-        <section className="home-stats" aria-label="Indicadores em destaque">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow dark">Leitura rápida</p>
-              <h2>O estado em quatro sinais</h2>
+          <section className="manifesto">
+            <div className="manifesto-mark" aria-hidden="true">
+              <img src="/lighthouse-icon.svg" alt="" />
             </div>
-            <button onClick={() => navigate("/resumo")}>Ver panorama completo →</button>
-          </div>
-          <div className="stat-strip">
-            {summaryKpis.map((item) => (
-              <article key={item.label} className={`stat-card tone-${item.tone}`}>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-                <small>{item.note}</small>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="manifesto">
-          <div className="manifesto-mark" aria-hidden="true">
-            <i />
-          </div>
-          <p>
-            Farol que ilumina dados.
-            <br />
-            Referência que orienta o <strong>futuro.</strong>
-          </p>
-          <span>
-            Uma plataforma independente, transparente e colaborativa, a serviço
-            do desenvolvimento de Pernambuco.
-          </span>
+            <p>
+              Farol que ilumina dados.
+              <br />
+              Referência que orienta o <strong>futuro.</strong>
+            </p>
+            <span>
+              Uma plataforma independente, transparente e colaborativa, a serviço
+              do desenvolvimento de Pernambuco.
+            </span>
+          </section>
         </section>
       </main>
 
+      <section className="home-analysis" aria-labelledby="home-analysis-title">
+        <div className="analysis-heading reveal-on-scroll">
+          <div>
+            <p>Leitura rápida</p>
+            <h2 id="home-analysis-title">Pernambuco em quatro sinais</h2>
+            <span className="analysis-intro">
+              Indicadores selecionados para uma leitura objetiva do cenário econômico.
+            </span>
+          </div>
+          <button onClick={() => navigate("/resumo")}>Ver análise completa <span>→</span></button>
+        </div>
+        <div className="analysis-grid">
+          {summaryKpis.map((item, index) => (
+            <article
+              key={item.label}
+              className={`tone-${item.tone} reveal-on-scroll`}
+              style={{ "--reveal-delay": `${index * 90}ms` } as CSSProperties}
+            >
+              <i className="metric-halo" aria-hidden="true" />
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+              <small>{item.note}</small>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <footer className="home-footer">
         <span>Dados · Conhecimento · Estratégia · Desenvolvimento</span>
-        <span>Secretaria de Desenvolvimento Econômico de Pernambuco</span>
       </footer>
     </div>
   );
@@ -330,7 +354,9 @@ function Sidebar({
             </button>
             {economicOpen && (
               <div className="group-children">
-                {panels.slice(0, 2).map((panel) => panelButton(panel))}
+                {panels
+                  .filter((panel) => panel.category === "Dinâmica Econômica")
+                  .map((panel) => panelButton(panel))}
               </div>
             )}
           </div>
@@ -348,7 +374,9 @@ function Sidebar({
             </button>
             {agroOpen && (
               <div className="group-children">
-                {panelButton(panels[2])}
+                {panels
+                  .filter((panel) => panel.category === "Agropecuária")
+                  .map((panel) => panelButton(panel))}
                 <button
                   className="subgroup-toggle"
                   onClick={() => setLivestockOpen((value) => !value)}
@@ -359,7 +387,9 @@ function Sidebar({
                 </button>
                 {livestockOpen && (
                   <div className="subgroup-children">
-                    {panels.slice(3).map((panel) => panelButton(panel, true))}
+                    {panels
+                      .filter((panel) => panel.category === "Agropecuária · Pecuária")
+                      .map((panel) => panelButton(panel, true))}
                   </div>
                 )}
               </div>
@@ -792,22 +822,48 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
           <p className="eyebrow">Farol PE</p>
           <h1>Dados que ajudam Pernambuco a enxergar mais longe.</h1>
           <p>
-            Um espaço público de inteligência econômica para transformar
-            informação oficial em decisões mais claras.
+            O Farol PE é uma plataforma pública de inteligência socioeconômica
+            criada para reunir, organizar e apresentar informações estratégicas
+            sobre Pernambuco. O projeto aproxima dados oficiais da sociedade e
+            transforma evidências em apoio para decisões mais claras.
           </p>
           <button className="button button-light" onClick={() => navigate("/paineis/agricultura")}>
             Conhecer os painéis →
           </button>
         </div>
       </header>
-      <section className="about-grid">
-        {cards.map(([title, text], index) => (
-          <article key={title}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h2>{title}</h2>
-            <p>{text}</p>
-          </article>
-        ))}
+      <section className="about-content-layout">
+        <div className="about-narrative">
+          <p className="eyebrow dark">Sobre a plataforma</p>
+          {cards.map(([title, text]) => (
+            <section key={title}>
+              <h2>{title}</h2>
+              <p>{text}</p>
+            </section>
+          ))}
+        </div>
+
+        <aside className="about-credits-panel" aria-labelledby="about-credits-title">
+          <p>Colaboração e realização</p>
+          <h2 id="about-credits-title">Quem construiu o Farol PE</h2>
+          <span>
+            Projeto desenvolvido de forma colaborativa, unindo conhecimento
+            técnico, análise de dados e construção digital.
+          </span>
+          <ul>
+            {[
+              "Pedro Albuquerque",
+              "Eduardo Silva",
+              "Caio Coutinho",
+              "Marcus Ferraz",
+            ].map((name, index) => (
+              <li key={name}>
+                <small>{String(index + 1).padStart(2, "0")}</small>
+                <strong>{name}</strong>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </section>
     </main>
   );

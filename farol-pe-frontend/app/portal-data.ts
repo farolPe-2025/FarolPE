@@ -49,6 +49,32 @@ export const panels: Panel[] = [
       "https://app.powerbi.com/view?r=eyJrIjoiYTA5ODc2MDYtOGNiZi00ZmM0LTgwZDgtYTAyZjFjYTE5YjU4IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
   },
   {
+    slug: "servicos",
+    legacyId: "bi-servicos",
+    title: "Serviços em Pernambuco",
+    shortTitle: "Serviços",
+    category: "Dinâmica Econômica",
+    eyebrow: "Pesquisa Mensal de Serviços",
+    description:
+      "Acompanhe o desempenho do setor de serviços em Pernambuco e sua evolução ao longo do tempo.",
+    source: "Power BI",
+    embedUrl:
+      "https://app.powerbi.com/view?r=eyJrIjoiNjhkOGJiOGEtZTlkNy00NmYwLThiODctZDc1ODZkMWQ1MWExIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+  },
+  {
+    slug: "turismo",
+    legacyId: "bi-turismo",
+    title: "Turismo em Pernambuco",
+    shortTitle: "Turismo",
+    category: "Dinâmica Econômica",
+    eyebrow: "Atividades turísticas",
+    description:
+      "Explore os principais indicadores da atividade turística de Pernambuco e sua trajetória recente.",
+    source: "Power BI",
+    embedUrl:
+      "https://app.powerbi.com/view?r=eyJrIjoiMThiM2ZmNTktYTRmYi00YTFiLTk2ZjYtMDcwNTU3ZjIyYTNmIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+  },
+  {
     slug: "agricultura",
     legacyId: "bi-pam-municipio",
     title: "Produção agrícola de Pernambuco",
