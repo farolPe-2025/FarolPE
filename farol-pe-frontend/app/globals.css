@@ -497,64 +497,6 @@ iframe:focus-visible {
   text-transform: uppercase;
 }
 
-.data-card {
-  position: absolute;
-  z-index: 5;
-  bottom: 12px;
-  left: 0;
-  display: flex;
-  width: 260px;
-  min-height: 195px;
-  padding: 22px;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-md);
-  background: rgba(7, 22, 52, 0.88);
-  box-shadow: var(--shadow-md);
-}
-
-.data-card > span {
-  color: #9fb0ca;
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.data-card > strong {
-  margin-top: 4px;
-  color: var(--gold);
-  font-size: 38px;
-  line-height: 1.1;
-}
-
-.data-card > small {
-  max-width: 190px;
-  margin-top: 4px;
-  color: #bac6d8;
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.spark-bars {
-  position: absolute;
-  right: 18px;
-  bottom: 18px;
-  left: 18px;
-  display: flex;
-  height: 48px;
-  align-items: flex-end;
-  gap: 5px;
-  opacity: 0.5;
-}
-
-.spark-bars i {
-  flex: 1;
-  border-radius: 3px 3px 0 0;
-  background: linear-gradient(to top, var(--blue), #61b8ef);
-}
-
 .home-stats {
   padding: 72px clamp(24px, 6vw, 96px) 82px;
   background: var(--surface);
@@ -1126,20 +1068,6 @@ kbd {
   font-size: 11.5px;
 }
 
-.status-dot {
-  width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
-  border: 1px solid #8795ac;
-  border-radius: 50%;
-}
-
-.status-dot.is-live {
-  border: 0;
-  background: #46c57a;
-  box-shadow: 0 0 0 3px rgba(70, 197, 122, 0.1);
-}
-
 .subgroup-toggle {
   min-height: 36px;
   padding-left: 11px;
@@ -1154,8 +1082,11 @@ kbd {
 }
 
 .sidebar-footer {
+  display: flex;
   margin-top: auto;
   padding: 20px;
+  align-items: center;
+  justify-content: center;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -1165,14 +1096,6 @@ kbd {
   height: auto;
   filter: brightness(0) invert(1);
   opacity: 0.92;
-}
-
-.sidebar-footer p {
-  margin: 8px 0 0;
-  color: #7d8ea8;
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .portal-main {
@@ -2777,11 +2700,6 @@ kbd {
     height: 440px;
   }
 
-  .data-card {
-    bottom: 0;
-    width: min(250px, 66%);
-  }
-
   .home-stats {
     padding: 54px 20px 60px;
   }
@@ -2952,10 +2870,6 @@ kbd {
 
   .photo-frame {
     width: 76%;
-  }
-
-  .data-card {
-    width: 70%;
   }
 
   .content-actions {

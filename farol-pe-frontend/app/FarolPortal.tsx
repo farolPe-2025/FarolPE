@@ -186,16 +186,6 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               <img src="/farol.jpg" alt="Farol vermelho e branco no litoral de Pernambuco" />
               <span className="photo-caption">Pernambuco em perspectiva</span>
             </div>
-            <div className="data-card">
-              <span>Atividade econômica</span>
-              <strong>+5,91%</strong>
-              <small>2º maior crescimento entre as UFs acompanhadas</small>
-              <div className="spark-bars" aria-hidden="true">
-                {[28, 42, 35, 58, 49, 71, 63, 88].map((height, index) => (
-                  <i key={index} style={{ height: `${height}%` }} />
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
@@ -273,7 +263,6 @@ function Sidebar({
         onClick={() => go(`/paineis/${panel.slug}`)}
       >
         <span>{panel.shortTitle}</span>
-        {panel.embedUrl ? <i className="status-dot is-live" title="Painel disponível" /> : <i className="status-dot" title="Em preparação" />}
       </button>
       {panel.info && (
         <button
@@ -380,7 +369,6 @@ function Sidebar({
 
         <div className="sidebar-footer">
           <img src="/sdec-logo.png" alt="Secretaria de Desenvolvimento Econômico" />
-          <p>Governo de Pernambuco</p>
         </div>
       </aside>
     </>

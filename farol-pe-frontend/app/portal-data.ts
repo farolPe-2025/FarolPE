@@ -151,7 +151,9 @@ export const panels: Panel[] = [
     eyebrow: "PPM · IBGE",
     description:
       "Indicadores municipais de leite, ovos, mel e outros produtos de origem animal.",
-    source: "Integração em preparação",
+    source: "Microsoft Fabric",
+    embedUrl:
+      "https://app.fabric.microsoft.com/view?r=eyJrIjoiYjI4ZTcxNjktNjIwMy00ZmNhLWE2OTAtODVmZDZkYTIwNzI0IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
     info: {
       eyebrow: "Sobre o indicador · PPM",
       title: "Produção de Origem Animal em Pernambuco",
@@ -193,7 +195,9 @@ export const panels: Panel[] = [
     eyebrow: "PPM · IBGE",
     description:
       "Acompanhe o efetivo municipal de bovinos, suínos, caprinos, ovinos, aves e outros rebanhos.",
-    source: "Integração em preparação",
+    source: "Microsoft Fabric",
+    embedUrl:
+      "https://app.fabric.microsoft.com/view?r=eyJrIjoiYzEwOTQxMTItODIxYy00NWNjLWExYzctMzA5MGEzODc1MDlhIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
     info: {
       eyebrow: "Sobre o indicador · PPM",
       title: "Rebanhos de Pernambuco",
