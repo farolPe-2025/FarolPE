@@ -497,6 +497,8 @@ function Sidebar({
           title="Pesquisar no FarolPE"
         >
           <SearchIcon />
+          Buscar no Farol PE
+          <kbd>/</kbd>
         </button>
 
         <nav className="sidebar-nav" aria-label="Navegação dos painéis">

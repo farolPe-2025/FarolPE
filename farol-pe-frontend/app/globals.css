@@ -4396,21 +4396,12 @@ button {
 }
 
 .sidebar-search {
-  display: grid;
-  width: 40px;
-  height: 40px;
-  min-height: 40px;
-  margin: 16px 16px 4px auto;
-  padding: 0;
-  grid-template-columns: 1fr;
-  place-items: center;
-  border-color: rgba(248, 198, 48, .46);
-  border-radius: 50%;
-  color: var(--gold);
+  color: #c6d0df;
 }
 
 .sidebar-search .search-glyph {
-  font-size: 0;
+  color: var(--gold);
+  transform: scaleX(-1);
 }
 
 .mobile-topbar .search-glyph {

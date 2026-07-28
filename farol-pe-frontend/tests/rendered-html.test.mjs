@@ -108,6 +108,23 @@ test("aplica a centralização padrão a qualquer painel incorporado", async () 
   );
 });
 
+test("mantém a busca antiga na lateral e espelha somente a lupa", async () => {
+  const response = await render("/paineis/atividade-economica");
+  const html = await response.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(html, /class="sidebar-search"/);
+  assert.match(html, /Buscar no Farol PE/);
+  assert.match(html, /<kbd>\/<\/kbd>/);
+  assert.match(
+    stylesheet,
+    /\.sidebar-search \.search-glyph\s*\{[\s\S]*?transform: scaleX\(-1\)/,
+  );
+});
+
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {
   const source = await readFile(
     new URL("../app/portal-data.ts", import.meta.url),
