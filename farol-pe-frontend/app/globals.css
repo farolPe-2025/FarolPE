@@ -3376,6 +3376,9 @@ kbd {
   position: relative;
   z-index: 2;
   font-size: clamp(34px, 2.55vw, 44px);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  will-change: contents;
 }
 .analysis-grid article small { position: relative; z-index: 2; max-width: 210px; }
 .metric-halo {

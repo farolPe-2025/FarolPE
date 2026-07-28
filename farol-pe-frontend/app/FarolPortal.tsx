@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   dataRequestUrl,
@@ -58,6 +58,89 @@ function Brand({ compact = false }: { compact?: boolean }) {
 
 function SearchIcon() {
   return <span className="search-glyph" aria-hidden="true" />;
+}
+
+function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number }) {
+  const elementRef = useRef<HTMLElement>(null);
+  const metric = useMemo(() => {
+    const normalized = value.replace(/\./g, "").replace(",", ".");
+    const target = Number(normalized.match(/-?\d+(?:\.\d+)?/)?.[0] ?? 0);
+    const decimals = value.match(/,(\d+)/)?.[1].length ?? 0;
+
+    return {
+      target,
+      decimals,
+      showPlus: value.trim().startsWith("+"),
+      showPercent: value.includes("%"),
+    };
+  }, [value]);
+
+  const formatValue = (current: number) => {
+    const formatted = current.toLocaleString("pt-BR", {
+      minimumFractionDigits: metric.decimals,
+      maximumFractionDigits: metric.decimals,
+    });
+
+    return `${metric.showPlus && current >= 0 ? "+" : ""}${formatted}${
+      metric.showPercent ? "%" : ""
+    }`;
+  };
+
+  const [displayValue, setDisplayValue] = useState(() => formatValue(0));
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplayValue(value);
+      return;
+    }
+
+    let animationFrame = 0;
+    let startTimer = 0;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+
+        startTimer = window.setTimeout(() => {
+          const startedAt = performance.now();
+          const duration = 1250;
+
+          const animate = (now: number) => {
+            const progress = Math.min((now - startedAt) / duration, 1);
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            setDisplayValue(formatValue(metric.target * easedProgress));
+
+            if (progress < 1) {
+              animationFrame = window.requestAnimationFrame(animate);
+            } else {
+              setDisplayValue(value);
+            }
+          };
+
+          animationFrame = window.requestAnimationFrame(animate);
+        }, delay);
+      },
+      { threshold: 0.45 },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(startTimer);
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, [delay, metric, value]);
+
+  return (
+    <strong ref={elementRef} aria-label={value}>
+      {displayValue}
+    </strong>
+  );
 }
 
 function SearchDialog({
@@ -260,7 +343,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
             >
               <i className="metric-halo" aria-hidden="true" />
               <span>{item.label}</span>
-              <strong>{item.value}</strong>
+              <AnimatedMetric value={item.value} delay={index * 90} />
               <small>{item.note}</small>
             </article>
           ))}
