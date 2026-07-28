@@ -163,6 +163,36 @@ export const panels: Panel[] = [
     source: "Power BI",
     embedUrl:
       "https://app.powerbi.com/view?r=eyJrIjoiMThiM2ZmNTktYTRmYi00YTFiLTk2ZjYtMDcwNTU3ZjIyYTNmIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+    info: {
+      eyebrow: "Sobre o indicador · PMS",
+      title: "Pesquisa Mensal de Serviços (PMS)",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgada mensalmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com dois meses de defasagem, a PMS mede a evolução do volume e da receita dos serviços prestados a empresas e famílias – de hospedagem e alimentação a transporte, informação e serviços profissionais – mas não inclui os serviços públicos nem os financeiros. É a principal fonte para acompanhar setores como o turismo, tratado como uma atividade específica dentro da pesquisa.",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O IBGE pesquisa uma amostra de empresas de serviços e constrói índices de volume (quantidade efetivamente prestada) e de receita nominal, com ano-base na média de 2022 (2022 = 100). O índice de turismo, em particular, cobre atividades como hospedagem, agências de viagens e transporte de passageiros.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel traz como leituras: Índice (2022 = 100), o nível bruto da série; Índice com ajuste sazonal (2022 = 100), o mesmo nível, mas corrigido para remover efeitos que se repetem todo ano (como feriados e férias); Crescimento acumulado no ano (%); Crescimento acumulado em 12 meses (%); Crescimento mensal com ajuste sazonal (%), que compara o mês com o imediatamente anterior já sem efeito de sazonalidade; e Crescimento em relação ao mesmo mês do ano anterior (%).",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Segundo o Boletim Econômico de PE (junho/2026), o volume de serviços de Pernambuco avançou 2,4% em abril frente a março (série com ajuste sazonal) – o dobro do resultado nacional (1,2%) e entre os seis maiores do país –, recuperando-se da retração de março. Na comparação com abril de 2025 houve variação de -2,4%; o acumulado do ano ficou estável (-0,1%) e o indicador em 12 meses cresceu 0,1%. O turismo foi o principal motor dessa recuperação: o volume de atividades turísticas subiu 6,9% frente ao mês anterior (quarto maior crescimento entre os 17 estados pesquisados) e a receita nominal avançou 1,8%, impulsionados pela circulação de visitantes nos feriados de Semana Santa, Páscoa e Tiradentes.",
+          ],
+        },
+      ],
+    },
   },
   {
     slug: "estrutura-industrial",
