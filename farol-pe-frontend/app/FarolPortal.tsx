@@ -645,15 +645,8 @@ function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
   const [loaded, setLoaded] = useState(false);
 
   if (panel.embedUrl) {
-    const embedClass = panel.embedUrl.includes("app.powerbi.com")
-      ? "is-powerbi"
-      : "is-fabric";
-
     return (
-      <main
-        className={`panel-page is-embedded ${embedClass}`}
-        aria-label={panel.title}
-      >
+      <main className="panel-page is-embedded" aria-label={panel.title}>
         <section className="panel-stage">
           <div className="iframe-wrap">
             {!loaded && (

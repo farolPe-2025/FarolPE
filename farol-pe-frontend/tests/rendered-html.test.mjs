@@ -69,14 +69,35 @@ test("carrega somente o iframe da rota ativa", async () => {
   assert.doesNotMatch(html, /Y2YzZDY2OTMtMDViZS00MmMz/);
 });
 
-test("centraliza os painéis Power BI sem alterar os painéis Fabric", async () => {
-  const powerBiResponse = await render("/paineis/turismo");
-  const powerBiHtml = await powerBiResponse.text();
-  assert.match(powerBiHtml, /panel-page is-embedded is-powerbi/);
+test("aplica a centralização padrão a qualquer painel incorporado", async () => {
+  for (const path of [
+    "/paineis/industria",
+    "/paineis/atividade-economica",
+    "/paineis/servicos",
+    "/paineis/turismo",
+    "/paineis/agricultura",
+    "/paineis/aquicultura",
+    "/paineis/origem-animal",
+    "/paineis/rebanhos",
+  ]) {
+    const response = await render(path);
+    const html = await response.text();
+    assert.match(html, /panel-page is-embedded/);
+    assert.doesNotMatch(html, /is-powerbi|is-fabric/);
+  }
 
-  const fabricResponse = await render("/paineis/agricultura");
-  const fabricHtml = await fabricResponse.text();
-  assert.match(fabricHtml, /panel-page is-embedded is-fabric/);
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    stylesheet,
+    /@media \(min-width: 861px\)[\s\S]*?\.panel-page\.is-embedded \.panel-stage[\s\S]*?place-items: center/,
+  );
+  assert.match(
+    stylesheet,
+    /\.panel-page\.is-embedded \.iframe-wrap[\s\S]*?width: min\(100%, 1680px\)/,
+  );
 });
 
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {

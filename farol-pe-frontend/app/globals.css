@@ -1148,14 +1148,14 @@ kbd {
 }
 
 @media (min-width: 861px) {
-  .panel-page.is-embedded.is-powerbi .panel-stage {
+  .panel-page.is-embedded .panel-stage {
     display: grid;
     padding: clamp(18px, 2.4vh, 30px);
     place-items: center;
     background: #f4f5f7;
   }
 
-  .panel-page.is-embedded.is-powerbi .iframe-wrap {
+  .panel-page.is-embedded .iframe-wrap {
     width: min(100%, 1680px);
     height: min(
       100%,
