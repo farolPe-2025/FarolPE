@@ -1147,6 +1147,28 @@ kbd {
   min-height: 0;
 }
 
+@media (min-width: 861px) {
+  .panel-page.is-embedded.is-powerbi .panel-stage {
+    display: grid;
+    padding: clamp(18px, 2.4vh, 30px);
+    place-items: center;
+    background: #f4f5f7;
+  }
+
+  .panel-page.is-embedded.is-powerbi .iframe-wrap {
+    width: min(100%, 1680px);
+    height: min(
+      100%,
+      calc((100vw - var(--sidebar-width)) * 0.5625 + 56px)
+    );
+    overflow: hidden;
+    border: 1px solid #dfe5ee;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 42px rgba(16, 45, 89, .1);
+  }
+}
+
 .panel-page.is-embedded .iframe-wrap::after {
   position: absolute;
   z-index: 4;

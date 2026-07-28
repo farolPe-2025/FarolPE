@@ -69,6 +69,16 @@ test("carrega somente o iframe da rota ativa", async () => {
   assert.doesNotMatch(html, /Y2YzZDY2OTMtMDViZS00MmMz/);
 });
 
+test("centraliza os painéis Power BI sem alterar os painéis Fabric", async () => {
+  const powerBiResponse = await render("/paineis/turismo");
+  const powerBiHtml = await powerBiResponse.text();
+  assert.match(powerBiHtml, /panel-page is-embedded is-powerbi/);
+
+  const fabricResponse = await render("/paineis/agricultura");
+  const fabricHtml = await fabricResponse.text();
+  assert.match(fabricHtml, /panel-page is-embedded is-fabric/);
+});
+
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {
   const source = await readFile(
     new URL("../app/portal-data.ts", import.meta.url),
