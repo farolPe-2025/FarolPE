@@ -1060,8 +1060,8 @@ function DataDictionaryPage() {
         <p className="eyebrow">Download dos Dados</p>
         <h1>Solicite as bases dos painéis.</h1>
         <p>
-          Consulte um resumo de cada painel e acesse o canal oficial para
-          solicitar os dados.
+          Consulte um resumo de cada painel e acesse os dados pelo canal
+          indicado.
         </p>
       </header>
 
@@ -1074,9 +1074,9 @@ function DataDictionaryPage() {
               href={dataRequestUrl}
               target="_blank"
               rel="noreferrer"
-              aria-label={`Solicitar dados do painel ${panel.shortTitle}`}
+              aria-label={`Acessar dados do painel ${panel.shortTitle}`}
             >
-              Solicitar dados <span aria-hidden="true">↗</span>
+              Acessar dados <span aria-hidden="true">↗</span>
             </a>
           </article>
         ))}

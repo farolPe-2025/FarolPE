@@ -81,13 +81,13 @@ test("mantém na busca os mesmos nomes exibidos no menu", async () => {
   assert.doesNotMatch(source, /Notícias|\/noticias/i);
 });
 
-test("entrega o catálogo simplificado para solicitação de dados", async () => {
+test("entrega o catálogo simplificado para acesso aos dados", async () => {
   const response = await render("/dicionario-de-dados");
   const html = await response.text();
 
   assert.equal(response.status, 200);
   assert.match(html, /Solicite as bases dos painéis/);
-  assert.match(html, /Solicitar dados/);
+  assert.match(html, /Acessar dados/);
   assert.match(
     html,
     /https:\/\/docs\.google\.com\/forms\/d\/e\/1FAIpQLSdaDaMbjhz70ubK79YQeoOjySp8668p5XoihS6gw_ElNBQV9g\/viewform/,
