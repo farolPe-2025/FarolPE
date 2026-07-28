@@ -508,7 +508,7 @@ export const panels: Panel[] = [
     slug: "origem-animal",
     legacyId: "bi-ppm-origem-animal",
     title: "Produção de origem animal",
-    shortTitle: "Origem animal",
+    shortTitle: "Produção de origem animal",
     category: "Agropecuária · Pecuária",
     eyebrow: "PPM · IBGE",
     description:
@@ -548,40 +548,40 @@ export const dataRequestUrl =
 export const summaryKpis = [
   {
     label: "Atividade econômica",
-    value: "+5,91%",
+    value: "+5,1%",
     note: "2º Brasil · 1º Nordeste",
     tone: "blue",
   },
   {
     label: "Produção industrial",
-    value: "+19,7%",
-    note: "Janeiro–abril",
+    value: "+14,9%",
+    note: "Janeiro–maio · 2º Brasil",
     tone: "green",
   },
   {
     label: "Comércio varejista",
-    value: "+9,4%",
+    value: "+11,0%",
     note: "Maior crescimento do país",
     tone: "gold",
   },
   {
     label: "Emprego formal",
     value: "5.894",
-    note: "Saldo em maio",
+    note: "Pendente de atualização",
     tone: "red",
   },
 ];
 
 export const summaryTable = [
-  ["Atividade econômica", "+5,91%", "2º", "1º", "IBCR · BCB"],
-  ["Produção industrial", "+19,7%", "2º*", "2º", "PIM-PF · IBGE"],
-  ["Varejo ampliado", "+9,4%", "1º", "1º", "PMC · IBGE"],
-  ["Serviços", "+2,4%", "6º", "2º", "PMS · IBGE"],
-  ["Aberturas de empresas", "73.461", "9º", "2º", "Mapa de Empresas"],
-  ["Saldo de empregos", "5.894", "6º", "2º", "Novo Caged"],
-  ["Balança comercial", "-US$ 533,3 mi", "24º", "9º", "SECEX"],
-  ["Inadimplência", "50,36%", "8º", "3º", "Serasa"],
-  ["Pix", "R$ 333,9 bi", "10º", "2º", "BCB"],
+  ["Atividade econômica", "+5,1%", "2º", "1º", "IBCR · BCB", "Atualizado"],
+  ["Produção industrial", "+14,9%", "2º", "1º*", "PIM-PF · IBGE", "Atualizado"],
+  ["Comércio varejista", "+11,0%", "1º", "1º", "PMC · IBGE", "Atualizado"],
+  ["Serviços", "-0,3%", "—", "—", "PMS · IBGE", "Atualizado"],
+  ["Aberturas de empresas", "73.461", "9º", "2º", "Mapa de Empresas", "Pendente"],
+  ["Saldo de empregos", "5.894", "6º", "2º", "Novo Caged", "Pendente"],
+  ["Balança comercial", "-US$ 533,3 mi", "24º", "9º", "SECEX", "Pendente"],
+  ["Inadimplência", "50,36%", "8º", "3º", "Serasa", "Pendente"],
+  ["Pix", "R$ 333,9 bi", "10º", "2º", "BCB", "Pendente"],
 ];
 
 export const searchItems = [

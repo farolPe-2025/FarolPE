@@ -15,11 +15,11 @@ import {
 type Navigate = (href: string) => void;
 
 const activityBars = [
-  ["Atividade", "+5,91%", 30, "blue"],
-  ["Indústria", "+19,7%", 100, "green"],
-  ["Varejo", "+9,4%", 48, "gold"],
-  ["Serviços", "+2,4%", 12, "slate"],
-  ["Turismo", "+6,9%", 35, "orange"],
+  ["Atividade", "+5,1%", 34, "blue"],
+  ["Indústria", "+14,9%", 100, "green"],
+  ["Varejo", "+11,0%", 74, "gold"],
+  ["Serviços", "-0,3%", 2, "slate"],
+  ["Turismo", "-2,6%", 17, "orange"],
 ] as const;
 
 const businessBars = [
@@ -799,16 +799,16 @@ function SummaryPage() {
             de Pernambuco
           </h1>
           <p>
-            Atividade, indústria, comércio, serviços, empresas, comércio
-            exterior, emprego e inadimplência — dados oficiais divulgados até
-            junho de 2026.
+            Atividade, indústria, comércio e serviços atualizados com os dados
+            de maio de 2026. Os demais temas permanecem sinalizados até a
+            próxima atualização.
           </p>
         </div>
         <aside>
           <span>Leitura central</span>
           <strong>
-            Expansão robusta, com riscos concentrados no setor externo e no
-            endividamento.
+            Atividade, indústria e varejo seguem fortes; serviços apresentam
+            acomodação na margem.
           </strong>
         </aside>
       </header>
@@ -819,7 +819,7 @@ function SummaryPage() {
             <article key={item.label} className={`tone-${item.tone}`}>
               <span>{item.label}</span>
               <strong>{item.value}</strong>
-              <small>{item.note}</small>
+              <small className={item.note === "Pendente de atualização" ? "summary-kpi-pending" : ""}>{item.note}</small>
             </article>
           ))}
         </section>
@@ -830,18 +830,18 @@ function SummaryPage() {
             <h2>Motores do crescimento estadual</h2>
             <span>
               Pernambuco combina atividade acima da média nacional, forte
-              expansão industrial, liderança do varejo e recuperação dos
-              serviços e do turismo.
+              expansão industrial e liderança do varejo, enquanto serviços e
+              turismo recuaram em maio.
             </span>
           </div>
           <div className="summary-grid">
             <BarChart title="Variação por setor" items={activityBars} />
             <div className="insight-grid">
               {[
-                ["IBCR", "+5,91%", "2º maior crescimento entre as UFs acompanhadas."],
-                ["Indústria", "+19,7%", "Petróleo e biocombustíveis em destaque."],
-                ["Serviços", "+2,4%", "Crescimento mensal, o dobro do Brasil."],
-                ["Turismo", "+6,9%", "Impulsionado pelos feriados de abril."],
+                ["IBCR", "+5,1%", "Acumulado do ano; 2º do Brasil e 1º do Nordeste."],
+                ["Indústria", "+14,9%", "Acumulado do ano; 2º maior avanço do Brasil."],
+                ["Serviços", "-0,3%", "Acumulado do ano; queda de 0,6% na margem."],
+                ["Turismo", "-2,6%", "Recuo em maio frente a abril."],
               ].map(([label, value, note]) => (
                 <article key={label}>
                   <span>{label}</span>
@@ -851,6 +851,10 @@ function SummaryPage() {
               ))}
             </div>
           </div>
+          <p className="summary-inline-status">
+            Indicadores estruturais da indústria
+            <span className="summary-status is-pending">Pendente de atualização</span>
+          </p>
           <div className="mini-stats">
             <article className="is-navy"><span>VBPI industrial</span><strong>R$ 143,3 bi</strong></article>
             <article className="is-green"><span>Empresas industriais</span><strong>5.397</strong></article>
@@ -860,7 +864,7 @@ function SummaryPage() {
 
         <section className="summary-section">
           <div className="summary-heading">
-            <p>Dinâmica empresarial e meios de pagamento</p>
+            <p>Dinâmica empresarial e meios de pagamento <span className="summary-status is-pending">Pendente de atualização</span></p>
             <h2>Abertura de empresas e Pix</h2>
           </div>
           <div className="summary-grid even">
@@ -871,7 +875,7 @@ function SummaryPage() {
 
         <section className="summary-section">
           <div className="summary-heading">
-            <p>Comércio exterior</p>
+            <p>Comércio exterior <span className="summary-status is-pending">Pendente de atualização</span></p>
             <h2>Balança comercial sob pressão</h2>
           </div>
           <div className="summary-grid">
@@ -901,7 +905,7 @@ function SummaryPage() {
 
         <section className="summary-section">
           <div className="summary-heading">
-            <p>Mercado de trabalho</p>
+            <p>Mercado de trabalho <span className="summary-status is-pending">Pendente de atualização</span></p>
             <h2>Saldo por setor</h2>
           </div>
           <div className="summary-grid">
@@ -923,7 +927,7 @@ function SummaryPage() {
 
         <section className="summary-section">
           <div className="summary-heading">
-            <p>Indicadores sociais</p>
+            <p>Indicadores sociais <span className="summary-status is-pending">Pendente de atualização</span></p>
             <h2>Inadimplência das famílias</h2>
           </div>
           <div className="summary-grid">
@@ -952,22 +956,35 @@ function SummaryPage() {
         <section className="summary-section">
           <div className="summary-heading">
             <p>Quadro-síntese</p>
-            <h2>Indicadores divulgados em junho de 2026</h2>
+            <h2>Indicadores do boletim de julho de 2026</h2>
           </div>
           <div className="summary-table-wrap">
             <table>
               <caption className="sr-only">
-                Síntese dos indicadores econômicos divulgados em junho de 2026
+                Síntese dos indicadores econômicos do boletim de julho de 2026
               </caption>
               <thead>
                 <tr>
-                  <th scope="col">Indicador</th><th scope="col">Resultado</th><th scope="col">Brasil</th><th scope="col">NE</th><th scope="col">Fonte</th>
+                  <th scope="col">Indicador</th><th scope="col">Resultado</th><th scope="col">Brasil</th><th scope="col">NE</th><th scope="col">Fonte</th><th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {summaryTable.map((row) => (
                   <tr key={row[0]}>
-                    {row.map((cell, index) => <td key={cell} className={index === 0 ? "is-strong" : ""}>{cell}</td>)}
+                    {row.map((cell, index) => (
+                      <td
+                        key={`${cell}-${index}`}
+                        className={[
+                          index === 0 ? "is-strong" : "",
+                        ].filter(Boolean).join(" ")}
+                      >
+                        {index === 5 ? (
+                          <span className={`summary-table-status ${cell === "Atualizado" ? "is-updated" : "is-pending"}`}>
+                            {cell}
+                          </span>
+                        ) : cell}
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
@@ -976,13 +993,13 @@ function SummaryPage() {
         </section>
 
         <section className="swot">
-          <article className="is-green"><span>Forças</span><p>Indústria, varejo, atividade, turismo, empresas e emprego.</p></article>
-          <article className="is-gold"><span>Atenção</span><p>Desaceleração marginal do emprego.</p></article>
-          <article className="is-red"><span>Riscos</span><p>Déficit comercial, juros elevados e inadimplência.</p></article>
+          <article className="is-green"><span>Forças</span><p>Indústria, varejo e atividade econômica.</p></article>
+          <article className="is-gold"><span>Atenção</span><p>Acomodação dos serviços e retração do turismo em maio.</p></article>
+          <article className="is-red"><span>Pendente</span><p>Empresas, Pix, emprego, comércio exterior e inadimplência aguardam atualização.</p></article>
         </section>
 
         <footer className="summary-footnote">
-          <span>Painel baseado no Boletim Econômico de Pernambuco — Julho/2026 · Dados divulgados até junho/2026.</span>
+          <span>Painel baseado no Boletim Econômico de Pernambuco — Julho/2026 · Atividade, indústria, comércio e serviços atualizados até maio/2026.</span>
           <b>Secretaria de Desenvolvimento Econômico de Pernambuco</b>
         </footer>
       </div>
