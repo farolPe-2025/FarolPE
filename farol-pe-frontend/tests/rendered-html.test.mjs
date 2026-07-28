@@ -98,6 +98,14 @@ test("aplica a centralização padrão a qualquer painel incorporado", async () 
     stylesheet,
     /\.panel-page\.is-embedded \.iframe-wrap[\s\S]*?width: min\(100%, 1680px\)/,
   );
+  assert.match(
+    stylesheet,
+    /@media \(min-width: 1360px\)[\s\S]*?\.panel-page\.is-embedded \.panel-stage[\s\S]*?padding: 0/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(min-width: 1360px\)[\s\S]*?\.panel-page\.is-embedded \.iframe-wrap[\s\S]*?width: 100%[\s\S]*?height: 100%/,
+  );
 });
 
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {

@@ -1169,6 +1169,20 @@ kbd {
   }
 }
 
+@media (min-width: 1360px) {
+  .panel-page.is-embedded .panel-stage {
+    padding: 0;
+  }
+
+  .panel-page.is-embedded .iframe-wrap {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
 .panel-page.is-embedded .iframe-wrap::after {
   position: absolute;
   z-index: 4;
