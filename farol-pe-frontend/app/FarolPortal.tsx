@@ -49,16 +49,15 @@ function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`brand-lockup ${compact ? "is-compact" : ""}`}>
       <span className="brand-beacon" aria-hidden="true">
-        <img src="/lighthouse-icon.svg" alt="" />
+        <img src="/favicon.png" alt="" />
       </span>
-      <span>
-        <b>
-          FAROL <em>PE</em>
-        </b>
-        {!compact && <small>Observatório Socioeconômico</small>}
-      </span>
+      <b>Farol<span>PE</span></b>
     </div>
   );
+}
+
+function SearchIcon() {
+  return <span className="search-glyph" aria-hidden="true" />;
 }
 
 function SearchDialog({
@@ -101,7 +100,7 @@ function SearchDialog({
           </button>
         </div>
         <label className="search-field">
-          <span aria-hidden="true">⌕</span>
+          <SearchIcon />
           <input
             autoFocus
             value={query}
@@ -165,7 +164,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
           aria-label="Fechar menu"
         />
         <header className="home-header">
-          <button className="brand-button" onClick={() => navigate("/")} aria-label="Farol PE — início">
+          <button className="brand-button" onClick={() => navigate("/")} aria-label="FarolPE — início">
             <Brand />
           </button>
           <nav className={homeMenuOpen ? "is-open" : ""} aria-label="Navegação principal">
@@ -198,52 +197,46 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
             }}
             aria-label="Pesquisar no portal"
           >
-            <span>Pesquisar</span>
-            <b>⌕</b>
+            <SearchIcon />
           </button>
         </header>
 
         <section className="hero">
           <div className="hero-copy">
             <h1>
-              Conhecer hoje.
-              <strong>Decidir melhor.</strong>
-              Transformar amanhã.
+              Ver com clareza.
+              <strong>Decidir com segurança.</strong>
+              Construir o futuro de Pernambuco.
             </h1>
-            <span className="pe-color-rule" aria-hidden="true"><i /><i /><i /></span>
+            <span className="pe-color-rule" aria-hidden="true"><i /><i /><i /><i /></span>
             <p className="hero-lead">
-              Inteligência de dados e análises para orientar políticas,
-              investimentos e o desenvolvimento de Pernambuco.
+              O farol sobre os dados de Pernambuco para orientar gestores,
+              pesquisadores e investidores na leitura da economia pernambucana.
             </p>
             <div className="hero-actions">
-              <button className="button button-primary" onClick={() => navigate("/paineis/agricultura")}>
-                Explorar painéis <span>→</span>
+              <button className="button button-primary" onClick={() => navigate("/paineis/atividade-economica")}>
+                <span className="action-icon" aria-hidden="true">▦</span>
+                <span>Visualizar dados</span>
               </button>
               <button className="button button-ghost" onClick={() => navigate("/resumo")}>
-                Ver panorama
+                <span className="action-icon" aria-hidden="true">◫</span>
+                <span>Ler panorama</span>
               </button>
             </div>
           </div>
 
-          <div className="hero-data-art" aria-hidden="true">
-            <span /><span /><span /><span /><span /><span /><span />
-            <i /><i />
+          <div className="home-more-strip">
+            <button
+              onClick={() =>
+                document.getElementById("home-analysis-title")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+            >
+              <span aria-hidden="true">↓</span> Veja mais
+            </button>
           </div>
-
-          <section className="manifesto">
-            <div className="manifesto-mark" aria-hidden="true">
-              <img src="/lighthouse-icon.svg" alt="" />
-            </div>
-            <p>
-              Farol que ilumina dados.
-              <br />
-              Referência que orienta o <strong>futuro.</strong>
-            </p>
-            <span>
-              Uma plataforma independente, transparente e colaborativa, a serviço
-              do desenvolvimento de Pernambuco.
-            </span>
-          </section>
         </section>
       </main>
 
@@ -275,6 +268,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
       </section>
 
       <footer className="home-footer">
+        <img src="/sdec-logo.png" alt="Secretaria de Desenvolvimento Econômico de Pernambuco" />
         <span>Dados · Conhecimento · Estratégia · Desenvolvimento</span>
       </footer>
     </div>
@@ -344,10 +338,13 @@ function Sidebar({
           </button>
         </div>
 
-        <button className="sidebar-search" onClick={onSearch}>
-          <span>⌕</span>
-          Buscar no Farol PE
-          <kbd>/</kbd>
+        <button
+          className="sidebar-search"
+          onClick={onSearch}
+          aria-label="Pesquisar no FarolPE"
+          title="Pesquisar no FarolPE"
+        >
+          <SearchIcon />
         </button>
 
         <nav className="sidebar-nav" aria-label="Navegação dos painéis">
@@ -355,16 +352,22 @@ function Sidebar({
             <span className="nav-symbol">⌂</span> Início
           </button>
           <button className={path === "/resumo" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/resumo")}>
-            <span className="nav-symbol">▥</span> Resumo
+            <span className="nav-symbol">▥</span> Boletim Econômico
+          </button>
+          <button className={path === "/publicacoes" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/publicacoes")}>
+            <span className="nav-symbol">▤</span> Publicações
+          </button>
+          <button className={path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/sobre")}>
+            <span className="nav-symbol">●</span> Sobre
           </button>
           <button
             className={path === "/dicionario-de-dados" ? "sidebar-main is-active" : "sidebar-main"}
             onClick={() => go("/dicionario-de-dados")}
           >
-            <span className="nav-symbol">Aa</span> Dicionário de dados
+            <span className="nav-symbol">↓</span> Download dos Dados
           </button>
 
-          <p className="sidebar-label">Painéis</p>
+          <p className="sidebar-label">Painéis dos Dados</p>
 
           <div className="nav-group">
             <button
@@ -474,7 +477,7 @@ function AppShell({
             <Brand compact />
           </button>
           <button onClick={onSearch} aria-label="Pesquisar">
-            ⌕
+            <SearchIcon />
           </button>
         </header>
         <div id="main-content">{children}</div>
@@ -844,7 +847,7 @@ function SummaryPage() {
 
 function AboutPage({ navigate }: { navigate: Navigate }) {
   const cards = [
-    ["O que é", "O Farol PE reúne os principais indicadores oficiais sobre a economia e a sociedade pernambucanas, atualizados na periodicidade de cada pesquisa e organizados por tema."],
+    ["O que é", "O FarolPE reúne os principais indicadores oficiais sobre a economia e a sociedade pernambucanas, atualizados na periodicidade de cada pesquisa e organizados por tema."],
     ["Para que serve", "A plataforma oferece a gestores públicos, pesquisadores, imprensa e à sociedade uma leitura confiável e atualizada do desempenho de Pernambuco."],
     ["Como explorar", "Os painéis permitem consultar séries históricas, comparar estados, regiões e municípios e visualizar os dados em gráficos, mapas e tabelas."],
     ["Realização", "Uma iniciativa da Secretaria de Desenvolvimento Econômico do Estado de Pernambuco — SDEC-PE."],
@@ -857,10 +860,10 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
           <img src="/farol.jpg" alt="Farol no litoral pernambucano" />
         </div>
         <div>
-          <p className="eyebrow">Farol PE</p>
+          <p className="eyebrow">FarolPE</p>
           <h1>Dados que ajudam Pernambuco a enxergar mais longe.</h1>
           <p>
-            O Farol PE é uma plataforma pública de inteligência socioeconômica
+            O FarolPE é uma plataforma pública de inteligência socioeconômica
             criada para reunir, organizar e apresentar informações estratégicas
             sobre Pernambuco. O projeto aproxima dados oficiais da sociedade e
             transforma evidências em apoio para decisões mais claras.
@@ -883,7 +886,7 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
 
         <aside className="about-credits-panel" aria-labelledby="about-credits-title">
           <p>Colaboração e realização</p>
-          <h2 id="about-credits-title">Quem construiu o Farol PE</h2>
+          <h2 id="about-credits-title">Quem construiu o FarolPE</h2>
           <span>
             Projeto desenvolvido de forma colaborativa, unindo conhecimento
             técnico, análise de dados e construção digital.
@@ -911,8 +914,8 @@ function DataDictionaryPage() {
   return (
     <main className="dictionary-page">
       <header className="dictionary-hero">
-        <p className="eyebrow">Dicionário de dados</p>
-        <h1>Dados disponíveis nos painéis.</h1>
+        <p className="eyebrow">Download dos Dados</p>
+        <h1>Solicite as bases dos painéis.</h1>
         <p>
           Consulte um resumo de cada painel e acesse o canal oficial para
           solicitar os dados.
@@ -947,7 +950,7 @@ function PublicationsPage({ navigate }: { navigate: Navigate }) {
         <h1>Análises para ir além dos números.</h1>
         <p>
           Este espaço reunirá boletins, notas técnicas e estudos produzidos a
-          partir dos indicadores do Farol PE.
+          partir dos indicadores do FarolPE.
         </p>
         <button className="button button-primary" onClick={() => navigate("/resumo")}>
           Enquanto isso, veja o panorama →

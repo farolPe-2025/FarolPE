@@ -437,10 +437,9 @@ export const panels: Panel[] = [
 
 export const mainLinks = [
   { href: "/", label: "Início" },
-  { href: "/resumo", label: "Resumo" },
-  { href: "/paineis/agricultura", label: "Painéis" },
+  { href: "/resumo", label: "Boletim Econômico" },
+  { href: "/paineis/atividade-economica", label: "Painéis dos Dados" },
   { href: "/publicacoes", label: "Publicações" },
-  { href: "/dicionario-de-dados", label: "Dicionário de dados" },
   { href: "/sobre", label: "Sobre" },
 ];
 

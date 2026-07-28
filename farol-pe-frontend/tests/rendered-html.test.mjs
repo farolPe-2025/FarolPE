@@ -26,18 +26,18 @@ async function render(path = "/") {
   );
 }
 
-test("renderiza a home institucional do Farol PE", async () => {
+test("renderiza a home institucional do FarolPE", async () => {
   const response = await render("/");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<html lang="pt-BR">/i);
-  assert.match(html, /Farol PE/i);
-  assert.match(html, /Conhecer hoje\./);
-  assert.match(html, /Decidir melhor\./);
-  assert.match(html, /Explorar painéis/);
-  assert.match(html, /Dicionário de dados/);
+  assert.match(html, /FarolPE/i);
+  assert.match(html, /Ver com clareza\./);
+  assert.match(html, /Decidir com segurança\./);
+  assert.match(html, /Visualizar dados/);
+  assert.match(html, /Painéis dos Dados/);
   assert.doesNotMatch(html, /Notícias|\/noticias/i);
   assert.doesNotMatch(html, /<iframe\b/i);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
@@ -55,7 +55,7 @@ test("renderiza rotas internas por URL", async () => {
     const response = await render(path);
     assert.equal(response.status, 200, `esperava 200 em ${path}`);
     const html = await response.text();
-    assert.match(html, /Farol PE/i);
+    assert.match(html, /FarolPE/i);
   }
 });
 
@@ -86,11 +86,11 @@ test("entrega o catálogo simplificado para solicitação de dados", async () =>
   const html = await response.text();
 
   assert.equal(response.status, 200);
-  assert.match(html, /Dados disponíveis nos painéis/);
+  assert.match(html, /Solicite as bases dos painéis/);
   assert.match(html, /Solicitar dados/);
   assert.match(
     html,
-    /https:\/\/www\.lai\.pe\.gov\.br\/sdec\/servico-de-informacao-ao-cidadao\//,
+    /https:\/\/docs\.google\.com\/forms\/d\/e\/1FAIpQLSdaDaMbjhz70ubK79YQeoOjySp8668p5XoihS6gw_ElNBQV9g\/viewform/,
   );
 
   for (const panelName of [

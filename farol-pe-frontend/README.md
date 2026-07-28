@@ -1,4 +1,4 @@
-# Farol PE — Front-end
+# FarolPE — Front-end
 
 Nova versão do Observatório Socioeconômico de Pernambuco, reconstruída como
 aplicação React/Vinext.

@@ -16,8 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(origin),
     title: {
-      default: "Farol PE — Observatório Socioeconômico",
-      template: "%s · Farol PE",
+      default: "FarolPE",
+      template: "%s · FarolPE",
     },
     description:
       "Indicadores oficiais e análises para orientar o desenvolvimento econômico de Pernambuco.",
@@ -28,24 +28,24 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: "pt_BR",
-      siteName: "Farol PE",
-      title: "Farol PE — Conhecer hoje. Decidir melhor.",
+      siteName: "FarolPE",
+      title: "FarolPE",
       description:
-        "Inteligência de dados e análises para orientar políticas, investimentos e o desenvolvimento de Pernambuco.",
+        "O farol sobre os dados de Pernambuco para orientar gestores, pesquisadores e investidores.",
       images: [
         {
           url: `${origin}/og.png`,
-          width: 1731,
-          height: 909,
-          alt: "Farol PE — Conhecer hoje. Decidir melhor. Transformar amanhã.",
+          width: 1734,
+          height: 907,
+          alt: "FarolPE",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Farol PE — Conhecer hoje. Decidir melhor.",
+      title: "FarolPE",
       description:
-        "Inteligência de dados para o desenvolvimento de Pernambuco.",
+        "O farol sobre os dados de Pernambuco para orientar gestores, pesquisadores e investidores.",
       images: [`${origin}/og.png`],
     },
   };
