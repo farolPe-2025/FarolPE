@@ -21,6 +21,37 @@ export type Panel = {
   info?: PanelInfo;
 };
 
+const ppmInfo: PanelInfo = {
+  eyebrow: "Sobre o indicador · PPM",
+  title: "Pesquisa da Pecuária Municipal (PPM)",
+  cards: [
+    {
+      title: "O que é",
+      paragraphs: [
+        "Divulgada anualmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com um ano de defasagem, a PPM investiga, por município, o efetivo dos rebanhos (bovino, suíno, caprino, ovino, aves etc.), a produção de origem animal (leite, ovos, mel, lã) e a produção da aquicultura, incluindo o valor da produção de cada uma.",
+      ],
+    },
+    {
+      title: "Como é calculado",
+      paragraphs: [
+        "O levantamento é anual e feito junto a informantes qualificados em cada município, sem amostragem domiciliar. O efetivo do rebanho é medido em número de cabeças na data de referência da pesquisa; a produção animal (leite, ovos, mel) e a aquicultura são medidas em quantidade produzida no ano e em valor da produção. Como os preços dos produtos variam de um ano para outro também por efeito da inflação, e não apenas por mudanças na quantidade produzida, comparar diretamente valores em reais de anos diferentes pode induzir a erro: um valor maior pode refletir apenas preços mais altos, não necessariamente mais produção. Por isso, a SDEC-PE deflaciona (converte a preços constantes) os valores nominais divulgados pelo IBGE, trazendo-os a preços de 2026. O deflator utilizado é o Índice Nacional de Preços ao Consumidor Amplo (IPCA), a referência oficial de inflação do Banco Central do Brasil, calculado e divulgado pelo IBGE; os dados de variação do IPCA são obtidos na série 'Preços - IPCA - variação (PRECOS_IPCAG)' do Ipeadata, banco de dados público mantido pelo Instituto de Pesquisa Econômica Aplicada (IPEA). O cálculo acumula a variação do IPCA entre o ano de referência de cada valor e 2026, obtendo um fator de correção que, multiplicado pelo valor nominal, resulta no valor a preços de 2026. Por se tratar de uma conversão feita pela própria SDEC-PE, os valores podem sofrer pequenos ajustes caso o IBGE revise algum mês do IPCA.",
+      ],
+    },
+    {
+      title: "Dados disponíveis",
+      paragraphs: [
+        "Os números centrais do painel são níveis (efetivo do rebanho, quantidade e valor produzidos) comparados entre anos e entre municípios ou regiões de desenvolvimento.",
+      ],
+    },
+    {
+      title: "Síntese da leitura mais recente",
+      paragraphs: [
+        "A edição mais recente da PPM (referente a 2024) mostrou recorde histórico dos rebanhos caprino e ovino no Brasil, com Pernambuco entre os três estados – ao lado de Bahia e Piauí – que juntos concentram 72,5% do rebanho caprino nacional, reforçando a vocação do Sertão e do Agreste pernambucanos para essa criação. O estado também se destacou na avicultura: o município de São Bento do Una figurou entre os maiores produtores de aves do país. Esses resultados reforçam o papel da pecuária como atividade estruturante para a economia do interior do estado, complementar à agricultura irrigada do Vale do São Francisco.",
+      ],
+    },
+  ],
+};
+
 export const panels: Panel[] = [
   {
     slug: "industria",
@@ -331,35 +362,31 @@ export const panels: Panel[] = [
       "https://app.fabric.microsoft.com/view?r=eyJrIjoiMWUxY2I2YTEtNmZkMC00Mzk4LWE4MTQtMDg4NGRlYWVmZjhlIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
     info: {
       eyebrow: "Sobre o indicador · PAM",
-      title: "Produção Agrícola de Pernambuco",
+      title: "Produção Agrícola Municipal (PAM)",
       cards: [
         {
           title: "O que é",
           paragraphs: [
-            "Divulgada anualmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com um ano de defasagem, a Produção Agrícola Municipal (PAM) é o principal retrato da agricultura brasileira.",
-            "A pesquisa investiga, por município, cada lavoura temporária e permanente, a área plantada, a área colhida, a quantidade produzida, o rendimento médio e o valor da produção.",
+            "Divulgada anualmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com um ano de defasagem, a PAM é o principal retrato da agricultura brasileira: investiga, para cada lavoura temporária (como milho e feijão) e permanente (como manga e uva), a área plantada, a área colhida, a quantidade produzida, o rendimento médio e o valor da produção, por município. É a base para entender a estrutura produtiva agrícola de Pernambuco, do Vale do São Francisco à Zona da Mata.",
           ],
         },
         {
           title: "Como é calculado",
           paragraphs: [
-            "O levantamento é realizado anualmente pelo IBGE junto a informantes qualificados em cada município. Uma cultura só é divulgada quando ocupa pelo menos um hectare e registra uma tonelada de produção.",
-            "O valor da produção resulta da quantidade produzida multiplicada pelo preço médio recebido pelo produtor. Para comparações no tempo, o Farol PE apresenta também valores corrigidos pelo IPCA, a preços constantes do ano de referência informado no painel.",
+            "O levantamento é feito anualmente pelo IBGE junto a informantes qualificados em cada município (técnicos agrícolas, cooperativas, órgãos locais), e não por amostragem domiciliar. Uma cultura só é divulgada para um município quando ocupa a partir de um hectare de área e uma tonelada de produção. O valor da produção é calculado multiplicando a quantidade produzida pelo preço médio recebido pelo produtor. Como os preços agrícolas variam de um ano para outro também por efeito da inflação, e não só por mudanças na quantidade produzida ou na demanda, comparar diretamente valores em reais de anos diferentes pode levar a conclusões erradas: um valor maior pode refletir apenas preços mais altos, não necessariamente mais produção. Por isso, a SDEC-PE deflaciona (converte a preços constantes) os valores nominais divulgados pelo IBGE, trazendoos a preços de 2026. O deflator utilizado é o Índice Nacional de Preços ao Consumidor Amplo (IPCA), a referência oficial de inflação do Banco Central do Brasil, calculado e divulgado pelo IBGE; os dados de variação do IPCA são obtidos na série 'Preços - IPCA - variação (PRECOS_IPCAG)' do Ipeadata, banco de dados público mantido pelo Instituto de Pesquisa Econômica Aplicada (IPEA). O cálculo acumula a variação do IPCA entre o ano de referência de cada valor e 2026, obtendo um fator de correção que, multiplicado pelo valor nominal, resulta no valor a preços de 2026. Por se tratar de uma conversão feita pela própria SDEC-PE, os valores podem sofrer pequenos ajustes caso o IBGE revise algum mês do IPCA.",
           ],
         },
         {
-          title: "O que significam as variações",
+          title: "Dados disponíveis",
           paragraphs: [
-            "Por ser anual, a PAM não possui variação mensal nem índice de base fixa. A análise compara níveis de área, quantidade, rendimento e valor entre anos-safra, municípios e regiões de desenvolvimento.",
-            "Uma alta no valor pode refletir aumento de produção, elevação de preços ou ambos. Por isso, quantidade e rendimento devem ser observados junto ao valor monetário.",
+            "Os principais resultados do painel são níveis (área, quantidade, valor), com comparações entre municípios e regiões de desenvolvimento de Pernambuco.",
           ],
         },
         {
           title: "Síntese da leitura mais recente",
           paragraphs: [
-            "Espaço reservado para o destaque do último ano disponível: principais culturas, municípios líderes e variações relevantes.",
+            "A edição mais recente da PAM (referente a 2024), divulgada pelo IBGE, confirmou Pernambuco entre os maiores produtores nacionais de fruticultura, com destaque para a produção irrigada do Vale do São Francisco (uva e manga). Em nível nacional, o valor da produção agrícola brasileira recuou pelo segundo ano seguido, refletindo a queda de preços e da safra de grãos – um contexto que reforça a importância de acompanhar, no Observatório, o desempenho de cada cultura e região de desenvolvimento separadamente, já que a fruticultura irrigada pernambucana tende a seguir uma dinâmica distinta da dos grãos.",
           ],
-          placeholder: true,
         },
       ],
     },
@@ -376,40 +403,7 @@ export const panels: Panel[] = [
     source: "Microsoft Fabric",
     embedUrl:
       "https://app.fabric.microsoft.com/view?r=eyJrIjoiNjFjNjQzNmQtYTZjYS00ZjI3LThhZGEtMWNkYjk3Y2Q3MTg4IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
-    info: {
-      eyebrow: "Sobre o indicador · PPM",
-      title: "Aquicultura em Pernambuco",
-      cards: [
-        {
-          title: "O que é",
-          paragraphs: [
-            "A aquicultura integra a Pesquisa da Pecuária Municipal (PPM), divulgada anualmente pelo IBGE. Ela acompanha, por município, a produção de organismos aquáticos criados em cativeiro, como peixes, camarões, moluscos e outros produtos aquícolas.",
-            "O painel apresenta a quantidade produzida e o valor da produção das espécies disponíveis para Pernambuco.",
-          ],
-        },
-        {
-          title: "Como é calculado",
-          paragraphs: [
-            "As informações são apuradas anualmente pelo IBGE junto a fontes qualificadas nos municípios. A quantidade corresponde à produção obtida durante o ano, conforme a unidade específica de cada produto.",
-            "O valor da produção é estimado pela quantidade produzida multiplicada pelo preço médio recebido pelo produtor. Valores de anos diferentes devem ser comparados a preços constantes para separar o efeito da inflação.",
-          ],
-        },
-        {
-          title: "O que significam as variações",
-          paragraphs: [
-            "Como a pesquisa é anual, as comparações são feitas entre anos, municípios e regiões de desenvolvimento. Uma variação positiva indica crescimento da quantidade, do preço recebido ou dos dois componentes.",
-            "Na leitura do valor produzido, observe também a espécie selecionada e sua unidade de medida, pois os produtos aquícolas possuem escalas distintas.",
-          ],
-        },
-        {
-          title: "Síntese da leitura mais recente",
-          paragraphs: [
-            "Espaço reservado para o destaque do último ano disponível: espécies com maior produção, municípios líderes e mudanças relevantes.",
-          ],
-          placeholder: true,
-        },
-      ],
-    },
+    info: ppmInfo,
   },
   {
     slug: "origem-animal",
@@ -423,37 +417,7 @@ export const panels: Panel[] = [
     source: "Microsoft Fabric",
     embedUrl:
       "https://app.fabric.microsoft.com/view?r=eyJrIjoiYjI4ZTcxNjktNjIwMy00ZmNhLWE2OTAtODVmZDZkYTIwNzI0IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
-    info: {
-      eyebrow: "Sobre o indicador · PPM",
-      title: "Produção de Origem Animal em Pernambuco",
-      cards: [
-        {
-          title: "O que é",
-          paragraphs: [
-            "É o conjunto de produtos de origem animal acompanhado anualmente pela Pesquisa da Pecuária Municipal, como leite, ovos, mel e lã, apresentado por município.",
-          ],
-        },
-        {
-          title: "Como é calculado",
-          paragraphs: [
-            "O IBGE apura a quantidade produzida durante o ano e o respectivo valor da produção. Cada produto utiliza sua unidade própria, e o valor resulta da quantidade associada ao preço médio recebido pelo produtor.",
-          ],
-        },
-        {
-          title: "O que significam as variações",
-          paragraphs: [
-            "As variações mostram mudanças anuais na quantidade ou no valor. Para interpretar o valor, é importante distinguir crescimento real da produção de simples alteração nos preços.",
-          ],
-        },
-        {
-          title: "Síntese da leitura mais recente",
-          paragraphs: [
-            "Espaço reservado para os destaques do último ano disponível.",
-          ],
-          placeholder: true,
-        },
-      ],
-    },
+    info: ppmInfo,
   },
   {
     slug: "rebanhos",
@@ -467,37 +431,7 @@ export const panels: Panel[] = [
     source: "Microsoft Fabric",
     embedUrl:
       "https://app.fabric.microsoft.com/view?r=eyJrIjoiYzEwOTQxMTItODIxYy00NWNjLWExYzctMzA5MGEzODc1MDlhIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
-    info: {
-      eyebrow: "Sobre o indicador · PPM",
-      title: "Rebanhos de Pernambuco",
-      cards: [
-        {
-          title: "O que é",
-          paragraphs: [
-            "A Pesquisa da Pecuária Municipal acompanha anualmente o efetivo dos principais rebanhos, como bovinos, suínos, caprinos, ovinos e aves, em cada município.",
-          ],
-        },
-        {
-          title: "Como é calculado",
-          paragraphs: [
-            "O efetivo corresponde ao número de animais existente na data de referência da pesquisa. As informações são obtidas pelo IBGE junto a fontes qualificadas em cada município.",
-          ],
-        },
-        {
-          title: "O que significam as variações",
-          paragraphs: [
-            "As variações representam aumento ou redução do número de cabeças entre anos. Elas podem refletir ciclos produtivos, condições climáticas, custos, demanda e alterações na atividade pecuária local.",
-          ],
-        },
-        {
-          title: "Síntese da leitura mais recente",
-          paragraphs: [
-            "Espaço reservado para os principais rebanhos, municípios líderes e mudanças do último ano disponível.",
-          ],
-          placeholder: true,
-        },
-      ],
-    },
+    info: ppmInfo,
   },
 ];
 
