@@ -75,6 +75,134 @@ export const panels: Panel[] = [
       "https://app.powerbi.com/view?r=eyJrIjoiMThiM2ZmNTktYTRmYi00YTFiLTk2ZjYtMDcwNTU3ZjIyYTNmIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
   },
   {
+    slug: "estrutura-industrial",
+    legacyId: "bi-PIA",
+    title: "Estrutura industrial de Pernambuco",
+    shortTitle: "Estrutura Industrial",
+    category: "Dinâmica Econômica",
+    eyebrow: "PIA-Empresa · IBGE",
+    description:
+      "Conheça a estrutura da indústria pernambucana, o número de empresas, os empregos e o valor da produção industrial.",
+    source: "Link a definir",
+    info: {
+      eyebrow: "Sobre o indicador · PIA-Empresa",
+      title: "Pesquisa Industrial Anual",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgada anualmente pelo IBGE, com dois anos de defasagem, a PIA-Empresa retrata a estrutura do setor industrial: quantas empresas existem, quantas pessoas empregam e quanto produzem em valor.",
+            "É o retrato anual mais detalhado da indústria pernambucana e complementa a leitura mensal de curto prazo da produção industrial.",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O IBGE coleta informações contábeis e de pessoal das empresas industriais. Os principais resultados incluem o Valor Bruto da Produção Industrial, o número de empresas, os empregos e a produtividade média.",
+            "Para permitir comparações no tempo, a SDEC-PE apresenta os valores monetários corrigidos pelo IPCA a preços constantes de 2026.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel apresenta valor da produção, quantidade de empresas e empregos do setor. A edição de 2024 inicia uma nova série e não deve ser comparada diretamente com anos anteriores devido à mudança metodológica do IBGE.",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Em 2024, Pernambuco registrou aproximadamente R$ 143,3 bilhões em produção industrial, 5.397 empresas e 212.951 trabalhadores formais no setor.",
+          ],
+        },
+      ],
+    },
+  },
+  {
+    slug: "comercio",
+    legacyId: "bi-PMC",
+    title: "Comércio em Pernambuco",
+    shortTitle: "Comércio",
+    category: "Dinâmica Econômica",
+    eyebrow: "Pesquisa Mensal de Comércio · IBGE",
+    description:
+      "Acompanhe o volume de vendas e a receita do comércio varejista de Pernambuco, com comparações por segmento e território.",
+    source: "Link a definir",
+    info: {
+      eyebrow: "Sobre o indicador · PMC",
+      title: "Pesquisa Mensal de Comércio",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgada mensalmente pelo IBGE, a PMC mede a evolução do volume de vendas e da receita nominal do comércio varejista.",
+            "O acompanhamento inclui o varejo ampliado, que reúne também veículos, peças e material de construção.",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O IBGE pesquisa uma amostra de empresas comerciais e constrói índices de volume de vendas com base 2022 igual a 100.",
+            "Para detalhar a comparação mensal por atividade e estado, a SDEC-PE realiza o ajuste sazonal das séries com o método X-13ARIMA-SEATS.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel reúne índice bruto, índice com ajuste sazonal, crescimento acumulado no ano e em 12 meses, variação mensal dessazonalizada e variação contra o mesmo mês do ano anterior.",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Entre janeiro e abril de 2026, o varejo ampliado de Pernambuco cresceu 9,4%, o maior resultado entre as unidades da federação no período.",
+          ],
+        },
+      ],
+    },
+  },
+  {
+    slug: "pix",
+    legacyId: "bi-pix",
+    title: "Movimentações financeiras via Pix",
+    shortTitle: "Pix",
+    category: "Dinâmica Econômica",
+    eyebrow: "Pix · Banco Central",
+    description:
+      "Explore o valor movimentado e a quantidade de transações via Pix em Pernambuco, com recortes estaduais e municipais.",
+    source: "Link a definir",
+    info: {
+      eyebrow: "Sobre o indicador · Pix",
+      title: "Movimentações financeiras via Pix",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgadas mensalmente pelo Banco Central, as movimentações via Pix registram o valor total e o número de transações realizadas em cada estado e município.",
+            "O indicador funciona como um termômetro da atividade econômica digital e da circulação de renda.",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O Banco Central soma o valor e a quantidade das transações via Pix originadas no território durante o período selecionado.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel apresenta o valor acumulado movimentado e o número de transações, permitindo comparações entre estados e municípios.",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Entre janeiro e maio de 2026, Pernambuco movimentou R$ 333,9 bilhões em aproximadamente 1,38 bilhão de transações via Pix.",
+          ],
+        },
+      ],
+    },
+  },
+  {
     slug: "agricultura",
     legacyId: "bi-pam-municipio",
     title: "Produção agrícola de Pernambuco",
