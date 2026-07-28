@@ -196,7 +196,7 @@ export const panels: Panel[] = [
       "https://app.powerbi.com/view?r=eyJrIjoiMThiM2ZmNTktYTRmYi00YTFiLTk2ZjYtMDcwNTU3ZjIyYTNmIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
     info: {
       eyebrow: "Sobre o indicador · PMS",
-      title: "Pesquisa Mensal de Serviços (PMS)",
+      title: "Pesquisa Mensal de Serviços - Turismo (PMS)",
       cards: [
         {
           title: "O que é",
