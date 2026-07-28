@@ -268,7 +268,7 @@ export const mainLinks = [
 ];
 
 export const dataRequestUrl =
-  "https://www.lai.pe.gov.br/sdec/servico-de-informacao-ao-cidadao/";
+  "https://docs.google.com/forms/d/e/1FAIpQLSdaDaMbjhz70ubK79YQeoOjySp8668p5XoihS6gw_ElNBQV9g/viewform";
 
 export const summaryKpis = [
   {
