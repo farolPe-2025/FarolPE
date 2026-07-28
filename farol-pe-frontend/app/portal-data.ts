@@ -229,8 +229,8 @@ export const panels: Panel[] = [
     slug: "estrutura-industrial",
     legacyId: "bi-PIA",
     title: "Estrutura industrial de Pernambuco",
-    shortTitle: "Estrutura Industrial",
-    category: "Dinâmica Econômica",
+    shortTitle: "Indústria (PIA)",
+    category: "Panoramas Setoriais",
     eyebrow: "PIA-Empresa · IBGE",
     description:
       "Conheça a estrutura da indústria pernambucana, o número de empresas, os empregos e o valor da produção industrial.",
@@ -311,8 +311,8 @@ export const panels: Panel[] = [
     slug: "pix",
     legacyId: "bi-pix",
     title: "Movimentações financeiras via Pix",
-    shortTitle: "Pix",
-    category: "Dinâmica Econômica",
+    shortTitle: "Movimentações Financeiras",
+    category: "Produção e Renda",
     eyebrow: "Pix · Banco Central",
     description:
       "Explore o valor movimentado e a quantidade de transações via Pix em Pernambuco, com recortes estaduais e municipais.",
@@ -347,6 +347,105 @@ export const panels: Panel[] = [
         },
       ],
     },
+  },
+  {
+    slug: "panorama-comercio",
+    legacyId: "bi-PAC",
+    title: "Panorama do comércio",
+    shortTitle: "Comércio (PAC)",
+    category: "Panoramas Setoriais",
+    eyebrow: "PAC · IBGE",
+    description:
+      "Panorama estrutural do comércio pernambucano, com indicadores de empresas, pessoal ocupado, salários e receita.",
+    source: "Link a definir",
+  },
+  {
+    slug: "panorama-servicos",
+    legacyId: "bi-PAS",
+    title: "Panorama dos serviços",
+    shortTitle: "Serviços (PAS)",
+    category: "Panoramas Setoriais",
+    eyebrow: "PAS · IBGE",
+    description:
+      "Panorama estrutural dos serviços em Pernambuco, com indicadores empresariais, ocupacionais e de receita.",
+    source: "Link a definir",
+  },
+  {
+    slug: "produto-interno-bruto",
+    legacyId: "bi-PIB",
+    title: "Produto Interno Bruto",
+    shortTitle: "Produto Interno Bruto (PIB)",
+    category: "Produção e Renda",
+    eyebrow: "PIB · IBGE",
+    description:
+      "Acompanhe a dimensão e a evolução da economia pernambucana por meio do Produto Interno Bruto.",
+    source: "Link a definir",
+  },
+  {
+    slug: "valor-adicionado-bruto",
+    legacyId: "bi-VAB",
+    title: "Valor Adicionado Bruto",
+    shortTitle: "Valor Adicionado Bruto (VAB)",
+    category: "Produção e Renda",
+    eyebrow: "VAB · IBGE",
+    description:
+      "Explore a contribuição dos setores econômicos para a geração de valor em Pernambuco.",
+    source: "Link a definir",
+  },
+  {
+    slug: "arrecadacao",
+    legacyId: "bi-arrecadacao",
+    title: "Arrecadação",
+    shortTitle: "Arrecadação",
+    category: "Produção e Renda",
+    eyebrow: "Receitas públicas",
+    description:
+      "Consulte indicadores de arrecadação e acompanhe sua evolução no estado de Pernambuco.",
+    source: "Link a definir",
+  },
+  {
+    slug: "rendimentos",
+    legacyId: "bi-rendimentos",
+    title: "Rendimentos",
+    shortTitle: "Rendimentos",
+    category: "Produção e Renda",
+    eyebrow: "Renda · Pernambuco",
+    description:
+      "Acompanhe os principais indicadores de rendimento da população pernambucana.",
+    source: "Link a definir",
+  },
+  {
+    slug: "estoque-de-emprego",
+    legacyId: "bi-estoque-emprego",
+    title: "Estoque de Emprego",
+    shortTitle: "Estoque de Emprego",
+    category: "Emprego",
+    eyebrow: "Emprego formal",
+    description:
+      "Acompanhe o estoque de vínculos formais de trabalho em Pernambuco.",
+    source: "Link a definir",
+  },
+  {
+    slug: "fluxo-de-emprego",
+    legacyId: "bi-fluxo-emprego",
+    title: "Fluxo de Emprego",
+    shortTitle: "Fluxo de Emprego",
+    category: "Emprego",
+    eyebrow: "Movimentação do emprego",
+    description:
+      "Consulte admissões, desligamentos e o saldo de empregos formais em Pernambuco.",
+    source: "Link a definir",
+  },
+  {
+    slug: "outros-indicadores-de-emprego",
+    legacyId: "bi-outros-emprego",
+    title: "Outros indicadores de emprego",
+    shortTitle: "Outros indicadores",
+    category: "Emprego",
+    eyebrow: "Mercado de trabalho",
+    description:
+      "Espaço reservado para novos indicadores do mercado de trabalho pernambucano.",
+    source: "Link a definir",
   },
   {
     slug: "agricultura",
@@ -486,7 +585,12 @@ export const summaryTable = [
 ];
 
 export const searchItems = [
-  ...mainLinks,
+  { href: "/", label: "Início" },
+  { href: "/resumo", label: "Panorama" },
+  { href: "/paineis/atividade-economica", label: "Painéis" },
+  { href: "/dicionario-de-dados", label: "Download dos Dados" },
+  { href: "/publicacoes", label: "Publicações" },
+  { href: "/sobre", label: "Sobre" },
   ...panels.map((panel) => ({
     href: `/paineis/${panel.slug}`,
     label: panel.shortTitle,

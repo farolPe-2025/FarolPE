@@ -106,3 +106,42 @@ test("entrega o catálogo simplificado para solicitação de dados", async () =>
 
   assert.doesNotMatch(html, /Buscar termo no dicionário|termos disponíveis/);
 });
+
+test("organiza a navegação dos painéis e sinaliza conteúdos em preparação", async () => {
+  const response = await render("/paineis/estoque-de-emprego");
+  const html = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(html, /Dinâmica Econômica/);
+  assert.match(html, /Panoramas Setoriais/);
+  assert.match(html, /Produção e Renda/);
+  assert.match(html, /Agropecuária/);
+  assert.match(html, /Emprego/);
+  assert.match(html, /Estoque de Emprego/);
+  assert.match(html, /Fluxo de Emprego/);
+  assert.match(html, /Outros indicadores/);
+  assert.match(html, /Painel em preparação/);
+
+  const navigationOrder = [
+    "Início",
+    "Panorama",
+    "Painéis",
+    "Download dos Dados",
+    "Publicações",
+    "Sobre",
+  ].map((label) => html.indexOf(label));
+
+  assert.ok(
+    navigationOrder.every((position, index) =>
+      index === 0 ? position >= 0 : position > navigationOrder[index - 1],
+    ),
+  );
+});
+
+test("não exibe a fonte metodológica no rodapé dos informativos", async () => {
+  const response = await render("/indicadores/agricultura");
+  const html = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.doesNotMatch(html, /Fonte metodológica/);
+});

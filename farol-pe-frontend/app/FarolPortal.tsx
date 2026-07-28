@@ -45,6 +45,51 @@ const jobsBars = [
   ["Agropecuária", "-46", 2, "red"],
 ] as const;
 
+const sidebarPanelGroups = [
+  {
+    id: "economic",
+    label: "Dinâmica Econômica",
+    icon: "↗",
+    slugs: ["atividade-economica", "industria", "comercio", "servicos", "turismo"],
+  },
+  {
+    id: "sectoral",
+    label: "Panoramas Setoriais",
+    icon: "▦",
+    slugs: ["estrutura-industrial", "panorama-comercio", "panorama-servicos"],
+  },
+  {
+    id: "income",
+    label: "Produção e Renda",
+    icon: "◇",
+    slugs: [
+      "produto-interno-bruto",
+      "valor-adicionado-bruto",
+      "arrecadacao",
+      "rendimentos",
+      "pix",
+    ],
+  },
+  {
+    id: "agriculture",
+    label: "Agropecuária",
+    icon: "◉",
+    slugs: ["agricultura"],
+    nestedLabel: "Pecuária",
+    nestedSlugs: ["aquicultura", "origem-animal", "rebanhos"],
+  },
+  {
+    id: "employment",
+    label: "Emprego",
+    icon: "▥",
+    slugs: [
+      "estoque-de-emprego",
+      "fluxo-de-emprego",
+      "outros-indicadores-de-emprego",
+    ],
+  },
+] as const;
+
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`brand-lockup ${compact ? "is-compact" : ""}`}>
@@ -371,9 +416,28 @@ function Sidebar({
   onClose: () => void;
   onSearch: () => void;
 }) {
-  const [economicOpen, setEconomicOpen] = useState(true);
-  const [agroOpen, setAgroOpen] = useState(true);
-  const [livestockOpen, setLivestockOpen] = useState(true);
+  const activePanelSlug =
+    path.match(/^\/(?:paineis|indicadores)\/([^/]+)/)?.[1] ?? "";
+  const activeGroup =
+    sidebarPanelGroups.find(
+      (group) =>
+        group.slugs.includes(activePanelSlug as never) ||
+        ("nestedSlugs" in group &&
+          group.nestedSlugs.includes(activePanelSlug as never)),
+    )?.id ?? null;
+  const [openGroup, setOpenGroup] = useState<string | null>(
+    activeGroup ?? "economic",
+  );
+  const [livestockOpen, setLivestockOpen] = useState(
+    ["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug),
+  );
+
+  useEffect(() => {
+    if (activeGroup) setOpenGroup(activeGroup);
+    if (["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug)) {
+      setLivestockOpen(true);
+    }
+  }, [activeGroup, activePanelSlug]);
 
   const go = (href: string) => {
     navigate(href);
@@ -402,6 +466,11 @@ function Sidebar({
       )}
     </div>
   );
+
+  const panelButtonBySlug = (slug: string, nested = false) => {
+    const panel = panels.find((item) => item.slug === slug);
+    return panel ? panelButton(panel, nested) : null;
+  };
 
   return (
     <>
@@ -435,7 +504,73 @@ function Sidebar({
             <span className="nav-symbol">⌂</span> Início
           </button>
           <button className={path === "/resumo" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/resumo")}>
-            <span className="nav-symbol">▥</span> Boletim Econômico
+            <span className="nav-symbol">▥</span> Panorama
+          </button>
+          <button
+            className={
+              path.startsWith("/paineis/") || path.startsWith("/indicadores/")
+                ? "sidebar-main is-active"
+                : "sidebar-main"
+            }
+            onClick={() => go("/paineis/atividade-economica")}
+          >
+            <span className="nav-symbol">▦</span> Painéis
+          </button>
+
+          <p className="sidebar-label">Explorar por tema</p>
+
+          {sidebarPanelGroups.map((group) => {
+            const isOpen = openGroup === group.id;
+
+            return (
+              <div className="nav-group" key={group.id}>
+                <button
+                  className="group-toggle"
+                  onClick={() =>
+                    setOpenGroup((current) =>
+                      current === group.id ? null : group.id,
+                    )
+                  }
+                  aria-expanded={isOpen}
+                >
+                  <span>
+                    <i className="group-icon">{group.icon}</i> {group.label}
+                  </span>
+                  <b>{isOpen ? "−" : "+"}</b>
+                </button>
+                {isOpen && (
+                  <div className="group-children">
+                    {group.slugs.map((slug) => panelButtonBySlug(slug))}
+                    {"nestedSlugs" in group && (
+                      <>
+                        <button
+                          className="subgroup-toggle"
+                          onClick={() => setLivestockOpen((value) => !value)}
+                          aria-expanded={livestockOpen}
+                        >
+                          <span>{group.nestedLabel}</span>
+                          <b>{livestockOpen ? "⌄" : "›"}</b>
+                        </button>
+                        {livestockOpen && (
+                          <div className="subgroup-children">
+                            {group.nestedSlugs.map((slug) =>
+                              panelButtonBySlug(slug, true),
+                            )}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <button
+            className={path === "/dicionario-de-dados" ? "sidebar-main is-active" : "sidebar-main"}
+            onClick={() => go("/dicionario-de-dados")}
+          >
+            <span className="nav-symbol">↓</span> Download dos Dados
           </button>
           <button className={path === "/publicacoes" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/publicacoes")}>
             <span className="nav-symbol">▤</span> Publicações
@@ -443,69 +578,6 @@ function Sidebar({
           <button className={path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/sobre")}>
             <span className="nav-symbol">●</span> Sobre
           </button>
-          <button
-            className={path === "/dicionario-de-dados" ? "sidebar-main is-active" : "sidebar-main"}
-            onClick={() => go("/dicionario-de-dados")}
-          >
-            <span className="nav-symbol">↓</span> Download dos Dados
-          </button>
-
-          <p className="sidebar-label">Painéis dos Dados</p>
-
-          <div className="nav-group">
-            <button
-              className="group-toggle"
-              onClick={() => setEconomicOpen((value) => !value)}
-              aria-expanded={economicOpen}
-            >
-              <span>
-                <i className="group-icon">↗</i> Dinâmica Econômica
-              </span>
-              <b>{economicOpen ? "−" : "+"}</b>
-            </button>
-            {economicOpen && (
-              <div className="group-children">
-                {panels
-                  .filter((panel) => panel.category === "Dinâmica Econômica")
-                  .map((panel) => panelButton(panel))}
-              </div>
-            )}
-          </div>
-
-          <div className="nav-group">
-            <button
-              className="group-toggle"
-              onClick={() => setAgroOpen((value) => !value)}
-              aria-expanded={agroOpen}
-            >
-              <span>
-                <i className="group-icon">◇</i> Agropecuária
-              </span>
-              <b>{agroOpen ? "−" : "+"}</b>
-            </button>
-            {agroOpen && (
-              <div className="group-children">
-                {panels
-                  .filter((panel) => panel.category === "Agropecuária")
-                  .map((panel) => panelButton(panel))}
-                <button
-                  className="subgroup-toggle"
-                  onClick={() => setLivestockOpen((value) => !value)}
-                  aria-expanded={livestockOpen}
-                >
-                  <span>Pecuária</span>
-                  <b>{livestockOpen ? "⌄" : "›"}</b>
-                </button>
-                {livestockOpen && (
-                  <div className="subgroup-children">
-                    {panels
-                      .filter((panel) => panel.category === "Agropecuária · Pecuária")
-                      .map((panel) => panelButton(panel, true))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </nav>
 
         <div className="sidebar-footer">
@@ -575,14 +647,6 @@ function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
   if (panel.embedUrl) {
     return (
       <main className="panel-page is-embedded" aria-label={panel.title}>
-        {panel.info && (
-          <button
-            className="embedded-info-button"
-            onClick={() => navigate(`/indicadores/${panel.slug}`)}
-          >
-            <span className="info-circle">i</span> Sobre o indicador
-          </button>
-        )}
         <section className="panel-stage">
           <div className="iframe-wrap">
             {!loaded && (
@@ -687,10 +751,6 @@ function InfoPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
           </article>
         ))}
       </section>
-      <footer className="source-note">
-        <span>Fonte metodológica</span>
-        <b>Instituto Brasileiro de Geografia e Estatística — IBGE</b>
-      </footer>
     </main>
   );
 }
