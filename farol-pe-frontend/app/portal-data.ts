@@ -34,6 +34,36 @@ export const panels: Panel[] = [
     source: "Power BI",
     embedUrl:
       "https://app.powerbi.com/view?r=eyJrIjoiY2YzZDY2OTMtMDViZS00MmMzLThiYWYtNmVmODYwODg3ODY5IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+    info: {
+      eyebrow: "Sobre o indicador · PIM-PF",
+      title: "Pesquisa Industrial Mensal – Produção Física (PIM-PF)",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgada mensalmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com dois meses de defasagem, a PIM-PF mede a evolução da produção física da indústria, ou seja, quanto a indústria efetivamente produziu em quantidade, e não em valor monetário. É o principal termômetro de curto prazo da atividade industrial, cobrindo a indústria geral e, dentro dela, a indústria de transformação (que exclui a extrativa mineral).",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O IBGE pesquisa uma amostra de estabelecimentos industriais e constrói um número-índice (índice de quantum), com ano-base na média de 2022 (2022 = 100). Os dados são coletados por atividade – segundo a Classificação Nacional de Atividades Econômicas (CNAE) – e depois agregados para formar os índices setoriais e o índice geral do estado. O IBGE divulga a série com ajuste sazonal apenas para a indústria geral do estado, sem abrir esse tratamento para a indústria de transformação de Pernambuco especificamente – um recorte importante, já que a transformação responde por quase toda a produção industrial pernambucana e permite isolar o desempenho manufatureiro de outras atividades, como a extrativa. Para preencher essa lacuna e permitir a comparação com o mês imediatamente anterior nesse recorte, a SDEC-PE estima sua própria série dessazonalizada com o método X-13ARIMA-SEATS – desenvolvido pelo U.S. Census Bureau a partir do X-11 e incorporando o modelo TRAMO-SEATS do Banco da Espanha, hoje o padrão internacional de ajuste sazonal, adotado também pelo IBGE, pelo Banco Central do Brasil e pelo Eurostat. O método modela a série histórica, separa o padrão que se repete todo ano (como paradas de manutenção programadas) do movimento efetivo de produção, e remove apenas o primeiro. Por resultar de estimação estatística, e não de um número oficialmente publicado pelo IBGE, esse valor pode sofrer pequenas revisões à medida que novos meses são incorporados à série.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel traz como leituras: Índice (2022 = 100), o nível bruto da série; Índice com ajuste sazonal (2022 = 100), o mesmo nível, mas corrigido para remover efeitos que se repetem todo ano (como paradas de manutenção programadas e sazonalidade de safra); Crescimento acumulado no ano (%), que apresenta a variação acumulada no ano em relação ao mesmo período do ano anterior; Crescimento acumulado em 12 meses(%), que apresenta a variação acumulada em 12 meses em relação ao período anterior de 12 meses; Crescimento mensal com ajuste sazonal (%), que compara o mês com o imediatamente anterior já sem efeito de sazonalidade; e Crescimento em relação ao mesmo mês do ano anterior (%).",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Segundo o Boletim Econômico de PE (junho/2026), a produção industrial de Pernambuco cresceu 19,7% no acumulado de janeiro a abril frente ao mesmo período de 2025 – o segundo maior resultado entre os 14 estados pesquisados (atrás apenas do Espírito Santo, com 25,3%) e mais de onze vezes o crescimento nacional (1,7%). Nos últimos 12 meses, a alta foi de 7,3%. O desempenho foi puxado principalmente pelo segmento de coque, derivados de petróleo e biocombustíveis, refletindo o dinamismo do Complexo Industrial Portuário de Suape e o retorno pleno da Refinaria Abreu e Lima (RNEST) após a manutenção programada de 2025. Na margem, houve recuo pontual de 3,6% em abril frente a março (série com ajuste sazonal), sem alterar a tendência de alta do ano.",
+          ],
+        },
+      ],
+    },
   },
   {
     slug: "atividade-economica",
@@ -47,6 +77,36 @@ export const panels: Panel[] = [
     source: "Power BI",
     embedUrl:
       "https://app.powerbi.com/view?r=eyJrIjoiYTA5ODc2MDYtOGNiZi00ZmM0LTgwZDgtYTAyZjFjYTE5YjU4IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+    info: {
+      eyebrow: "Sobre o indicador · IBCR",
+      title: "Índice de Atividade Econômica Regional do Banco Central (IBCR)",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgado mensalmente pelo Banco Central do Brasil (BCB), com dois meses de defasagem, o IBCR é a principal prévia mensal do Produto Interno Bruto (PIB) estadual divulgado pelo Instituto Brasileiro de Geografia e Estatística (IBGE). Funciona como um termômetro da atividade econômica de Pernambuco, antecipando, com base em informações setoriais disponíveis mês a mês – como a arrecadação de Imposto sobre Circulação de Mercadorias e Serviços (ICMS) –, a direção que o PIB trimestral do estado deve seguir.",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O Banco Central combina indicadores de oferta dos setores agropecuário, industrial e de serviços, ponderados pelo peso de cada um na economia estadual, em um único número-índice. O índice tem como referência a média de 2022 (2022 = 100): um valor de 105,8, por exemplo, indica que o nível de atividade está 5,8% acima da média daquele ano-base. O IBCR nacional equivalente é o IBC-Br.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel traz como leituras: Índice (2022 = 100), o nível bruto da série; Índice com ajuste sazonal (2022 = 100), o mesmo nível, mas corrigido para remover efeitos que se repetem todo ano (como feriados e safras); Crescimento acumulado no ano (%), que apresenta a variação acumulada no ano em relação ao mesmo período do ano anterior; Crescimento acumulado em 12 meses (%), que apresenta a variação acumulada em 12 meses em relação ao período anterior de 12 meses; Crescimento mensal com ajuste sazonal (%), que compara o mês com o imediatamente anterior já sem efeito de sazonalidade; e Crescimento em relação ao mesmo mês do ano anterior (%). Juntas, essas leituras permitem distinguir uma variação pontual de uma mudança de tendência.",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Na leitura mais recente do Boletim Econômico de PE (junho/2026), o IBCR referente a abril de 2026 alcançou 105,8 pontos, com crescimento acumulado no ano de 5,91% frente ao mesmo período de 2025 – a segunda maior expansão entre as 14 unidades da federação acompanhadas pelo Banco Central, atrás apenas do Rio de Janeiro (5,99%), e a maior do Nordeste, muito à frente de Maranhão (1,75%), Ceará (1,74%) e Bahia (0,50%). O crescimento interanual foi de 1,53% e, no trimestre fevereiro-abril, a expansão chegou a 5,45%. Na série com ajuste sazonal, houve recuo de 0,4% frente a março, um sinal pontual de acomodação na margem que não compromete a tendência de expansão observada no ano.",
+          ],
+        },
+      ],
+    },
   },
   {
     slug: "servicos",
@@ -60,6 +120,36 @@ export const panels: Panel[] = [
     source: "Power BI",
     embedUrl:
       "https://app.powerbi.com/view?r=eyJrIjoiNjhkOGJiOGEtZTlkNy00NmYwLThiODctZDc1ODZkMWQ1MWExIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+    info: {
+      eyebrow: "Sobre o indicador · PMS",
+      title: "Pesquisa Mensal de Serviços (PMS)",
+      cards: [
+        {
+          title: "O que é",
+          paragraphs: [
+            "Divulgada mensalmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com dois meses de defasagem, a PMS mede a evolução do volume e da receita dos serviços prestados a empresas e famílias – de hospedagem e alimentação a transporte, informação e serviços profissionais – mas não inclui os serviços públicos nem os financeiros. É a principal fonte para acompanhar setores como o turismo, tratado como uma atividade específica dentro da pesquisa.",
+          ],
+        },
+        {
+          title: "Como é calculado",
+          paragraphs: [
+            "O IBGE pesquisa uma amostra de empresas de serviços e constrói índices de volume (quantidade efetivamente prestada) e de receita nominal, com ano-base na média de 2022 (2022 = 100). O índice de turismo, em particular, cobre atividades como hospedagem, agências de viagens e transporte de passageiros.",
+          ],
+        },
+        {
+          title: "Dados disponíveis",
+          paragraphs: [
+            "O painel traz como leituras: Índice (2022 = 100), o nível bruto da série; Índice com ajuste sazonal (2022 = 100), o mesmo nível, mas corrigido para remover efeitos que se repetem todo ano (como feriados e férias); Crescimento acumulado no ano (%); Crescimento acumulado em 12 meses (%); Crescimento mensal com ajuste sazonal (%), que compara o mês com o imediatamente anterior já sem efeito de sazonalidade; e Crescimento em relação ao mesmo mês do ano anterior (%).",
+          ],
+        },
+        {
+          title: "Síntese da leitura mais recente",
+          paragraphs: [
+            "Segundo o Boletim Econômico de PE (junho/2026), o volume de serviços de Pernambuco avançou 2,4% em abril frente a março (série com ajuste sazonal) – o dobro do resultado nacional (1,2%) e entre os seis maiores do país –, recuperando-se da retração de março. Na comparação com abril de 2025 houve variação de -2,4%; o acumulado do ano ficou estável (-0,1%) e o indicador em 12 meses cresceu 0,1%. O turismo foi o principal motor dessa recuperação: o volume de atividades turísticas subiu 6,9% frente ao mês anterior (quarto maior crescimento entre os 17 estados pesquisados) e a receita nominal avançou 1,8%, impulsionados pela circulação de visitantes nos feriados de Semana Santa, Páscoa e Tiradentes.",
+          ],
+        },
+      ],
+    },
   },
   {
     slug: "turismo",
@@ -86,32 +176,30 @@ export const panels: Panel[] = [
     source: "Link a definir",
     info: {
       eyebrow: "Sobre o indicador · PIA-Empresa",
-      title: "Pesquisa Industrial Anual",
+      title: "Pesquisa Industrial Anual (PIA-Empresa)",
       cards: [
         {
           title: "O que é",
           paragraphs: [
-            "Divulgada anualmente pelo IBGE, com dois anos de defasagem, a PIA-Empresa retrata a estrutura do setor industrial: quantas empresas existem, quantas pessoas empregam e quanto produzem em valor.",
-            "É o retrato anual mais detalhado da indústria pernambucana e complementa a leitura mensal de curto prazo da produção industrial.",
+            "Divulgada anualmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com dois anos de defasagem, a PIA-Empresa retrata a estrutura do setor industrial: quantas empresas industriais existem, quantas pessoas empregam e quanto produzem em valor. É o raio-x anual e mais detalhado da indústria pernambucana, usado para entender a composição e o peso de cada segmento (automotivo, alimentício, químico etc.), complementando a leitura mensal de curto prazo da produção industrial do estado.",
           ],
         },
         {
           title: "Como é calculado",
           paragraphs: [
-            "O IBGE coleta informações contábeis e de pessoal das empresas industriais. Os principais resultados incluem o Valor Bruto da Produção Industrial, o número de empresas, os empregos e a produtividade média.",
-            "Para permitir comparações no tempo, a SDEC-PE apresenta os valores monetários corrigidos pelo IPCA a preços constantes de 2026.",
+            "O IBGE levanta, junto às empresas industriais do país, informações contábeis e de pessoal ocupado referentes ao ano anterior. O principal resultado é o Valor Bruto da Produção Industrial (VBPI), complementado por número de empresas, empregos formais e produtividade média (VBPI em relação ao pessoal ocupado). Como o valor de produção varia de um ano para outro também por efeito da inflação, e não apenas por mudanças na quantidade produzida, comparar diretamente valores em reais de anos diferentes pode induzir a erro: um valor maior pode refletir apenas preços mais altos, não necessariamente mais produção. Por isso, a SDEC-PE deflaciona (converte a preços constantes) os valores nominais divulgados pelo IBGE, trazendo-os a preços de 2026 – a mesma base usada em todos os valores monetários do Observatório. O deflator utilizado é o Índice Nacional de Preços ao Consumidor Amplo (IPCA), a referência oficial de inflação do Banco Central do Brasil, calculado e divulgado pelo IBGE; os dados de variação do IPCA são obtidos na série 'Preços - IPCA - variação (PRECOS_IPCAG)' do Ipeadata, banco de dados público mantido pelo Instituto de Pesquisa Econômica Aplicada (IPEA). O cálculo acumula a variação do IPCA entre o ano de referência de cada valor e 2026, obtendo um fator de correção que, multiplicado pelo valor nominal, resulta no valor a preços de 2026. Por se tratar de uma conversão feita pela própria SDECPE – e não de um número publicado dessa forma pelo IBGE, que divulga os valores a preços correntes de cada ano –, os valores podem sofrer pequenos ajustes caso o IBGE revise algum mês do IPCA.",
           ],
         },
         {
           title: "Dados disponíveis",
           paragraphs: [
-            "O painel apresenta valor da produção, quantidade de empresas e empregos do setor. A edição de 2024 inicia uma nova série e não deve ser comparada diretamente com anos anteriores devido à mudança metodológica do IBGE.",
+            "A PIA apresenta dados referentes ao valor da produção em reais, quantidade de empresas e quantidade de empregos do setor. Devido à mudança metodológica ocorrida neste ano, a PIA-Empresa 2024 não é comparável à de anos anteriores e, por isso, o IBGE rompeu a série histórica a partir do ano-base de 2024. A principal mudança foi no desenho amostral: o corte do estrato certo – empresas automaticamente incluídas na amostra, sem sorteio – subiu de 20 para 30 pessoas ocupadas, passando também a incluir empresas com receita bruta superior a R$ 100 milhões independentemente do porte; houve ainda alterações na estrutura de apresentação dos resultados. Por isso, o Observatório evita comparar a edição de 2024 com edições anteriores a esse ano, priorizando comparações entre estados dentro da própria edição.",
           ],
         },
         {
           title: "Síntese da leitura mais recente",
           paragraphs: [
-            "Em 2024, Pernambuco registrou aproximadamente R$ 143,3 bilhões em produção industrial, 5.397 empresas e 212.951 trabalhadores formais no setor.",
+            "A edição mais recente (referente a 2024), divulgada em junho de 2026, mostrou Valor Bruto da Produção Industrial de Pernambuco de aproximadamente R$ 143,3 bilhões – a segunda maior economia industrial do Nordeste, atrás da Bahia (R$ 249,4 bilhões), e cerca de 22% da produção industrial da região. O estado contava com 5.397 empresas industriais e 212.951 trabalhadores formais no setor, sendo o segundo maior empregador industrial do Nordeste. A indústria de transformação respondeu por 99,6% do VBPI – uma estrutura diversificada, liderada pela fabricação de veículos, reboques e carrocerias (R$ 35,8 bilhões, cerca de 25% do total), seguida por produtos alimentícios (R$ 29,5 bilhões) e indústria química (R$ 17,5 bilhões). A produtividade média chegou a R$ 673 mil por trabalhador, superior à da maior parte dos estados nordestinos.",
           ],
         },
       ],
@@ -129,32 +217,30 @@ export const panels: Panel[] = [
     source: "Link a definir",
     info: {
       eyebrow: "Sobre o indicador · PMC",
-      title: "Pesquisa Mensal de Comércio",
+      title: "Pesquisa Mensal de Comércio (PMC)",
       cards: [
         {
           title: "O que é",
           paragraphs: [
-            "Divulgada mensalmente pelo IBGE, a PMC mede a evolução do volume de vendas e da receita nominal do comércio varejista.",
-            "O acompanhamento inclui o varejo ampliado, que reúne também veículos, peças e material de construção.",
+            "Divulgada mensalmente pelo Instituto Brasileiro de Geografia e Estatística (IBGE), com dois meses de defasagem, a PMC mede a evolução do volume de vendas e da receita nominal do comércio varejista. O observatório acompanha o comércio varejista ampliado, que inclui, além do varejo restrito (supermercados, vestuário, móveis etc.), os segmentos de veículos e motos, peças e material de construção – mais sensíveis ao crédito e à renda.",
           ],
         },
         {
           title: "Como é calculado",
           paragraphs: [
-            "O IBGE pesquisa uma amostra de empresas comerciais e constrói índices de volume de vendas com base 2022 igual a 100.",
-            "Para detalhar a comparação mensal por atividade e estado, a SDEC-PE realiza o ajuste sazonal das séries com o método X-13ARIMA-SEATS.",
+            "O IBGE pesquisa uma amostra de empresas comerciais e constrói índices de volume de vendas, com anobase na média de 2022 (2022 = 100). O IBGE divulga o número-índice com ajuste sazonal apenas para o Brasil e para o total do varejo de cada estado, ou seja, não para o detalhamento por atividade (supermercados, móveis, vestuário etc.) dentro de cada unidade da federação. Para permitir a comparação mês a mês entre esses segmentos e entre estados, a SDEC-PE dessazonaliza essas séries por conta própria, com o método X13ARIMA-SEATS, desenvolvido pelo U.S. Census Bureau a partir do X-11 e incorporando o modelo TRAMO-SEATS do Banco da Espanha — hoje o padrão internacional de ajuste sazonal, adotado também pelo IBGE, pelo Banco Central do Brasil e pelo Eurostat. O procedimento modela cada série, identifica o padrão que se repete todos os anos (datas comemorativas, 13º salário, dias úteis) e o remove, deixando à mostra apenas a variação efetiva de um mês para o outro. Por resultar de estimação estatística, e não de um número oficialmente publicado pelo IBGE, esses valores podem sofrer pequenas revisões conforme novos dados são incorporados à série.",
           ],
         },
         {
           title: "Dados disponíveis",
           paragraphs: [
-            "O painel reúne índice bruto, índice com ajuste sazonal, crescimento acumulado no ano e em 12 meses, variação mensal dessazonalizada e variação contra o mesmo mês do ano anterior.",
+            "O painel traz como leituras: Índice (2022 = 100), o nível bruto da série; Índice com ajuste sazonal (2022 = 100), o mesmo nível, mas corrigido para remover efeitos que se repetem todo ano (como datas comemorativas e calendário de pagamentos); Crescimento acumulado no ano (%); Crescimento acumulado em 12 meses (%); Crescimento mensal com ajuste sazonal (%), que compara o mês com o imediatamente anterior já sem efeito de sazonalidade; e Crescimento em relação ao mesmo mês do ano anterior (%).",
           ],
         },
         {
           title: "Síntese da leitura mais recente",
           paragraphs: [
-            "Entre janeiro e abril de 2026, o varejo ampliado de Pernambuco cresceu 9,4%, o maior resultado entre as unidades da federação no período.",
+            "De acordo com o Boletim Econômico de PE (junho/2026), o volume de vendas do comércio varejista ampliado de Pernambuco cresceu 9,4% no acumulado de janeiro a abril de 2026 – o maior resultado entre todas as unidades da federação no período, mais de cinco vezes o resultado nacional (1,8%). Na comparação interanual (abril/2026 ante abril/2025), o avanço foi de 5,4%, o terceiro maior do país. Na margem, o estado ficou estável (+0,3%), enquanto o Brasil recuou 0,7% e 20 das 27 UFs apresentaram queda – o sexto melhor desempenho do país e o terceiro do Nordeste. O consumo das famílias puxou o resultado no ano, com destaque para hipermercados e supermercados (+26,8%) e equipamentos de informática e comunicação (+17,4%).",
           ],
         },
       ],
@@ -177,26 +263,25 @@ export const panels: Panel[] = [
         {
           title: "O que é",
           paragraphs: [
-            "Divulgadas mensalmente pelo Banco Central, as movimentações via Pix registram o valor total e o número de transações realizadas em cada estado e município.",
-            "O indicador funciona como um termômetro da atividade econômica digital e da circulação de renda.",
+            "Divulgadas mensalmente pelo Banco Central do Brasil (BCB), com um mês de defasagem, as movimentações financeiras via Pix são um registro administrativo: o Banco Central publica o valor total movimentado e o número de transações realizadas pelo sistema de pagamentos instantâneos em cada estado e município. Funcionam como um termômetro da atividade econômica digital e da circulação de renda no dia a dia da população e das empresas.",
           ],
         },
         {
           title: "Como é calculado",
           paragraphs: [
-            "O Banco Central soma o valor e a quantidade das transações via Pix originadas no território durante o período selecionado.",
+            "O BCB soma o valor (em reais) e a quantidade de todas as transações via Pix originadas no estado em um determinado período, tipicamente acumulado no ano ou nos últimos 12 meses.",
           ],
         },
         {
           title: "Dados disponíveis",
           paragraphs: [
-            "O painel apresenta o valor acumulado movimentado e o número de transações, permitindo comparações entre estados e municípios.",
+            "Os principais resultados do painel são o valor acumulado movimentado e o número de transações no período, comparados entre estados e municípios.",
           ],
         },
         {
           title: "Síntese da leitura mais recente",
           paragraphs: [
-            "Entre janeiro e maio de 2026, Pernambuco movimentou R$ 333,9 bilhões em aproximadamente 1,38 bilhão de transações via Pix.",
+            "Segundo o Boletim Econômico de PE (junho/2026), entre janeiro e maio de 2026 Pernambuco movimentou R$ 333,9 bilhões via Pix, com aproximadamente 1,38 bilhão de transações – o segundo maior volume do Nordeste, atrás apenas da Bahia (R$ 507,6 bilhões) e à frente do Ceará (R$ 317,8 bilhões). O volume equivale a cerca de 21% do valor movimentado pelos nove estados nordestinos, proporção coerente com a participação de Pernambuco no PIB regional (aproximadamente 18%). A intensidade do uso do Pix acompanha o desempenho do comércio varejista, a expansão do tecido empresarial e a recuperação da renda das famílias, funcionando como uma infraestrutura de suporte à atividade econômica captada pelas demais pesquisas conjunturais.",
           ],
         },
       ],

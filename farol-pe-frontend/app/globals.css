@@ -1159,6 +1159,31 @@ kbd {
   pointer-events: none;
 }
 
+.embedded-info-button {
+  position: fixed;
+  z-index: 6;
+  top: 16px;
+  right: 18px;
+  display: inline-flex;
+  min-height: 40px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(20, 48, 86, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 24px rgba(12, 35, 67, 0.16);
+  color: var(--navy-800);
+  font-size: 12px;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+}
+
+.embedded-info-button:hover {
+  background: var(--white);
+  transform: translateY(-1px);
+}
+
 .content-header {
   display: flex;
   margin-bottom: 22px;

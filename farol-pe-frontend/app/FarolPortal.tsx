@@ -489,6 +489,14 @@ function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
   if (panel.embedUrl) {
     return (
       <main className="panel-page is-embedded" aria-label={panel.title}>
+        {panel.info && (
+          <button
+            className="embedded-info-button"
+            onClick={() => navigate(`/indicadores/${panel.slug}`)}
+          >
+            <span className="info-circle">i</span> Sobre o indicador
+          </button>
+        )}
         <section className="panel-stage">
           <div className="iframe-wrap">
             {!loaded && (
