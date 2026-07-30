@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   dataRequestUrl,
   mainLinks,
@@ -1140,12 +1140,11 @@ function NotFoundPage({ navigate }: { navigate: Navigate }) {
 }
 
 export default function FarolPortal() {
-  const router = useRouter();
   const pathname = usePathname() || "/";
   const [searchOpen, setSearchOpen] = useState(false);
 
   const navigate: Navigate = (href) => {
-    router.push(href);
+    if (href !== pathname) window.history.pushState(null, "", href);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
