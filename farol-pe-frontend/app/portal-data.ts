@@ -275,7 +275,9 @@ export const panels: Panel[] = [
     eyebrow: "Pesquisa Mensal de Comércio · IBGE",
     description:
       "Acompanhe o volume de vendas e a receita do comércio varejista de Pernambuco, com comparações por segmento e território.",
-    source: "Link a definir",
+    source: "Power BI",
+    embedUrl:
+      "https://app.powerbi.com/view?r=eyJrIjoiY2IzMDA5ZTYtN2Y3MS00YzA1LWExY2UtMzlmYWFmZGVlZjNlIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
     info: {
       eyebrow: "Sobre o indicador · PMC",
       title: "Pesquisa Mensal de Comércio (PMC)",
