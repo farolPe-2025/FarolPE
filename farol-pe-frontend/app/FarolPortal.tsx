@@ -506,7 +506,7 @@ function Sidebar({
             <span className="nav-symbol">⌂</span> Início
           </button>
           <button className={path === "/resumo" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/resumo")}>
-            <span className="nav-symbol">▥</span> Panorama
+            <span className="nav-symbol">▥</span> Boletim econômico
           </button>
           <button
             className={
@@ -790,9 +790,9 @@ function SummaryPage() {
     <main className="summary-page">
       <header className="summary-hero">
         <div>
-          <p className="eyebrow">Boletim Econômico de PE · Julho / 2026</p>
+          <p className="eyebrow">Panorama Econômico de PE · Julho / 2026</p>
           <h1>
-            Panorama econômico
+            Boletim econômico
             <br />
             de Pernambuco
           </h1>
