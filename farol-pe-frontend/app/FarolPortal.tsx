@@ -519,8 +519,6 @@ function Sidebar({
             <span className="nav-symbol">▦</span> Painéis
           </button>
 
-          <p className="sidebar-label">Explorar por tema</p>
-
           {sidebarPanelGroups.map((group) => {
             const isOpen = openGroup === group.id;
 
