@@ -4349,6 +4349,42 @@ button {
   font-size: 19px;
 }
 
+/* Marca oficial FarolPE */
+.brand-lockup {
+  position: relative;
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  aspect-ratio: 3.25 / 1;
+  overflow: hidden;
+}
+
+.brand-lockup .brand-logo {
+  position: absolute;
+  top: -80%;
+  left: -14.6%;
+  width: 127.5%;
+  height: auto;
+  max-width: none;
+  object-fit: contain;
+}
+
+.brand-lockup.is-compact {
+  width: 150px;
+}
+
+.reference-home .brand-lockup {
+  width: clamp(210px, 16vw, 290px);
+}
+
+.sidebar-brand .brand-lockup {
+  width: 188px;
+}
+
+.mobile-topbar .brand-lockup {
+  width: 138px;
+}
+
 .reference-home {
   min-height: 100vh;
   min-height: 100dvh;

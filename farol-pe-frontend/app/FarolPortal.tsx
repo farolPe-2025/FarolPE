@@ -93,10 +93,11 @@ const sidebarPanelGroups = [
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`brand-lockup ${compact ? "is-compact" : ""}`}>
-      <span className="brand-beacon" aria-hidden="true">
-        <img src="/favicon.png" alt="" />
-      </span>
-      <b>Farol<span>PE</span></b>
+      <img
+        className="brand-logo"
+        src="/farolpe-logo.png"
+        alt="FarolPE — Observatório Socioeconômico de Pernambuco"
+      />
     </div>
   );
 }
