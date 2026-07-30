@@ -101,6 +101,15 @@ function Brand({ compact = false }: { compact?: boolean }) {
   );
 }
 
+function SdecLogo({ compact = false }: { compact?: boolean }) {
+  return (
+    <span className={`sdec-lockup ${compact ? "is-compact" : ""}`}>
+      <img src="/sdec-logo.png" alt="Secretaria de Desenvolvimento Econômico" />
+      <strong>GOVERNO DE PERNAMBUCO</strong>
+    </span>
+  );
+}
+
 function SearchIcon() {
   return <span className="search-glyph" aria-hidden="true" />;
 }
@@ -396,7 +405,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
       </section>
 
       <footer className="home-footer">
-        <img src="/sdec-logo.png" alt="Secretaria de Desenvolvimento Econômico de Pernambuco" />
+        <SdecLogo />
         <span>Dados · Conhecimento · Estratégia · Desenvolvimento</span>
       </footer>
     </div>
@@ -581,7 +590,7 @@ function Sidebar({
         </nav>
 
         <div className="sidebar-footer">
-          <img src="/sdec-logo.png" alt="Secretaria de Desenvolvimento Econômico" />
+          <SdecLogo compact />
         </div>
       </aside>
     </>
