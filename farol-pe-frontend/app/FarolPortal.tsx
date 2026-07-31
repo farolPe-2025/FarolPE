@@ -794,7 +794,7 @@ function EconomicPanoramaPage() {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <main className="panel-page is-embedded" aria-label="Panorama Econômico de Pernambuco">
+    <main className="panel-page is-embedded is-panorama" aria-label="Panorama Econômico de Pernambuco">
       <section className="panel-stage">
         <div className="iframe-wrap">
           {!loaded && (

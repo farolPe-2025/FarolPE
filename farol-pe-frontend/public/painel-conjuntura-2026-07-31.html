@@ -753,6 +753,45 @@ html[data-theme="dark"] .siteheader{background:linear-gradient(160deg,#081221 0%
   .wrap{padding:0 12px;}
   .site-lead{font-size:15px;}
   .site-meta span + span{padding-left:0; border-left:none;}
+  html,body{width:100%; max-width:100%; overflow-x:hidden;}
+  main,.wrap,section,.card,.pad,.pane,.blocogrid>*,.cextgrid>*{min-width:0; max-width:100%;}
+  body{font-size:13.5px; line-height:1.5;}
+  main{padding-bottom:28px;}
+  section{margin-bottom:26px;}
+  .sec-head{margin-bottom:11px;}
+  .card{overflow:hidden; border-radius:11px;}
+  .pad{padding:14px 12px;}
+  .colchart,.tblwrap,.tblscroll{display:block; width:100%; max-width:100%; overflow-x:auto; overscroll-behavior-inline:contain; scrollbar-width:thin; scrollbar-color:var(--blue-300) var(--blue-050);}
+  .colchart{display:flex;}
+  .colgroup{min-width:58px;}
+  .colfoot{font-size:9.5px; overflow-wrap:anywhere;}
+  .tblwrap{margin:0; padding:0;}
+  .tblwrap table{min-width:640px;}
+  table.mini,table.sint,table.inv{max-width:none;}
+  .colchart::-webkit-scrollbar,.tblwrap::-webkit-scrollbar,.tblscroll::-webkit-scrollbar{height:7px;}
+  .colchart::-webkit-scrollbar-track,.tblwrap::-webkit-scrollbar-track,.tblscroll::-webkit-scrollbar-track{background:var(--blue-050); border-radius:999px;}
+  .colchart::-webkit-scrollbar-thumb,.tblwrap::-webkit-scrollbar-thumb,.tblscroll::-webkit-scrollbar-thumb{background:var(--blue-300); border-radius:999px;}
+  .janelas{gap:6px;}
+  .jan{min-width:0; padding:8px 9px 8px 9px;}
+  .jan span{font-size:8.5px;}
+  .dest{grid-template-columns:1fr;}
+  .dcard{min-height:0;}
+  .siteheader{padding:24px 0 22px; margin-bottom:22px;}
+  .site-h1{font-size:25px;}
+  .site-help{font-size:12.5px;}
+  .blocogrid>div{width:100%; min-width:0; overflow:hidden;}
+  .blocogrid .colchart{width:100%; overflow-x:auto; gap:10px; padding:0 0 10px; touch-action:pan-x pan-y; scroll-behavior:smooth;}
+  .blocogrid .colgroup{min-width:104px; flex:0 0 104px;}
+  .blocogrid .colslot{width:38px !important;}
+  .blocogrid .colnum{font-size:8.5px;}
+  .blocogrid .colfoot{min-height:52px; font-size:10.5px;}
+  .blocogrid .chartlegend{gap:14px;}
+  .blocogrid .lgi{font-size:10.5px;}
+  .blocogrid .tblscroll{width:100%; overflow-x:auto; touch-action:pan-x pan-y; scroll-behavior:smooth;}
+  .blocogrid .tblscroll table.mini{width:640px; min-width:640px; table-layout:fixed; font-size:10.5px;}
+  .blocogrid .tblscroll table.mini th,
+  .blocogrid .tblscroll table.mini td{padding:9px 7px; white-space:nowrap;}
+  .blocogrid .tblscroll table.mini th{font-size:8px; letter-spacing:.02em;}
 }
 </style></head>
 <body>
@@ -1583,5 +1622,10 @@ function mostrar(g,k){
   }
   var bs=document.querySelectorAll('.jan[data-g="'+g+'"]');
   for(var j=0;j<bs.length;j++){ bs[j].className = 'jan' + (bs[j].getAttribute('data-k')===k ? ' active' : ''); }
-}</script>
+  var scrollers=document.querySelectorAll('.pane[data-g="'+g+'"][data-k="'+k+'"] .colchart, .pane[data-g="'+g+'"][data-k="'+k+'"] .tblscroll');
+  for(var n=0;n<scrollers.length;n++){ scrollers[n].scrollLeft=0; }
+}
+var initialScrollers=document.querySelectorAll('.colchart,.tblwrap,.tblscroll');
+for(var s=0;s<initialScrollers.length;s++){ initialScrollers[s].scrollLeft=0; }
+</script>
 </body></html>

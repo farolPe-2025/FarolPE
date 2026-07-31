@@ -1284,6 +1284,17 @@ kbd {
   pointer-events: none;
 }
 
+.panel-page.is-panorama .iframe-wrap::after {
+  display: none;
+}
+
+.panel-page.is-panorama,
+.panel-page.is-panorama .panel-stage,
+.panel-page.is-panorama .iframe-wrap {
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .content-header {
   display: flex;
   margin-bottom: 22px;

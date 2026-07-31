@@ -234,7 +234,9 @@ export const panels: Panel[] = [
     eyebrow: "PIA-Empresa · IBGE",
     description:
       "Conheça a estrutura da indústria pernambucana, o número de empresas, os empregos e o valor da produção industrial.",
-    source: "Link a definir",
+    source: "Power BI",
+    embedUrl:
+      "https://app.powerbi.com/view?r=eyJrIjoiMDdjMDU5NDMtZGRjYy00OTZiLWIzYTUtYTM4MDhlOGM1M2Y5IiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
     info: {
       eyebrow: "Sobre o indicador · PIA-Empresa",
       title: "Pesquisa Industrial Anual (PIA-Empresa)",
