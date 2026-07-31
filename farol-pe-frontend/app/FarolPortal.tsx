@@ -49,19 +49,16 @@ const sidebarPanelGroups = [
   {
     id: "economic",
     label: "Dinâmica Econômica",
-    icon: "↗",
     slugs: ["atividade-economica", "industria", "comercio", "servicos", "turismo"],
   },
   {
     id: "sectoral",
-    label: "Panoramas Setoriais",
-    icon: "▦",
+    label: "Estruturas Setoriais",
     slugs: ["estrutura-industrial", "panorama-comercio", "panorama-servicos"],
   },
   {
     id: "income",
     label: "Produção e Renda",
-    icon: "◇",
     slugs: [
       "produto-interno-bruto",
       "valor-adicionado-bruto",
@@ -73,7 +70,6 @@ const sidebarPanelGroups = [
   {
     id: "agriculture",
     label: "Agropecuária",
-    icon: "◉",
     slugs: ["agricultura"],
     nestedLabel: "Pecuária",
     nestedSlugs: ["aquicultura", "origem-animal", "rebanhos"],
@@ -81,7 +77,6 @@ const sidebarPanelGroups = [
   {
     id: "employment",
     label: "Emprego",
-    icon: "▥",
     slugs: [
       "estoque-de-emprego",
       "fluxo-de-emprego",
@@ -513,10 +508,10 @@ function Sidebar({
 
         <nav className="sidebar-nav" aria-label="Navegação dos painéis">
           <button className={path === "/" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/")}>
-            <span className="nav-symbol">⌂</span> Início
+            <span className="nav-symbol tone-home">⌂</span> Início
           </button>
           <button className={path === "/resumo" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/resumo")}>
-            <span className="nav-symbol">▥</span> Boletim econômico
+            <span className="nav-symbol tone-panorama">◔</span> Panorama econômico
           </button>
           <button
             className={
@@ -526,14 +521,15 @@ function Sidebar({
             }
             onClick={() => go("/paineis/atividade-economica")}
           >
-            <span className="nav-symbol">▦</span> Painéis
+            <span className="nav-symbol tone-panels">▦</span> Painéis dos Dados
           </button>
 
-          {sidebarPanelGroups.map((group) => {
-            const isOpen = openGroup === group.id;
+          <div className="sidebar-panel-groups">
+            {sidebarPanelGroups.map((group) => {
+              const isOpen = openGroup === group.id;
 
-            return (
-              <div className="nav-group" key={group.id}>
+              return (
+                <div className="nav-group" key={group.id}>
                 <button
                   className="group-toggle"
                   onClick={() =>
@@ -543,9 +539,7 @@ function Sidebar({
                   }
                   aria-expanded={isOpen}
                 >
-                  <span>
-                    <i className="group-icon">{group.icon}</i> {group.label}
-                  </span>
+                  <span>{group.label}</span>
                   <b>{isOpen ? "−" : "+"}</b>
                 </button>
                 {isOpen && (
@@ -572,21 +566,22 @@ function Sidebar({
                     )}
                   </div>
                 )}
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
 
           <button
             className={path === "/dicionario-de-dados" ? "sidebar-main is-active" : "sidebar-main"}
             onClick={() => go("/dicionario-de-dados")}
           >
-            <span className="nav-symbol">↓</span> Download dos Dados
+            <span className="nav-symbol tone-download">⇩</span> Download dos Dados
           </button>
           <button className={path === "/publicacoes" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/publicacoes")}>
-            <span className="nav-symbol">▤</span> Publicações
+            <span className="nav-symbol tone-publications">≡</span> Publicações
           </button>
           <button className={path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/sobre")}>
-            <span className="nav-symbol">●</span> Sobre
+            <span className="nav-symbol tone-about">ⓘ</span> Sobre
           </button>
         </nav>
 
@@ -792,6 +787,32 @@ function BarChart({
         ))}
       </div>
     </article>
+  );
+}
+
+function EconomicPanoramaPage() {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <main className="panel-page is-embedded" aria-label="Panorama Econômico de Pernambuco">
+      <section className="panel-stage">
+        <div className="iframe-wrap">
+          {!loaded && (
+            <div className="panel-loading" role="status">
+              <span className="loader-beam" />
+              <strong>Carregando o panorama econômico</strong>
+              <small>Preparando os indicadores de Pernambuco…</small>
+            </div>
+          )}
+          <iframe
+            src="/painel-conjuntura-2026-07-31.html"
+            title="Painel de Conjuntura Econômica de Pernambuco"
+            onLoad={() => setLoaded(true)}
+            className={loaded ? "is-loaded" : ""}
+          />
+        </div>
+      </section>
+    </main>
   );
 }
 
@@ -1182,7 +1203,7 @@ export default function FarolPortal() {
     : undefined;
 
   let content: React.ReactNode;
-  if (pathname === "/resumo") content = <SummaryPage />;
+  if (pathname === "/resumo") content = <EconomicPanoramaPage />;
   else if (pathname === "/sobre") content = <AboutPage navigate={navigate} />;
   else if (pathname === "/dicionario-de-dados") content = <DataDictionaryPage />;
   else if (pathname === "/publicacoes") content = <PublicationsPage navigate={navigate} />;

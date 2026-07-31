@@ -229,7 +229,7 @@ export const panels: Panel[] = [
     slug: "estrutura-industrial",
     legacyId: "bi-PIA",
     title: "Estrutura industrial de Pernambuco",
-    shortTitle: "Indústria (PIA)",
+    shortTitle: "Indústria ",
     category: "Panoramas Setoriais",
     eyebrow: "PIA-Empresa · IBGE",
     description:
@@ -354,7 +354,7 @@ export const panels: Panel[] = [
     slug: "panorama-comercio",
     legacyId: "bi-PAC",
     title: "Panorama do comércio",
-    shortTitle: "Comércio (PAC)",
+    shortTitle: "Comércio",
     category: "Panoramas Setoriais",
     eyebrow: "PAC · IBGE",
     description:
@@ -365,7 +365,7 @@ export const panels: Panel[] = [
     slug: "panorama-servicos",
     legacyId: "bi-PAS",
     title: "Panorama dos serviços",
-    shortTitle: "Serviços (PAS)",
+    shortTitle: "Serviços",
     category: "Panoramas Setoriais",
     eyebrow: "PAS · IBGE",
     description:
@@ -538,14 +538,14 @@ export const panels: Panel[] = [
 
 export const mainLinks = [
   { href: "/", label: "Início" },
-  { href: "/resumo", label: "Boletim Econômico" },
+  { href: "/resumo", label: "Panorama Econômico" },
   { href: "/paineis/atividade-economica", label: "Painéis dos Dados" },
   { href: "/publicacoes", label: "Publicações" },
   { href: "/sobre", label: "Sobre" },
 ];
 
 export const dataRequestUrl =
-  "https://docs.google.com/forms/d/e/1FAIpQLSdaDaMbjhz70ubK79YQeoOjySp8668p5XoihS6gw_ElNBQV9g/viewform";
+  "https://forms.gle/aMfCQQ8N4aU1pt4m6";
 
 export const summaryKpis = [
   {

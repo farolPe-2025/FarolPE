@@ -22,8 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "Indicadores oficiais e análises para orientar o desenvolvimento econômico de Pernambuco.",
     icons: {
-      icon: "/farolpe-logo.png",
-      shortcut: "/farolpe-logo.png",
+      icon: "/favicon-farol-large.png",
+      shortcut: "/favicon-farol-large.png",
+      apple: "/favicon-farol-large.png",
     },
     openGraph: {
       type: "website",
