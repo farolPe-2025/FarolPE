@@ -14,6 +14,9 @@ import {
 
 type Navigate = (href: string) => void;
 
+type PublicationKind = "news" | "report" | "bulletin";
+type PublicationRange = "all" | "30" | "90" | "365";
+
 const activityBars = [
   ["Atividade", "+5,1%", 34, "blue"],
   ["Indústria", "+14,9%", 100, "green"],
@@ -45,6 +48,45 @@ const jobsBars = [
   ["Agropecuária", "-46", 2, "red"],
 ] as const;
 
+const publicationKindOptions = [
+  { value: "all", label: "Todos" },
+  { value: "news", label: "Notícias" },
+  { value: "report", label: "Relatórios analíticos" },
+  { value: "bulletin", label: "Boletim econômico" },
+] as const;
+
+const publicationRangeOptions = [
+  { value: "all", label: "Todo o período" },
+  { value: "30", label: "Últimos 30 dias" },
+  { value: "90", label: "Últimos 3 meses" },
+  { value: "365", label: "Últimos 12 meses" },
+] as const;
+
+const publicationTypeLabels: Record<PublicationKind, string> = {
+  news: "Notícia",
+  report: "Relatório analítico",
+  bulletin: "Boletim econômico",
+};
+
+const publicationItems = [
+  {
+    id: "clipping-varejo-pernambuco-2026",
+    kind: "news" as const,
+    title:
+      "Pernambuco lidera alta do comércio varejista em 2026 no país, aponta IBGE",
+    summary:
+      "Exemplo de clipping para demonstrar a organização das manchetes. Os próximos conteúdos poderão ser incluídos nesta mesma estrutura.",
+    source: "Diario de Pernambuco",
+    publishedAt: "2026-07-17",
+    displayDate: "17 jul. 2026",
+    image: "/farol-home.jpg",
+    imageAlt:
+      "Farol iluminando o litoral, imagem ilustrativa do exemplo de clipping",
+    href: "https://www.diariodepernambuco.com.br/economia/2026/07/11719036-pernambuco-lidera-alta-do-comercio-varejista-no-pais-aponta-ibge.html",
+    isExample: true,
+  },
+];
+
 const sidebarPanelGroups = [
   {
     id: "economic",
@@ -53,7 +95,7 @@ const sidebarPanelGroups = [
   },
   {
     id: "sectoral",
-    label: "Estruturas Setoriais",
+    label: "Estrutura Setorial",
     slugs: ["estrutura-industrial", "panorama-comercio", "panorama-servicos"],
   },
   {
@@ -430,18 +472,16 @@ function Sidebar({
         ("nestedSlugs" in group &&
           group.nestedSlugs.includes(activePanelSlug as never)),
     )?.id ?? null;
-  const [openGroup, setOpenGroup] = useState<string | null>(
-    activeGroup ?? "economic",
-  );
+  const [openGroup, setOpenGroup] = useState<string | null>(activeGroup);
   const [livestockOpen, setLivestockOpen] = useState(
     ["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug),
   );
 
   useEffect(() => {
-    if (activeGroup) setOpenGroup(activeGroup);
-    if (["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug)) {
-      setLivestockOpen(true);
-    }
+    setOpenGroup(activeGroup);
+    setLivestockOpen(
+      ["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug),
+    );
   }, [activeGroup, activePanelSlug]);
 
   const go = (href: string) => {
@@ -453,7 +493,9 @@ function Sidebar({
     <div className="sidebar-panel-row" key={panel.slug}>
       <button
         className={`sidebar-link ${nested ? "is-nested" : ""} ${
-          path === `/paineis/${panel.slug}` ? "is-active" : ""
+          path === `/paineis/${panel.slug}` || path === `/indicadores/${panel.slug}`
+            ? "is-active"
+            : ""
         }`}
         onClick={() => go(`/paineis/${panel.slug}`)}
       >
@@ -511,7 +553,7 @@ function Sidebar({
             <span className="nav-symbol tone-home">⌂</span> Início
           </button>
           <button className={path === "/resumo" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/resumo")}>
-            <span className="nav-symbol tone-panorama">◔</span> Panorama econômico
+            <span className="nav-symbol tone-panorama">◔</span> Panorama Econômico
           </button>
           <button
             className={
@@ -1043,22 +1085,27 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
     ["Como explorar", "Os painéis permitem consultar séries históricas, comparar estados, regiões e municípios e visualizar os dados em gráficos, mapas e tabelas."],
     ["Realização", "Uma iniciativa da Secretaria de Desenvolvimento Econômico do Estado de Pernambuco — SDEC-PE."],
   ];
+  const team = [
+    { name: "Pedro Albuquerque" },
+    { name: "Eduardo Silva" },
+    { name: "Caio Coutinho" },
+    { name: "Marcus Ferraz" },
+    {
+      name: "Pedro Lacerda",
+      role: "Secretário Executivo de Atração de Investimentos e Estudos Econômicos",
+    },
+    {
+      name: "Danielle Jar",
+      role: "Secretária de Desenvolvimento Econômico",
+    },
+  ];
 
   return (
     <main className="about-page">
       <header className="about-hero">
-        <div className="about-photo">
-          <img src="/farol.jpg" alt="Farol no litoral pernambucano" />
-        </div>
         <div>
           <p className="eyebrow">FarolPE</p>
           <h1>Dados que ajudam Pernambuco a enxergar mais longe.</h1>
-          <p>
-            O FarolPE é uma plataforma pública de inteligência socioeconômica
-            criada para reunir, organizar e apresentar informações estratégicas
-            sobre Pernambuco. O projeto aproxima dados oficiais da sociedade e
-            transforma evidências em apoio para decisões mais claras.
-          </p>
           <button className="button button-light" onClick={() => navigate("/paineis/agricultura")}>
             Conhecer os painéis →
           </button>
@@ -1083,15 +1130,13 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
             técnico, análise de dados e construção digital.
           </span>
           <ul>
-            {[
-              "Pedro Albuquerque",
-              "Eduardo Silva",
-              "Caio Coutinho",
-              "Marcus Ferraz",
-            ].map((name, index) => (
-              <li key={name}>
+            {team.map((member, index) => (
+              <li key={member.name}>
                 <small>{String(index + 1).padStart(2, "0")}</small>
-                <strong>{name}</strong>
+                <span>
+                  <strong>{member.name}</strong>
+                  {member.role && <em>{member.role}</em>}
+                </span>
               </li>
             ))}
           </ul>
@@ -1102,6 +1147,10 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
 }
 
 function DataDictionaryPage() {
+  const downloadablePanels = panels.filter(
+    (panel) => panel.embedUrl && panel.downloadTitle && panel.research,
+  );
+
   return (
     <main className="dictionary-page">
       <header className="dictionary-hero">
@@ -1114,15 +1163,17 @@ function DataDictionaryPage() {
       </header>
 
       <section className="dictionary-list" aria-label="Painéis disponíveis">
-        {panels.map((panel) => (
+        {downloadablePanels.map((panel) => (
           <article className="dictionary-card" key={panel.slug}>
-            <h2>{panel.shortTitle}</h2>
+            <h2>
+              {panel.downloadTitle} <span>({panel.research})</span>
+            </h2>
             <p>{panel.description}</p>
             <a
               href={dataRequestUrl}
               target="_blank"
               rel="noreferrer"
-              aria-label={`Acessar dados do painel ${panel.shortTitle}`}
+              aria-label={`Acessar dados do painel ${panel.downloadTitle} (${panel.research})`}
             >
               Acessar dados <span aria-hidden="true">↗</span>
             </a>
@@ -1133,26 +1184,110 @@ function DataDictionaryPage() {
   );
 }
 
-function PublicationsPage({ navigate }: { navigate: Navigate }) {
+function PublicationsPage() {
+  const [kind, setKind] = useState<"all" | PublicationKind>("all");
+  const [range, setRange] = useState<PublicationRange>("all");
+  const filteredPublications = useMemo(() => {
+    const now = Date.now();
+
+    return publicationItems.filter((item) => {
+      if (kind !== "all" && item.kind !== kind) return false;
+      if (range === "all") return true;
+
+      const publishedAt = new Date(`${item.publishedAt}T12:00:00-03:00`).getTime();
+      const ageInDays = (now - publishedAt) / 86_400_000;
+      return ageInDays >= 0 && ageInDays <= Number(range);
+    });
+  }, [kind, range]);
+
   return (
-    <main className="coming-page">
-      <div className="coming-copy">
-        <p className="eyebrow dark">Publicações</p>
-        <h1>Análises para ir além dos números.</h1>
+    <main className="publications-page">
+      <header className="publications-hero">
+        <p className="eyebrow">Publicações</p>
+        <h1>Informação para acompanhar Pernambuco.</h1>
         <p>
-          Este espaço reunirá boletins, notas técnicas e estudos produzidos a
-          partir dos indicadores do FarolPE.
+          Consulte notícias selecionadas, relatórios analíticos e boletins
+          econômicos em uma linha do tempo organizada pelo FarolPE.
         </p>
-        <button className="button button-primary" onClick={() => navigate("/resumo")}>
-          Enquanto isso, veja o panorama →
-        </button>
-      </div>
-      <div className="coming-visual" aria-hidden="true">
-        <span>EM BREVE</span>
-        <div className="document-stack">
-          <i /><i /><i />
+      </header>
+
+      <section className="publications-content" aria-labelledby="publications-results-title">
+        <div className="publications-filters">
+          <fieldset>
+            <legend>Tipo de publicação</legend>
+            <div className="publication-kind-options">
+              {publicationKindOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={kind === option.value ? "is-active" : ""}
+                  onClick={() => setKind(option.value)}
+                  aria-pressed={kind === option.value}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
+          <label className="publication-range-filter">
+            <span>Janela de tempo</span>
+            <select
+              value={range}
+              onChange={(event) => setRange(event.target.value as PublicationRange)}
+            >
+              {publicationRangeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
-      </div>
+
+        <div className="publications-results-heading">
+          <div>
+            <p>Acervo</p>
+            <h2 id="publications-results-title">Conteúdos publicados</h2>
+          </div>
+          <span aria-live="polite">
+            {filteredPublications.length}{" "}
+            {filteredPublications.length === 1 ? "resultado" : "resultados"}
+          </span>
+        </div>
+
+        {filteredPublications.length > 0 ? (
+          <div className="publication-grid">
+            {filteredPublications.map((item) => (
+              <article className="publication-card" key={item.id}>
+                <div className="publication-card-image">
+                  <img src={item.image} alt={item.imageAlt} />
+                  {item.isExample && <span>Exemplo de clipping</span>}
+                </div>
+                <div className="publication-card-copy">
+                  <div className="publication-card-meta">
+                    <span>{publicationTypeLabels[item.kind]}</span>
+                    <time dateTime={item.publishedAt}>{item.displayDate}</time>
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.summary}</p>
+                  <footer>
+                    <strong>{item.source}</strong>
+                    <a href={item.href} target="_blank" rel="noreferrer">
+                      Ler clipping <span aria-hidden="true">↗</span>
+                    </a>
+                  </footer>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="publications-empty" role="status">
+            <strong>Nenhum conteúdo nesta seleção.</strong>
+            <p>Altere o tipo de publicação ou amplie a janela de tempo.</p>
+          </div>
+        )}
+      </section>
     </main>
   );
 }
@@ -1206,7 +1341,7 @@ export default function FarolPortal() {
   if (pathname === "/resumo") content = <EconomicPanoramaPage />;
   else if (pathname === "/sobre") content = <AboutPage navigate={navigate} />;
   else if (pathname === "/dicionario-de-dados") content = <DataDictionaryPage />;
-  else if (pathname === "/publicacoes") content = <PublicationsPage navigate={navigate} />;
+  else if (pathname === "/publicacoes") content = <PublicationsPage />;
   else if (panel) content = <PanelPage key={panel.slug} panel={panel} navigate={navigate} />;
   else if (infoPanel?.info) content = <InfoPage panel={infoPanel} navigate={navigate} />;
   else content = <NotFoundPage navigate={navigate} />;

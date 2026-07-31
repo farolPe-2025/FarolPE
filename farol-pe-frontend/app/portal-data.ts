@@ -13,6 +13,8 @@ export type Panel = {
   legacyId: string;
   title: string;
   shortTitle: string;
+  downloadTitle?: string;
+  research?: string;
   category: string;
   eyebrow: string;
   description: string;
@@ -58,6 +60,8 @@ export const panels: Panel[] = [
     legacyId: "bi-PIM",
     title: "Produção industrial",
     shortTitle: "Indústria",
+    downloadTitle: "Indústria",
+    research: "PIM-PF",
     category: "Dinâmica Econômica",
     eyebrow: "PIM-PF · IBGE",
     description:
@@ -101,6 +105,8 @@ export const panels: Panel[] = [
     legacyId: "bi-IBCR",
     title: "Atividade econômica",
     shortTitle: "Atividade Econômica",
+    downloadTitle: "Atividade Econômica",
+    research: "IBCR",
     category: "Dinâmica Econômica",
     eyebrow: "IBCR · Banco Central",
     description:
@@ -144,6 +150,8 @@ export const panels: Panel[] = [
     legacyId: "bi-servicos",
     title: "Serviços em Pernambuco",
     shortTitle: "Serviços",
+    downloadTitle: "Serviços",
+    research: "PMS",
     category: "Dinâmica Econômica",
     eyebrow: "Pesquisa Mensal de Serviços",
     description:
@@ -187,6 +195,8 @@ export const panels: Panel[] = [
     legacyId: "bi-turismo",
     title: "Turismo em Pernambuco",
     shortTitle: "Turismo",
+    downloadTitle: "Turismo",
+    research: "PMS",
     category: "Dinâmica Econômica",
     eyebrow: "Atividades turísticas",
     description:
@@ -230,6 +240,8 @@ export const panels: Panel[] = [
     legacyId: "bi-PIA",
     title: "Estrutura industrial de Pernambuco",
     shortTitle: "Indústria ",
+    downloadTitle: "Estrutura industrial",
+    research: "PIA-Empresa",
     category: "Panoramas Setoriais",
     eyebrow: "PIA-Empresa · IBGE",
     description:
@@ -273,6 +285,8 @@ export const panels: Panel[] = [
     legacyId: "bi-PMC",
     title: "Comércio em Pernambuco",
     shortTitle: "Comércio",
+    downloadTitle: "Comércio",
+    research: "PMC",
     category: "Dinâmica Econômica",
     eyebrow: "Pesquisa Mensal de Comércio · IBGE",
     description:
@@ -456,6 +470,8 @@ export const panels: Panel[] = [
     legacyId: "bi-pam-municipio",
     title: "Produção agrícola de Pernambuco",
     shortTitle: "Agricultura",
+    downloadTitle: "Agricultura",
+    research: "PAM",
     category: "Agropecuária",
     eyebrow: "PAM · IBGE",
     description:
@@ -499,6 +515,8 @@ export const panels: Panel[] = [
     legacyId: "bi-ppm-aquicultura",
     title: "Aquicultura em Pernambuco",
     shortTitle: "Aquicultura",
+    downloadTitle: "Aquicultura",
+    research: "PPM",
     category: "Agropecuária · Pecuária",
     eyebrow: "PPM · IBGE",
     description:
@@ -513,6 +531,8 @@ export const panels: Panel[] = [
     legacyId: "bi-ppm-origem-animal",
     title: "Produção de origem animal",
     shortTitle: "Produção de origem animal",
+    downloadTitle: "Produção de origem animal",
+    research: "PPM",
     category: "Agropecuária · Pecuária",
     eyebrow: "PPM · IBGE",
     description:
@@ -527,6 +547,8 @@ export const panels: Panel[] = [
     legacyId: "bi-ppm-rebanhos",
     title: "Rebanhos de Pernambuco",
     shortTitle: "Rebanhos",
+    downloadTitle: "Rebanhos",
+    research: "PPM",
     category: "Agropecuária · Pecuária",
     eyebrow: "PPM · IBGE",
     description:
@@ -551,27 +573,27 @@ export const dataRequestUrl =
 
 export const summaryKpis = [
   {
-    label: "Atividade econômica",
+    label: "Atividade econômica (IBCR/BCB)",
     value: "+5,1%",
-    note: "2º Brasil · 1º Nordeste",
+    note: "Acumulado no ano até maio",
     tone: "blue",
   },
   {
-    label: "Produção industrial",
+    label: "Produção industrial (PIM/IBGE)",
     value: "+14,9%",
-    note: "Janeiro–maio · 2º Brasil",
+    note: "Acumulado no ano até maio",
     tone: "green",
   },
   {
-    label: "Comércio varejista",
+    label: "Comércio varejista restrito (PMC/IBGE)",
     value: "+11,0%",
-    note: "Maior crescimento do país",
+    note: "Acumulado no ano até maio",
     tone: "gold",
   },
   {
-    label: "Emprego formal",
-    value: "5.894",
-    note: "Pendente de atualização",
+    label: "Saldo de empregos formais",
+    value: "+6.162",
+    note: "Em jun/2026",
     tone: "red",
   },
 ];
