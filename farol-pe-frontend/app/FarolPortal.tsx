@@ -142,8 +142,12 @@ function Brand({ compact = false }: { compact?: boolean }) {
 function SdecLogo({ compact = false }: { compact?: boolean }) {
   return (
     <span className={`sdec-lockup ${compact ? "is-compact" : ""}`}>
-      <img src="/sdec-logo.png" alt="Secretaria de Desenvolvimento Econômico" />
-      <strong>GOVERNO DE PERNAMBUCO</strong>
+      <span className="sdec-logo-crop">
+        <img
+          src="/sdec-gov-branco.png"
+          alt="Secretaria de Desenvolvimento Econômico — Governo de Pernambuco"
+        />
+      </span>
     </span>
   );
 }
