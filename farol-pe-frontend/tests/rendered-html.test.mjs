@@ -288,7 +288,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-07-31.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-03.html", import.meta.url),
     "utf8",
   );
   const stylesheet = await readFile(
@@ -302,7 +302,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     assert.ok(panorama.includes(value));
   }
 
-  assert.match(panorama, /Panorama Econômico de Pernambuco/);
+  assert.match(panorama, /Panorama econômico de Pernambuco/i);
   assert.match(
     stylesheet,
     /\.home-analysis \{\s*background:[\s\S]*?linear-gradient\(145deg, #071a38 0%, #0a2447 54%, #0d3158 100%\);\s*color: #fff;/,
