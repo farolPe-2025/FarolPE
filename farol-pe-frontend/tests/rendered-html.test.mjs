@@ -26,6 +26,34 @@ async function render(path = "/") {
   );
 }
 
+test("mantem o panorama contido e rolavel em telas pequenas", async () => {
+  const panorama = await readFile(
+    new URL("../public/painel-conjuntura-2026-08-03.html", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    panorama,
+    /@media \(max-width:640px\)[\s\S]*?html,body\{width:100%; max-width:100%; overflow-x:hidden;\}/,
+  );
+  assert.match(
+    panorama,
+    /\.blocogrid>div\{width:100%; min-width:0; overflow:hidden;\}/,
+  );
+  assert.match(
+    panorama,
+    /\.blocogrid \.colchart\{[^}]*overflow-x:auto;[^}]*touch-action:pan-x pan-y;/,
+  );
+  assert.match(
+    panorama,
+    /\.blocogrid \.tblscroll\{[^}]*overflow-x:auto;[^}]*touch-action:pan-x pan-y;/,
+  );
+  assert.match(
+    panorama,
+    /initialScrollers=document\.querySelectorAll\('\.colchart,\.tblwrap,\.tblscroll'\)/,
+  );
+});
+
 test("renderiza a home institucional do FarolPE", async () => {
   const response = await render("/");
   assert.equal(response.status, 200);
