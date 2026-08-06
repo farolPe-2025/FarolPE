@@ -5602,10 +5602,10 @@ button {
   display: block;
   margin: 8px 22px 2px 31px;
   color: #91a4bf;
-  font-size: 9.3px;
+  font-size: 11px;
   font-weight: 480;
   letter-spacing: 0;
-  line-height: 1.48;
+  line-height: 1.5;
   animation: groupSummaryIn .3s cubic-bezier(.22, 1, .36, 1) both;
 }
 

@@ -244,6 +244,10 @@ test("resume cada categoria e informa sua quantidade de painéis", async () => {
     stylesheet,
     /\.sidebar-panel-groups \.group-icon,[\s\S]*?\.group-icon\.tone-employment \{[\s\S]*?color: #fff;/,
   );
+  assert.match(
+    stylesheet,
+    /\.group-toggle \.group-summary \{[\s\S]*?font-size: 11px;[\s\S]*?line-height: 1\.5;/,
+  );
 });
 
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {
