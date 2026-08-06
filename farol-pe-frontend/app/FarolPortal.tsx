@@ -3,6 +3,23 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import {
+  Building2,
+  ChartNoAxesCombined,
+  ChevronRight,
+  Compass,
+  Download,
+  FileText,
+  HandCoins,
+  House,
+  Info,
+  LayoutGrid,
+  Leaf,
+  Menu,
+  Search,
+  Users,
+  X,
+} from "lucide-react";
+import {
   dataRequestUrl,
   mainLinks,
   panels,
@@ -91,21 +108,21 @@ const sidebarPanelGroups = [
   {
     id: "economic",
     label: "Dinâmica Econômica",
-    glyph: "↗",
+    icon: ChartNoAxesCombined,
     tone: "economic",
     slugs: ["atividade-economica", "industria", "comercio", "servicos", "turismo"],
   },
   {
     id: "sectoral",
     label: "Estrutura Setorial",
-    glyph: "▥",
+    icon: Building2,
     tone: "sectoral",
     slugs: ["estrutura-industrial", "panorama-comercio", "panorama-servicos"],
   },
   {
     id: "income",
     label: "Produção e Renda",
-    glyph: "◴",
+    icon: HandCoins,
     tone: "income",
     slugs: [
       "produto-interno-bruto",
@@ -118,7 +135,7 @@ const sidebarPanelGroups = [
   {
     id: "agriculture",
     label: "Agropecuária",
-    glyph: "◇",
+    icon: Leaf,
     tone: "agriculture",
     slugs: ["agricultura"],
     nestedLabel: "Pecuária",
@@ -127,7 +144,7 @@ const sidebarPanelGroups = [
   {
     id: "employment",
     label: "Emprego",
-    glyph: "◎",
+    icon: Users,
     tone: "employment",
     slugs: [
       "estoque-de-emprego",
@@ -176,7 +193,7 @@ function SdecLogo({ compact = false }: { compact?: boolean }) {
 }
 
 function SearchIcon() {
-  return <span className="search-glyph" aria-hidden="true" />;
+  return <Search className="search-glyph" aria-hidden="true" />;
 }
 
 function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number }) {
@@ -298,7 +315,7 @@ function SearchDialog({
             <h2 id="search-title">O que você quer encontrar?</h2>
           </div>
           <button className="icon-button" onClick={onClose} aria-label="Fechar busca">
-            ×
+            <X aria-hidden="true" />
           </button>
         </div>
         <label className="search-field">
@@ -620,7 +637,7 @@ function Sidebar({
           aria-label={`Sobre o indicador ${panel.shortTitle}`}
           title={`Sobre ${panel.shortTitle}`}
         >
-          i
+          <Info aria-hidden="true" />
         </button>
       )}
     </div>
@@ -645,7 +662,7 @@ function Sidebar({
             <Brand />
           </button>
           <button className="drawer-close" onClick={onClose} aria-label="Fechar menu">
-            ×
+            <X aria-hidden="true" />
           </button>
         </div>
 
@@ -670,7 +687,9 @@ function Sidebar({
               onClick={() => go("/")}
               aria-current={path === "/" ? "page" : undefined}
             >
-              <span className="primary-icon icon-home" aria-hidden="true"><i /></span>
+              <span className="primary-icon icon-home" aria-hidden="true">
+                <House />
+              </span>
               <span>Início</span>
             </button>
             <button
@@ -678,7 +697,9 @@ function Sidebar({
               onClick={showPanorama}
               aria-current={isPanoramaContext ? "page" : undefined}
             >
-              <span className="primary-icon icon-panorama" aria-hidden="true"><i /></span>
+              <span className="primary-icon icon-panorama" aria-hidden="true">
+                <Compass />
+              </span>
               <span>Panorama</span>
             </button>
             <button
@@ -686,7 +707,9 @@ function Sidebar({
               onClick={showPanels}
               aria-current={isPanelsContext ? "page" : undefined}
             >
-              <span className="primary-icon icon-panels" aria-hidden="true"><i /></span>
+              <span className="primary-icon icon-panels" aria-hidden="true">
+                <LayoutGrid />
+              </span>
               <span>Painéis</span>
             </button>
           </div>
@@ -731,6 +754,7 @@ function Sidebar({
                 {sidebarPanelGroups.map((group) => {
                   const isOpen = openGroup === group.id;
                   const childrenId = `sidebar-group-${group.id}`;
+                  const GroupIcon = group.icon;
 
                   return (
                     <div className="nav-group" key={group.id}>
@@ -750,11 +774,11 @@ function Sidebar({
                             className={`group-icon tone-${group.tone}`}
                             aria-hidden="true"
                           >
-                            {group.glyph}
+                            <GroupIcon />
                           </i>
                           {group.label}
                         </span>
-                        <b className="nav-chevron" aria-hidden="true">›</b>
+                        <ChevronRight className="nav-chevron" aria-hidden="true" />
                       </button>
                       {isOpen && (
                         <div className="group-children" id={childrenId}>
@@ -773,7 +797,7 @@ function Sidebar({
                                 aria-controls={`sidebar-group-${group.id}-livestock`}
                               >
                                 <span>{group.nestedLabel}</span>
-                                <b className="nav-chevron" aria-hidden="true">›</b>
+                                <ChevronRight className="nav-chevron" aria-hidden="true" />
                               </button>
                               {livestockOpen && (
                                 <div
@@ -811,7 +835,9 @@ function Sidebar({
                 path === "/dicionario-de-dados" ? "page" : undefined
               }
             >
-              <span className="nav-symbol tone-download">⇩</span>
+              <span className="nav-symbol tone-download" aria-hidden="true">
+                <Download />
+              </span>
               Download dos Dados
             </button>
             <button
@@ -823,7 +849,9 @@ function Sidebar({
               onClick={() => go("/publicacoes")}
               aria-current={path === "/publicacoes" ? "page" : undefined}
             >
-              <span className="nav-symbol tone-publications">≡</span>
+              <span className="nav-symbol tone-publications" aria-hidden="true">
+                <FileText />
+              </span>
               Publicações
             </button>
             <button
@@ -833,7 +861,9 @@ function Sidebar({
               onClick={() => go("/sobre")}
               aria-current={path === "/sobre" ? "page" : undefined}
             >
-              <span className="nav-symbol tone-about">ⓘ</span>
+              <span className="nav-symbol tone-about" aria-hidden="true">
+                <Info />
+              </span>
               Sobre
             </button>
           </div>
@@ -885,7 +915,7 @@ function AppShell({
       <div className="portal-main">
         <header className="mobile-topbar">
           <button onClick={() => setDrawerOpen(true)} aria-label="Abrir menu">
-            ☰
+            <Menu aria-hidden="true" />
           </button>
           <button className="brand-button" onClick={() => navigate("/")}>
             <Brand compact />

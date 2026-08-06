@@ -761,6 +761,13 @@ iframe:focus-visible {
   font-size: 25px;
 }
 
+.icon-button svg,
+.drawer-close svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.8;
+}
+
 .search-field {
   display: grid;
   min-height: 58px;
@@ -959,6 +966,12 @@ kbd {
   color: var(--gold);
 }
 
+.sidebar-info-link svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.8;
+}
+
 .sidebar-main {
   display: flex;
   padding: 0 12px;
@@ -990,6 +1003,12 @@ kbd {
   font-size: 15px;
   line-height: 1;
   transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.nav-symbol svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.75;
 }
 
 .sidebar-main:hover .nav-symbol,
@@ -1080,6 +1099,12 @@ kbd {
   font-size: 12px;
   line-height: 1;
   transition: transform .2s ease, background .2s ease;
+}
+
+.group-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.75;
 }
 
 .group-toggle:hover .group-icon { transform: rotate(-4deg) scale(1.05); }
@@ -1192,6 +1217,12 @@ kbd {
 
 .mobile-topbar {
   display: none;
+}
+
+.mobile-topbar > button:not(.brand-button) > svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.8;
 }
 
 .drawer-scrim {
@@ -4890,36 +4921,11 @@ button {
 }
 
 .search-glyph {
-  position: relative;
-  display: inline-block;
   width: 19px;
   height: 19px;
   flex: 0 0 19px;
   color: currentColor;
-}
-
-.search-glyph::before {
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  content: "";
-}
-
-.search-glyph::after {
-  position: absolute;
-  top: 12px;
-  left: 1px;
-  width: 8px;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-  content: "";
-  transform: rotate(-45deg);
-  transform-origin: right center;
+  stroke-width: 1.8;
 }
 
 .reference-home .search-trigger {
@@ -4933,7 +4939,6 @@ button {
 
 .sidebar-search .search-glyph {
   color: var(--gold);
-  transform: scaleX(-1);
 }
 
 .mobile-topbar .search-glyph {
@@ -5371,81 +5376,10 @@ button {
   transform: translateY(-1px) scale(1.06);
 }
 
-.primary-icon.icon-home::before {
-  position: absolute;
-  top: 4px;
-  width: 13px;
-  height: 13px;
-  border-top: 1.7px solid currentColor;
-  border-left: 1.7px solid currentColor;
-  content: "";
-  transform: rotate(45deg);
-}
-
-.primary-icon.icon-home i {
-  position: absolute;
-  bottom: 3px;
-  width: 14px;
-  height: 11px;
-  border: 1.7px solid currentColor;
-  border-top: 0;
-  border-radius: 0 0 2px 2px;
-}
-
-.primary-icon.icon-home i::after {
-  position: absolute;
-  right: 4px;
-  bottom: 0;
-  width: 3px;
-  height: 6px;
-  border-left: 1.7px solid currentColor;
-  content: "";
-}
-
-.primary-icon.icon-panorama {
-  border: 1.7px solid currentColor;
-  border-radius: 50%;
-}
-
-.primary-icon.icon-panorama::before {
-  width: 3px;
-  height: 10px;
-  border-radius: 90% 20% 90% 20%;
-  background: currentColor;
-  content: "";
-  transform: rotate(42deg) translateY(-1px);
-  transform-origin: center 70%;
-}
-
-.primary-icon.icon-panorama i {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border: 1px solid #061a39;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.primary-icon.icon-panels {
-  border: 1.7px solid currentColor;
-  border-radius: 4px;
-}
-
-.primary-icon.icon-panels i {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 4px;
-  height: 4px;
-  border: 1.4px solid currentColor;
-  border-radius: 1px;
-  box-shadow:
-    8px 0 0 -1px #061a39,
-    8px 0 0 0 currentColor,
-    0 8px 0 -1px #061a39,
-    0 8px 0 0 currentColor,
-    8px 8px 0 -1px #061a39,
-    8px 8px 0 0 currentColor;
+.primary-icon svg {
+  width: 23px;
+  height: 23px;
+  stroke-width: 1.65;
 }
 
 .sidebar-context {
@@ -5607,18 +5541,16 @@ button {
 .group-icon {
   border-color: rgba(255, 255, 255, .1);
   border-radius: 7px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
 }
 
 .group-toggle .nav-chevron,
 .subgroup-toggle .nav-chevron {
   display: inline-block;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
   color: #6f86a6;
-  font-size: 17px;
-  font-weight: 400;
-  line-height: 1;
+  stroke-width: 1.7;
   transition: color .2s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
 }
 
@@ -5698,7 +5630,6 @@ button {
   flex-basis: 23px;
   border: 0;
   background: transparent;
-  font-size: 15px;
 }
 
 .sidebar-footer {

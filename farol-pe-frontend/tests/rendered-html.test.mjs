@@ -136,9 +136,13 @@ test("aplica a centralização padrão a qualquer painel incorporado", async () 
   );
 });
 
-test("mantém a busca acessível na lateral e espelha somente a lupa", async () => {
+test("mantém a busca acessível com ícone profissional", async () => {
   const response = await render("/paineis/atividade-economica");
   const html = await response.text();
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
   const stylesheet = await readFile(
     new URL("../app/globals.css", import.meta.url),
     "utf8",
@@ -147,10 +151,40 @@ test("mantém a busca acessível na lateral e espelha somente a lupa", async () 
   assert.match(html, /class="sidebar-search"/);
   assert.match(html, /Buscar indicadores e temas/);
   assert.match(html, /<kbd>\/<\/kbd>/);
-  assert.match(
+  assert.match(source, /return <Search className="search-glyph"/);
+  assert.doesNotMatch(
     stylesheet,
     /\.sidebar-search \.search-glyph\s*\{[\s\S]*?transform: scaleX\(-1\)/,
   );
+});
+
+test("usa ícones semânticos no menu lateral", async () => {
+  const response = await render("/paineis/atividade-economica");
+  const html = await response.text();
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
+
+  for (const icon of [
+    "House",
+    "Compass",
+    "LayoutGrid",
+    "ChartNoAxesCombined",
+    "Building2",
+    "HandCoins",
+    "Leaf",
+    "Users",
+    "Download",
+    "FileText",
+    "Info",
+  ]) {
+    assert.match(source, new RegExp(`\\b${icon}\\b`));
+  }
+
+  assert.match(html, /lucide-chart-no-axes-combined/);
+  assert.match(html, /lucide-building-2/);
+  assert.doesNotMatch(source, /glyph:\s*["']|["'][↗▥◴◇◎⇩≡ⓘ☰×]["']/);
 });
 
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {
