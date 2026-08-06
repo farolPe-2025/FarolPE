@@ -358,7 +358,7 @@ test("organiza a navegação dos painéis e sinaliza conteúdos em preparação"
   );
 });
 
-test("faz o marcador verde acompanhar o título do painel ativo", async () => {
+test("faz o marcador amarelo acompanhar o título do painel ativo", async () => {
   const panelResponse = await render("/paineis/atividade-economica");
   const panelHtml = await panelResponse.text();
   const infoResponse = await render("/indicadores/atividade-economica");
@@ -378,7 +378,7 @@ test("faz o marcador verde acompanhar o título do painel ativo", async () => {
   assert.doesNotMatch(stylesheet, /\.sidebar-panel-groups::before/);
   assert.match(
     stylesheet,
-    /\.sidebar-link\.is-active::before \{[\s\S]*?left: -13px;[\s\S]*?background: #71d39e;/,
+    /\.sidebar-link\.is-active::before \{[\s\S]*?left: -13px;[\s\S]*?background: #f8c630;/,
   );
 });
 

@@ -1149,8 +1149,8 @@ kbd {
   width: 3px;
   height: 24px;
   border-radius: 999px;
-  background: #71d39e;
-  box-shadow: 0 0 10px rgba(113, 211, 158, .28);
+  background: #f8c630;
+  box-shadow: 0 0 10px rgba(248, 198, 48, .32);
   content: "";
 }
 
