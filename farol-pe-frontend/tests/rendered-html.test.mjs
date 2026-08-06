@@ -165,6 +165,10 @@ test("usa ícones semânticos no menu lateral", async () => {
     new URL("../app/FarolPortal.tsx", import.meta.url),
     "utf8",
   );
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
 
   for (const icon of [
     "House",
@@ -185,6 +189,15 @@ test("usa ícones semânticos no menu lateral", async () => {
   assert.match(html, /lucide-chart-no-axes-combined/);
   assert.match(html, /lucide-building-2/);
   assert.doesNotMatch(source, /glyph:\s*["']|["'][↗▥◴◇◎⇩≡ⓘ☰×]["']/);
+  assert.match(stylesheet, /\.primary-icon \{[\s\S]*?color: #fff;[\s\S]*?opacity: \.78;/);
+  assert.match(
+    stylesheet,
+    /\.sidebar-primary-tabs button\.is-active \.primary-icon \{[\s\S]*?color: var\(--gold\);/,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /\.sidebar-primary-tabs button:nth-child\([^)]*\) \.primary-icon/,
+  );
 });
 
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {

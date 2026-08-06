@@ -5358,21 +5358,22 @@ button {
   width: 25px;
   height: 25px;
   place-items: center;
-  color: #8ea8c9;
-  transition: color .22s ease, filter .22s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
+  color: #fff;
+  opacity: .78;
+  transition: color .22s ease, filter .22s ease, opacity .22s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
 }
 
-.sidebar-primary-tabs button:nth-child(2) .primary-icon {
-  color: var(--gold);
+.sidebar-primary-tabs button:hover .primary-icon {
+  color: #fff;
+  opacity: 1;
+  filter: drop-shadow(0 0 7px rgba(255, 255, 255, .34));
+  transform: translateY(-1px) scale(1.06);
 }
 
-.sidebar-primary-tabs button:nth-child(3) .primary-icon {
-  color: #53d7a1;
-}
-
-.sidebar-primary-tabs button:hover .primary-icon,
 .sidebar-primary-tabs button.is-active .primary-icon {
-  filter: drop-shadow(0 0 7px currentColor);
+  color: var(--gold);
+  opacity: 1;
+  filter: drop-shadow(0 0 7px rgba(248, 198, 48, .52));
   transform: translateY(-1px) scale(1.06);
 }
 
