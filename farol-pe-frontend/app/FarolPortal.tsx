@@ -108,6 +108,8 @@ const sidebarPanelGroups = [
   {
     id: "economic",
     label: "Dinâmica Econômica",
+    summary:
+      "Acompanhe atividade, indústria, comércio, serviços e turismo em Pernambuco.",
     icon: ChartNoAxesCombined,
     tone: "economic",
     slugs: ["atividade-economica", "industria", "comercio", "servicos", "turismo"],
@@ -115,6 +117,8 @@ const sidebarPanelGroups = [
   {
     id: "sectoral",
     label: "Estrutura Setorial",
+    summary:
+      "Explore a composição e o desempenho dos principais setores da economia.",
     icon: Building2,
     tone: "sectoral",
     slugs: ["estrutura-industrial", "panorama-comercio", "panorama-servicos"],
@@ -122,6 +126,8 @@ const sidebarPanelGroups = [
   {
     id: "income",
     label: "Produção e Renda",
+    summary:
+      "Consulte produção, renda, arrecadação e movimentações financeiras no estado.",
     icon: HandCoins,
     tone: "income",
     slugs: [
@@ -135,6 +141,8 @@ const sidebarPanelGroups = [
   {
     id: "agriculture",
     label: "Agropecuária",
+    summary:
+      "Acompanhe agricultura, aquicultura, produção animal e rebanhos de Pernambuco.",
     icon: Leaf,
     tone: "agriculture",
     slugs: ["agricultura"],
@@ -144,6 +152,8 @@ const sidebarPanelGroups = [
   {
     id: "employment",
     label: "Emprego",
+    summary:
+      "Veja estoque, fluxo e outros indicadores do mercado de trabalho formal.",
     icon: Users,
     tone: "employment",
     slugs: [
@@ -748,13 +758,15 @@ function Sidebar({
             >
               <div className="sidebar-context-heading">
                 <span id="sidebar-panels-title">Painéis do Farol</span>
-                <small>{panels.length}</small>
               </div>
               <div className="sidebar-panel-groups">
                 {sidebarPanelGroups.map((group) => {
                   const isOpen = openGroup === group.id;
                   const childrenId = `sidebar-group-${group.id}`;
                   const GroupIcon = group.icon;
+                  const panelCount =
+                    group.slugs.length +
+                    ("nestedSlugs" in group ? group.nestedSlugs.length : 0);
 
                   return (
                     <div className="nav-group" key={group.id}>
@@ -769,16 +781,30 @@ function Sidebar({
                         aria-expanded={isOpen}
                         aria-controls={childrenId}
                       >
-                        <span>
+                        <span className="group-title-line">
                           <i
                             className={`group-icon tone-${group.tone}`}
                             aria-hidden="true"
                           >
                             <GroupIcon />
                           </i>
-                          {group.label}
+                          <strong>{group.label}</strong>
                         </span>
-                        <ChevronRight className="nav-chevron" aria-hidden="true" />
+                        <span className="group-toggle-state">
+                          <small
+                            className="group-count"
+                            aria-label={`${panelCount} painéis`}
+                          >
+                            {panelCount}
+                          </small>
+                          <ChevronRight
+                            className="nav-chevron"
+                            aria-hidden="true"
+                          />
+                        </span>
+                        {isOpen && (
+                          <span className="group-summary">{group.summary}</span>
+                        )}
                       </button>
                       {isOpen && (
                         <div className="group-children" id={childrenId}>

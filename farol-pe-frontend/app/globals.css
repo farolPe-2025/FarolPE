@@ -5521,8 +5521,15 @@ button {
 }
 
 .sidebar-panel-groups .group-toggle {
-  min-height: 47px;
-  padding: 0 10px;
+  display: grid;
+  min-height: 50px;
+  padding: 8px 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title state"
+    "summary summary";
+  align-items: center;
+  gap: 0 9px;
   border-radius: 0;
   color: #c2cede;
   font-size: 10.5px;
@@ -5535,13 +5542,95 @@ button {
 }
 
 .sidebar-panel-groups .group-toggle[aria-expanded="true"] {
-  background: linear-gradient(90deg, rgba(83, 215, 161, .09), rgba(255, 255, 255, .025));
+  background:
+    radial-gradient(circle at 8% 22%, rgba(248, 198, 48, .1), transparent 32%),
+    linear-gradient(90deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .018));
   color: #fff;
 }
 
-.group-icon {
+.group-toggle .group-title-line {
+  grid-area: title;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.group-title-line strong {
+  min-width: 0;
+  color: inherit;
+  font-size: 10.7px;
+  font-weight: 720;
+  line-height: 1.25;
+}
+
+.group-toggle .group-toggle-state {
+  grid-area: state;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.group-count {
+  display: grid;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, .055);
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 760;
+  line-height: 1;
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.group-toggle[aria-expanded="true"] .group-count {
+  border-color: rgba(248, 198, 48, .32);
+  background: rgba(248, 198, 48, .1);
+  box-shadow: 0 0 12px rgba(248, 198, 48, .08);
+}
+
+.group-toggle .group-summary {
+  grid-area: summary;
+  display: block;
+  margin: 8px 22px 2px 31px;
+  color: #91a4bf;
+  font-size: 9.3px;
+  font-weight: 480;
+  letter-spacing: 0;
+  line-height: 1.48;
+  animation: groupSummaryIn .3s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.sidebar-panel-groups .group-icon,
+.sidebar-panel-groups .group-icon.tone-economic,
+.sidebar-panel-groups .group-icon.tone-sectoral,
+.sidebar-panel-groups .group-icon.tone-income,
+.sidebar-panel-groups .group-icon.tone-agriculture,
+.sidebar-panel-groups .group-icon.tone-employment {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
   border-color: rgba(255, 255, 255, .1);
   border-radius: 7px;
+  background: rgba(255, 255, 255, .045);
+  color: #fff;
+}
+
+.sidebar-panel-groups .group-toggle:hover .group-icon {
+  border-color: rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .08);
+  transform: translateY(-1px);
+}
+
+.sidebar-panel-groups .group-toggle[aria-expanded="true"] .group-icon {
+  border-color: rgba(248, 198, 48, .22);
+  background: rgba(255, 255, 255, .07);
+  color: #fff;
 }
 
 .group-toggle .nav-chevron,
@@ -5557,7 +5646,7 @@ button {
 
 .group-toggle[aria-expanded="true"] .nav-chevron,
 .subgroup-toggle[aria-expanded="true"] .nav-chevron {
-  color: #53d7a1;
+  color: var(--gold);
   transform: rotate(90deg);
 }
 
@@ -5651,6 +5740,17 @@ button {
   }
 }
 
+@keyframes groupSummaryIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 1366px) and (min-width: 861px) {
   .sidebar-brand {
     min-height: 100px;
@@ -5690,6 +5790,7 @@ button {
   .panorama-topic-list button,
   .panorama-topic-list button::before,
   .panorama-topic-list button::after,
+  .group-summary,
   .group-toggle .nav-chevron,
   .subgroup-toggle .nav-chevron,
   .sidebar-brand .brand-button {

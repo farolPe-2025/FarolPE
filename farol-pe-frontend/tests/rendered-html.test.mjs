@@ -200,6 +200,52 @@ test("usa ícones semânticos no menu lateral", async () => {
   );
 });
 
+test("resume cada categoria e informa sua quantidade de painéis", async () => {
+  const categories = [
+    [
+      "/paineis/atividade-economica",
+      "Acompanhe atividade, indústria, comércio, serviços e turismo em Pernambuco.",
+    ],
+    [
+      "/paineis/estrutura-industrial",
+      "Explore a composição e o desempenho dos principais setores da economia.",
+    ],
+    [
+      "/paineis/produto-interno-bruto",
+      "Consulte produção, renda, arrecadação e movimentações financeiras no estado.",
+    ],
+    [
+      "/paineis/agricultura",
+      "Acompanhe agricultura, aquicultura, produção animal e rebanhos de Pernambuco.",
+    ],
+    [
+      "/paineis/estoque-de-emprego",
+      "Veja estoque, fluxo e outros indicadores do mercado de trabalho formal.",
+    ],
+  ];
+
+  for (const [path, summary] of categories) {
+    const response = await render(path);
+    const html = await response.text();
+    assert.ok(html.includes(summary), `resumo esperado em ${path}`);
+  }
+
+  const response = await render("/paineis/atividade-economica");
+  const html = await response.text();
+  const counts = [...html.matchAll(/class="group-count" aria-label="(\d+) painéis"/g)]
+    .map((match) => Number(match[1]));
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.deepEqual(counts, [5, 3, 5, 4, 3]);
+  assert.match(
+    stylesheet,
+    /\.sidebar-panel-groups \.group-icon,[\s\S]*?\.group-icon\.tone-employment \{[\s\S]*?color: #fff;/,
+  );
+});
+
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {
   const source = await readFile(
     new URL("../app/portal-data.ts", import.meta.url),
