@@ -824,8 +824,11 @@ html[data-theme="dark"] .navbtn.active{background:var(--blue-300); color:#08131F
   .blocogrid .tblscroll table.mini td{padding:9px 7px; white-space:nowrap;}
   .blocogrid .tblscroll table.mini th{font-size:8px; letter-spacing:.02em;}
 }
+</style><style>
+html.is-embedded .sitenav{display:none;}
 </style></head>
 <body>
+<script>if(window.self!==window.top){document.documentElement.classList.add('is-embedded');}</script>
 <header class="siteheader"><div class="wrap">
   <div class="site-eyebrow">Panorama econômico de Pernambuco</div>
   <h1 class="site-h1">Como vai a economia do estado</h1>
@@ -1828,7 +1831,22 @@ function secao(k){
   var bs=document.querySelectorAll('.navbtn');
   for(var j=0;j<bs.length;j++){ bs[j].className='navbtn'+(bs[j].getAttribute('data-nav')===k?' active':''); }
   window.scrollTo({top:0,behavior:'smooth'});
+  notificarSecao(k);
 }
+function notificarSecao(k){
+  if(window.parent!==window){
+    window.parent.postMessage({type:'farol-panorama-section',section:k},window.location.origin);
+  }
+}
+window.addEventListener('message',function(event){
+  if(event.source!==window.parent || event.origin!==window.location.origin){return;}
+  var data=event.data || {};
+  var secoes=['__all','dest','cmp','trab','emp','cext','sint','prox'];
+  if(data.type==='farol-panorama-select' && secoes.indexOf(data.section)!==-1){
+    secao(data.section);
+  }
+});
+window.addEventListener('load',function(){notificarSecao('__all');});
 var initialScrollers=document.querySelectorAll('.colchart,.tblwrap,.tblscroll');
 for(var s=0;s<initialScrollers.length;s++){ initialScrollers[s].scrollLeft=0; }
 </script>

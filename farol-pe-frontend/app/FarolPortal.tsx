@@ -91,16 +91,22 @@ const sidebarPanelGroups = [
   {
     id: "economic",
     label: "Dinâmica Econômica",
+    glyph: "↗",
+    tone: "economic",
     slugs: ["atividade-economica", "industria", "comercio", "servicos", "turismo"],
   },
   {
     id: "sectoral",
     label: "Estrutura Setorial",
+    glyph: "▥",
+    tone: "sectoral",
     slugs: ["estrutura-industrial", "panorama-comercio", "panorama-servicos"],
   },
   {
     id: "income",
     label: "Produção e Renda",
+    glyph: "◴",
+    tone: "income",
     slugs: [
       "produto-interno-bruto",
       "valor-adicionado-bruto",
@@ -112,6 +118,8 @@ const sidebarPanelGroups = [
   {
     id: "agriculture",
     label: "Agropecuária",
+    glyph: "◇",
+    tone: "agriculture",
     slugs: ["agricultura"],
     nestedLabel: "Pecuária",
     nestedSlugs: ["aquicultura", "origem-animal", "rebanhos"],
@@ -119,6 +127,8 @@ const sidebarPanelGroups = [
   {
     id: "employment",
     label: "Emprego",
+    glyph: "◎",
+    tone: "employment",
     slugs: [
       "estoque-de-emprego",
       "fluxo-de-emprego",
@@ -126,6 +136,19 @@ const sidebarPanelGroups = [
     ],
   },
 ] as const;
+
+const panoramaTopics = [
+  { key: "__all", label: "Panorama geral" },
+  { key: "dest", label: "Destaques" },
+  { key: "cmp", label: "Dinâmica Econômica" },
+  { key: "trab", label: "Mercado de Trabalho" },
+  { key: "emp", label: "Dinâmica Empresarial" },
+  { key: "cext", label: "Comércio Exterior" },
+  { key: "sint", label: "Quadro-síntese" },
+  { key: "prox", label: "Calendário de Dados" },
+] as const;
+
+type PanoramaTopicKey = (typeof panoramaTopics)[number]["key"];
 
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
@@ -467,6 +490,9 @@ function Sidebar({
   onClose: () => void;
   onSearch: () => void;
 }) {
+  const isPanoramaContext = path === "/resumo";
+  const isPanelsContext =
+    path.startsWith("/paineis/") || path.startsWith("/indicadores/");
   const activePanelSlug =
     path.match(/^\/(?:paineis|indicadores)\/([^/]+)/)?.[1] ?? "";
   const activeGroup =
@@ -480,16 +506,85 @@ function Sidebar({
   const [livestockOpen, setLivestockOpen] = useState(
     ["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug),
   );
+  const [activePanoramaTopic, setActivePanoramaTopic] =
+    useState<PanoramaTopicKey>("__all");
 
   useEffect(() => {
-    setOpenGroup(activeGroup);
-    setLivestockOpen(
-      ["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug),
-    );
-  }, [activeGroup, activePanelSlug]);
+    const syncPanoramaTopic = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+
+      const frame = document.getElementById(
+        "panorama-frame",
+      ) as HTMLIFrameElement | null;
+      if (frame?.contentWindow && event.source !== frame.contentWindow) return;
+
+      const message = event.data as
+        | { type?: string; section?: PanoramaTopicKey }
+        | undefined;
+      if (message?.type !== "farol-panorama-section") return;
+      if (!panoramaTopics.some((topic) => topic.key === message.section)) return;
+
+      const requestedTopic = window.sessionStorage.getItem(
+        "farol-panorama-topic",
+      ) as PanoramaTopicKey | null;
+
+      if (
+        requestedTopic &&
+        requestedTopic !== message.section &&
+        panoramaTopics.some((topic) => topic.key === requestedTopic)
+      ) {
+        frame?.contentWindow?.postMessage(
+          { type: "farol-panorama-select", section: requestedTopic },
+          window.location.origin,
+        );
+        return;
+      }
+
+      setActivePanoramaTopic(message.section as PanoramaTopicKey);
+    };
+
+    window.addEventListener("message", syncPanoramaTopic);
+    return () => window.removeEventListener("message", syncPanoramaTopic);
+  }, []);
 
   const go = (href: string) => {
     navigate(href);
+    onClose();
+  };
+
+  const showPanorama = () => {
+    window.sessionStorage.setItem("farol-panorama-topic", "__all");
+    setActivePanoramaTopic("__all");
+
+    if (!isPanoramaContext) {
+      navigate("/resumo");
+      return;
+    }
+
+    const frame = document.getElementById(
+      "panorama-frame",
+    ) as HTMLIFrameElement | null;
+    frame?.contentWindow?.postMessage(
+      { type: "farol-panorama-select", section: "__all" },
+      window.location.origin,
+    );
+  };
+
+  const showPanels = () => {
+    if (!isPanelsContext) navigate("/paineis/atividade-economica");
+  };
+
+  const selectPanoramaTopic = (topic: PanoramaTopicKey) => {
+    window.sessionStorage.setItem("farol-panorama-topic", topic);
+    setActivePanoramaTopic(topic);
+
+    const frame = document.getElementById(
+      "panorama-frame",
+    ) as HTMLIFrameElement | null;
+    frame?.contentWindow?.postMessage(
+      { type: "farol-panorama-select", section: topic },
+      window.location.origin,
+    );
     onClose();
   };
 
@@ -543,92 +638,189 @@ function Sidebar({
 
         <button
           className="sidebar-search"
-          onClick={onSearch}
+          onClick={() => {
+            onClose();
+            onSearch();
+          }}
           aria-label="Pesquisar no FarolPE"
           title="Pesquisar no FarolPE"
         >
           <SearchIcon />
-          Buscar no Farol PE
+          <span>Buscar indicadores e temas</span>
           <kbd>/</kbd>
         </button>
 
-        <nav className="sidebar-nav" aria-label="Navegação dos painéis">
-          <button className={path === "/" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/")}>
-            <span className="nav-symbol tone-home">⌂</span> Início
-          </button>
-          <button className={path === "/resumo" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/resumo")}>
-            <span className="nav-symbol tone-panorama">◔</span> Panorama Econômico
-          </button>
-          <button
-            className={
-              path.startsWith("/paineis/") || path.startsWith("/indicadores/")
-                ? "sidebar-main is-active"
-                : "sidebar-main"
-            }
-            onClick={() => go("/paineis/atividade-economica")}
-          >
-            <span className="nav-symbol tone-panels">▦</span> Painéis dos Dados
-          </button>
-
-          <div className="sidebar-panel-groups">
-            {sidebarPanelGroups.map((group) => {
-              const isOpen = openGroup === group.id;
-
-              return (
-                <div className="nav-group" key={group.id}>
-                <button
-                  className="group-toggle"
-                  onClick={() =>
-                    setOpenGroup((current) =>
-                      current === group.id ? null : group.id,
-                    )
-                  }
-                  aria-expanded={isOpen}
-                >
-                  <span>{group.label}</span>
-                  <b>{isOpen ? "−" : "+"}</b>
-                </button>
-                {isOpen && (
-                  <div className="group-children">
-                    {group.slugs.map((slug) => panelButtonBySlug(slug))}
-                    {"nestedSlugs" in group && (
-                      <>
-                        <button
-                          className="subgroup-toggle"
-                          onClick={() => setLivestockOpen((value) => !value)}
-                          aria-expanded={livestockOpen}
-                        >
-                          <span>{group.nestedLabel}</span>
-                          <b>{livestockOpen ? "⌄" : "›"}</b>
-                        </button>
-                        {livestockOpen && (
-                          <div className="subgroup-children">
-                            {group.nestedSlugs.map((slug) =>
-                              panelButtonBySlug(slug, true),
-                            )}
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                )}
-                </div>
-              );
-            })}
+        <nav className="sidebar-nav" aria-label="Navegação principal">
+          <div className="sidebar-primary-tabs" aria-label="Áreas do FarolPE">
+            <button
+              className={path === "/" ? "is-active" : ""}
+              onClick={() => go("/")}
+              aria-current={path === "/" ? "page" : undefined}
+            >
+              <span className="primary-icon icon-home" aria-hidden="true"><i /></span>
+              <span>Início</span>
+            </button>
+            <button
+              className={isPanoramaContext ? "is-active" : ""}
+              onClick={showPanorama}
+              aria-current={isPanoramaContext ? "page" : undefined}
+            >
+              <span className="primary-icon icon-panorama" aria-hidden="true"><i /></span>
+              <span>Panorama</span>
+            </button>
+            <button
+              className={isPanelsContext ? "is-active" : ""}
+              onClick={showPanels}
+              aria-current={isPanelsContext ? "page" : undefined}
+            >
+              <span className="primary-icon icon-panels" aria-hidden="true"><i /></span>
+              <span>Painéis</span>
+            </button>
           </div>
 
-          <button
-            className={path === "/dicionario-de-dados" ? "sidebar-main is-active" : "sidebar-main"}
-            onClick={() => go("/dicionario-de-dados")}
-          >
-            <span className="nav-symbol tone-download">⇩</span> Download dos Dados
-          </button>
-          <button className={path === "/publicacoes" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/publicacoes")}>
-            <span className="nav-symbol tone-publications">≡</span> Publicações
-          </button>
-          <button className={path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"} onClick={() => go("/sobre")}>
-            <span className="nav-symbol tone-about">ⓘ</span> Sobre
-          </button>
+          {isPanoramaContext && (
+            <section
+              className="sidebar-context sidebar-panorama-context"
+              aria-labelledby="sidebar-panorama-title"
+            >
+              <div className="sidebar-context-heading">
+                <span id="sidebar-panorama-title">Tópicos do panorama</span>
+                <small>{panoramaTopics.length}</small>
+              </div>
+              <div className="panorama-topic-list">
+                {panoramaTopics.map((topic, index) => (
+                  <button
+                    key={topic.key}
+                    className={
+                      activePanoramaTopic === topic.key ? "is-active" : ""
+                    }
+                    onClick={() => selectPanoramaTopic(topic.key)}
+                    aria-current={
+                      activePanoramaTopic === topic.key ? "true" : undefined
+                    }
+                  >
+                    <span className="topic-index">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span>{topic.label}</span>
+                    <i aria-hidden="true">›</i>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {isPanelsContext && (
+            <section
+              className="sidebar-context sidebar-panels-context"
+              aria-labelledby="sidebar-panels-title"
+            >
+              <div className="sidebar-context-heading">
+                <span id="sidebar-panels-title">Painéis do Farol</span>
+                <small>{panels.length}</small>
+              </div>
+              <div className="sidebar-panel-groups">
+                {sidebarPanelGroups.map((group) => {
+                  const isOpen = openGroup === group.id;
+                  const childrenId = `sidebar-group-${group.id}`;
+
+                  return (
+                    <div className="nav-group" key={group.id}>
+                      <button
+                        className="group-toggle"
+                        onClick={() =>
+                          setOpenGroup((current) =>
+                            current === group.id ? null : group.id,
+                          )
+                        }
+                        aria-expanded={isOpen}
+                        aria-controls={childrenId}
+                      >
+                        <span>
+                          <i
+                            className={`group-icon tone-${group.tone}`}
+                            aria-hidden="true"
+                          >
+                            {group.glyph}
+                          </i>
+                          {group.label}
+                        </span>
+                        <b className="nav-chevron" aria-hidden="true">›</b>
+                      </button>
+                      {isOpen && (
+                        <div className="group-children" id={childrenId}>
+                          {group.slugs.map((slug) => panelButtonBySlug(slug))}
+                          {"nestedSlugs" in group && (
+                            <>
+                              <button
+                                className="subgroup-toggle"
+                                onClick={() =>
+                                  setLivestockOpen((value) => !value)
+                                }
+                                aria-expanded={livestockOpen}
+                              >
+                                <span>{group.nestedLabel}</span>
+                                <b className="nav-chevron" aria-hidden="true">›</b>
+                              </button>
+                              {livestockOpen && (
+                                <div className="subgroup-children">
+                                  {group.nestedSlugs.map((slug) =>
+                                    panelButtonBySlug(slug, true),
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          <div className="sidebar-services">
+            <div className="sidebar-context-heading">
+              <span>Serviços</span>
+            </div>
+            <button
+              className={
+                path === "/dicionario-de-dados"
+                  ? "sidebar-main is-active"
+                  : "sidebar-main"
+              }
+              onClick={() => go("/dicionario-de-dados")}
+              aria-current={
+                path === "/dicionario-de-dados" ? "page" : undefined
+              }
+            >
+              <span className="nav-symbol tone-download">⇩</span>
+              Download dos Dados
+            </button>
+            <button
+              className={
+                path === "/publicacoes"
+                  ? "sidebar-main is-active"
+                  : "sidebar-main"
+              }
+              onClick={() => go("/publicacoes")}
+              aria-current={path === "/publicacoes" ? "page" : undefined}
+            >
+              <span className="nav-symbol tone-publications">≡</span>
+              Publicações
+            </button>
+            <button
+              className={
+                path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"
+              }
+              onClick={() => go("/sobre")}
+              aria-current={path === "/sobre" ? "page" : undefined}
+            >
+              <span className="nav-symbol tone-about">ⓘ</span>
+              Sobre
+            </button>
+          </div>
         </nav>
 
         <div className="sidebar-footer">
@@ -668,6 +860,7 @@ function AppShell({
   return (
     <div className="portal-shell">
       <Sidebar
+        key={path}
         path={path}
         navigate={navigate}
         open={drawerOpen}
@@ -851,6 +1044,7 @@ function EconomicPanoramaPage() {
             </div>
           )}
           <iframe
+            id="panorama-frame"
             src="/painel-conjuntura-2026-08-03.html"
             title="Painel de Conjuntura Econômica de Pernambuco"
             onLoad={() => setLoaded(true)}

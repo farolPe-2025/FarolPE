@@ -136,7 +136,7 @@ test("aplica a centralização padrão a qualquer painel incorporado", async () 
   );
 });
 
-test("mantém a busca antiga na lateral e espelha somente a lupa", async () => {
+test("mantém a busca acessível na lateral e espelha somente a lupa", async () => {
   const response = await render("/paineis/atividade-economica");
   const html = await response.text();
   const stylesheet = await readFile(
@@ -145,7 +145,7 @@ test("mantém a busca antiga na lateral e espelha somente a lupa", async () => {
   );
 
   assert.match(html, /class="sidebar-search"/);
-  assert.match(html, /Buscar no Farol PE/);
+  assert.match(html, /Buscar indicadores e temas/);
   assert.match(html, /<kbd>\/<\/kbd>/);
   assert.match(
     stylesheet,
@@ -285,7 +285,7 @@ test("faz o marcador verde acompanhar o título do painel ativo", async () => {
   );
 });
 
-test("mantém grupos fechados fora das páginas de painéis", async () => {
+test("exibe somente a navegação contextual da área ativa", async () => {
   const response = await render("/sobre");
   const html = await response.text();
   const source = await readFile(
@@ -293,9 +293,36 @@ test("mantém grupos fechados fora das páginas de painéis", async () => {
     "utf8",
   );
 
-  assert.match(html, /aria-expanded="false"[^>]*><span>Dinâmica Econômica<\/span><b>\+<\/b>/);
+  assert.match(html, /class="sidebar-services"/);
+  assert.doesNotMatch(html, /sidebar-panel-groups|panorama-topic-list/);
   assert.match(source, /useState<string \| null>\(activeGroup\)/);
   assert.doesNotMatch(source, /activeGroup \?\? "economic"/);
+});
+
+test("troca a lateral entre tópicos do panorama e catálogo de painéis", async () => {
+  const panoramaResponse = await render("/resumo");
+  const panoramaHtml = await panoramaResponse.text();
+  const panelsResponse = await render("/paineis/atividade-economica");
+  const panelsHtml = await panelsResponse.text();
+  const panoramaDocument = await readFile(
+    new URL("../public/painel-conjuntura-2026-08-03.html", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(panoramaHtml, /Tópicos do panorama/);
+  assert.match(panoramaHtml, /class="panorama-topic-list"/);
+  assert.match(panoramaHtml, /Panorama geral/);
+  assert.match(panoramaHtml, /Calendário de Dados/);
+  assert.match(panoramaHtml, /id="panorama-frame"/);
+  assert.doesNotMatch(panoramaHtml, /class="sidebar-panel-groups"/);
+
+  assert.match(panelsHtml, /Painéis do Farol/);
+  assert.match(panelsHtml, /class="sidebar-panel-groups"/);
+  assert.doesNotMatch(panelsHtml, /class="panorama-topic-list"/);
+
+  assert.match(panoramaDocument, /farol-panorama-select/);
+  assert.match(panoramaDocument, /farol-panorama-section/);
+  assert.match(panoramaDocument, /html\.is-embedded \.sitenav\{display:none;\}/);
 });
 
 test("conclui a página Sobre com cabeçalho textual e equipe ampliada", async () => {
