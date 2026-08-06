@@ -71,6 +71,26 @@ test("renderiza a home institucional do FarolPE", async () => {
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
+test("remove as faixas multicoloridas do menu e da home", async () => {
+  const homeResponse = await render("/");
+  const homeHtml = await homeResponse.text();
+  const panelResponse = await render("/paineis/atividade-economica");
+  const panelHtml = await panelResponse.text();
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.doesNotMatch(homeHtml, /pe-color-rule/);
+  assert.doesNotMatch(panelHtml, /pe-stripe/);
+  assert.doesNotMatch(source, /pe-color-rule|pe-stripe/);
+  assert.doesNotMatch(stylesheet, /\.pe-color-rule|\.pe-stripe|sidebarStripeIn/);
+});
+
 test("renderiza rotas internas por URL", async () => {
   for (const path of [
     "/resumo",

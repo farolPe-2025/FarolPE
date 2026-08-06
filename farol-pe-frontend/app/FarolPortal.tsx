@@ -437,7 +437,6 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               <strong>Decidir com segurança.</strong>
               Construir o futuro de Pernambuco.
             </h1>
-            <span className="pe-color-rule" aria-hidden="true"><i /><i /><i /><i /></span>
             <p className="hero-lead">
               O farol sobre os dados de Pernambuco para orientar gestores,
               pesquisadores e investidores na leitura da economia pernambucana.
@@ -666,7 +665,6 @@ function Sidebar({
         aria-label="Fechar menu"
       />
       <aside className={`sidebar ${open ? "is-open" : ""}`}>
-        <div className="pe-stripe" />
         <div className="sidebar-brand">
           <button className="brand-button" onClick={() => go("/")}>
             <Brand />
