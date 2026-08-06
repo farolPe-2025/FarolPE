@@ -393,6 +393,30 @@ test("exibe somente a navegação contextual da área ativa", async () => {
   assert.doesNotMatch(source, /activeGroup \?\? "economic"/);
 });
 
+test("ancora serviços junto à logo e amplia seus itens", async () => {
+  const response = await render("/sobre");
+  const html = await response.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.ok(html.indexOf("sidebar-services") < html.indexOf("sidebar-footer"));
+  assert.match(
+    stylesheet,
+    /\.sidebar-nav \{[\s\S]*?display: flex;[\s\S]*?flex: 1 0 auto;[\s\S]*?flex-direction: column;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar-services \{[\s\S]*?margin-top: auto;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar-services \.sidebar-main \{[\s\S]*?min-height: 46px;[\s\S]*?font-size: 12px;/,
+  );
+  assert.match(stylesheet, /\.sidebar-footer \{[\s\S]*?margin-top: 0;/);
+});
+
 test("troca a lateral entre tópicos do panorama e catálogo de painéis", async () => {
   const panoramaResponse = await render("/resumo");
   const panoramaHtml = await panoramaResponse.text();
