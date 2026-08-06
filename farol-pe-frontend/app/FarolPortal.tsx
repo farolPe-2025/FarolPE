@@ -698,10 +698,9 @@ function Sidebar({
             >
               <div className="sidebar-context-heading">
                 <span id="sidebar-panorama-title">Tópicos do panorama</span>
-                <small>{panoramaTopics.length}</small>
               </div>
               <div className="panorama-topic-list">
-                {panoramaTopics.map((topic, index) => (
+                {panoramaTopics.map((topic) => (
                   <button
                     key={topic.key}
                     className={
@@ -712,11 +711,7 @@ function Sidebar({
                       activePanoramaTopic === topic.key ? "true" : undefined
                     }
                   >
-                    <span className="topic-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
                     <span>{topic.label}</span>
-                    <i aria-hidden="true">›</i>
                   </button>
                 ))}
               </div>

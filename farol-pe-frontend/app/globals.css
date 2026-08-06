@@ -5481,92 +5481,93 @@ button {
 }
 
 .panorama-topic-list {
-  position: relative;
   display: grid;
-  border: 1px solid rgba(124, 165, 207, .12);
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(4, 18, 41, .34);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
-}
-
-.panorama-topic-list::before {
-  position: absolute;
-  z-index: 0;
-  top: 21px;
-  bottom: 21px;
-  left: 27px;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(248, 198, 48, .34), rgba(83, 215, 161, .12));
-  content: "";
+  gap: 5px;
 }
 
 .panorama-topic-list button {
   position: relative;
-  z-index: 1;
-  display: grid;
+  isolation: isolate;
+  display: flex;
   width: 100%;
-  min-height: 43px;
-  padding: 0 10px;
-  grid-template-columns: 28px minmax(0, 1fr) 14px;
+  min-height: 42px;
+  padding: 0 14px 0 16px;
   align-items: center;
-  gap: 7px;
-  border: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, .055);
-  background: transparent;
-  color: #b9c7d9;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .018);
+  color: #afbdd0;
   text-align: left;
-  font-size: 10.7px;
-  transition: color .2s ease, background .2s ease, padding-left .25s cubic-bezier(.22, 1, .36, 1);
+  font-size: 10.8px;
+  font-weight: 570;
+  letter-spacing: -.006em;
+  transition:
+    color .2s ease,
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .25s ease,
+    transform .25s cubic-bezier(.22, 1, .36, 1);
 }
 
-.panorama-topic-list button:last-child {
-  border-bottom: 0;
+.panorama-topic-list button::before {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: 0;
+  width: 2px;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(180deg, #ffe16f, var(--gold));
+  box-shadow: 0 0 12px rgba(248, 198, 48, .55);
+  content: "";
+  opacity: 0;
+  transform: scaleY(.35);
+  transition: opacity .2s ease, transform .3s cubic-bezier(.22, 1, .36, 1);
 }
 
-.panorama-topic-list button:hover,
-.panorama-topic-list button.is-active {
-  padding-left: 13px;
-  background: linear-gradient(90deg, rgba(248, 198, 48, .09), rgba(255, 255, 255, .025));
-  color: #fff;
+.panorama-topic-list button::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 50%, rgba(248, 198, 48, .13), transparent 34%),
+    linear-gradient(100deg, rgba(255, 255, 255, .045), rgba(70, 139, 201, .025));
+  content: "";
+  opacity: 0;
+  transform: translateX(-12%);
+  transition: opacity .25s ease, transform .38s cubic-bezier(.22, 1, .36, 1);
 }
 
-.panorama-topic-list button.is-active {
-  box-shadow: inset 2px 0 var(--gold);
-  font-weight: 740;
-}
-
-.panorama-topic-list .topic-index {
-  display: grid;
-  width: 21px;
-  height: 21px;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, .12);
-  border-radius: 50%;
-  background: #071c3d;
-  color: #7f94b2;
-  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  font-size: 7.5px;
-  transition: border-color .2s ease, color .2s ease, box-shadow .2s ease;
-}
-
-.panorama-topic-list button.is-active .topic-index {
-  border-color: rgba(248, 198, 48, .65);
-  color: var(--gold);
-  box-shadow: 0 0 12px rgba(248, 198, 48, .18);
-}
-
-.panorama-topic-list button > i {
-  color: #7086a5;
-  font-size: 17px;
-  font-style: normal;
-  transition: color .2s ease, transform .2s ease;
-}
-
-.panorama-topic-list button:hover > i,
-.panorama-topic-list button.is-active > i {
-  color: var(--gold);
+.panorama-topic-list button:hover {
+  border-color: rgba(133, 175, 216, .11);
+  background: rgba(255, 255, 255, .045);
+  color: #f3f7fc;
   transform: translateX(2px);
+}
+
+.panorama-topic-list button.is-active {
+  border-color: rgba(248, 198, 48, .14);
+  background: rgba(255, 255, 255, .035);
+  color: #fff;
+  font-weight: 720;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .035),
+    0 9px 24px rgba(0, 7, 22, .15);
+}
+
+.panorama-topic-list button.is-active::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.panorama-topic-list button.is-active::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.panorama-topic-list button > span {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar-panel-groups {
@@ -5755,7 +5756,8 @@ button {
   .sidebar-primary-tabs > button::after,
   .primary-icon,
   .panorama-topic-list button,
-  .panorama-topic-list button > i,
+  .panorama-topic-list button::before,
+  .panorama-topic-list button::after,
   .group-toggle .nav-chevron,
   .subgroup-toggle .nav-chevron,
   .sidebar-brand .brand-button {

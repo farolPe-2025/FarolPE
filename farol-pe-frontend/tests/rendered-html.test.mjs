@@ -315,6 +315,7 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
   assert.match(panoramaHtml, /Panorama geral/);
   assert.match(panoramaHtml, /Calendário de Dados/);
   assert.match(panoramaHtml, /id="panorama-frame"/);
+  assert.doesNotMatch(panoramaHtml, /class="topic-index"|<small>8<\/small>|<i aria-hidden="true">›<\/i>/);
   assert.doesNotMatch(panoramaHtml, /class="sidebar-panel-groups"/);
 
   assert.match(panelsHtml, /Painéis do Farol/);
