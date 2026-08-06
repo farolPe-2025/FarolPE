@@ -502,10 +502,23 @@ function Sidebar({
         ("nestedSlugs" in group &&
           group.nestedSlugs.includes(activePanelSlug as never)),
     )?.id ?? null;
-  const [openGroup, setOpenGroup] = useState<string | null>(activeGroup);
-  const [livestockOpen, setLivestockOpen] = useState(
-    ["aquicultura", "origem-animal", "rebanhos"].includes(activePanelSlug),
+  const defaultLivestockOpen = ["aquicultura", "origem-animal", "rebanhos"].includes(
+    activePanelSlug,
   );
+  const [groupPreference, setGroupPreference] = useState<{
+    path: string;
+    group: string | null;
+  }>({ path, group: activeGroup });
+  const [livestockPreference, setLivestockPreference] = useState<{
+    path: string;
+    open: boolean;
+  }>({ path, open: defaultLivestockOpen });
+  const openGroup =
+    groupPreference.path === path ? groupPreference.group : activeGroup;
+  const livestockOpen =
+    livestockPreference.path === path
+      ? livestockPreference.open
+      : defaultLivestockOpen;
   const [activePanoramaTopic, setActivePanoramaTopic] =
     useState<PanoramaTopicKey>("__all");
 
@@ -516,7 +529,7 @@ function Sidebar({
       const frame = document.getElementById(
         "panorama-frame",
       ) as HTMLIFrameElement | null;
-      if (frame?.contentWindow && event.source !== frame.contentWindow) return;
+      if (!frame?.contentWindow || event.source !== frame.contentWindow) return;
 
       const message = event.data as
         | { type?: string; section?: PanoramaTopicKey }
@@ -729,9 +742,10 @@ function Sidebar({
                       <button
                         className="group-toggle"
                         onClick={() =>
-                          setOpenGroup((current) =>
-                            current === group.id ? null : group.id,
-                          )
+                          setGroupPreference({
+                            path,
+                            group: openGroup === group.id ? null : group.id,
+                          })
                         }
                         aria-expanded={isOpen}
                         aria-controls={childrenId}
@@ -755,15 +769,22 @@ function Sidebar({
                               <button
                                 className="subgroup-toggle"
                                 onClick={() =>
-                                  setLivestockOpen((value) => !value)
+                                  setLivestockPreference({
+                                    path,
+                                    open: !livestockOpen,
+                                  })
                                 }
                                 aria-expanded={livestockOpen}
+                                aria-controls={`sidebar-group-${group.id}-livestock`}
                               >
                                 <span>{group.nestedLabel}</span>
                                 <b className="nav-chevron" aria-hidden="true">›</b>
                               </button>
                               {livestockOpen && (
-                                <div className="subgroup-children">
+                                <div
+                                  className="subgroup-children"
+                                  id={`sidebar-group-${group.id}-livestock`}
+                                >
                                   {group.nestedSlugs.map((slug) =>
                                     panelButtonBySlug(slug, true),
                                   )}
@@ -860,7 +881,6 @@ function AppShell({
   return (
     <div className="portal-shell">
       <Sidebar
-        key={path}
         path={path}
         navigate={navigate}
         open={drawerOpen}
@@ -1047,7 +1067,25 @@ function EconomicPanoramaPage() {
             id="panorama-frame"
             src="/painel-conjuntura-2026-08-03.html"
             title="Painel de Conjuntura Econômica de Pernambuco"
-            onLoad={() => setLoaded(true)}
+            onLoad={(event) => {
+              setLoaded(true);
+              const storedTopic = window.sessionStorage.getItem(
+                "farol-panorama-topic",
+              ) as PanoramaTopicKey | null;
+              const requestedTopic = panoramaTopics.some(
+                (topic) => topic.key === storedTopic,
+              )
+                ? storedTopic
+                : "__all";
+
+              event.currentTarget.contentWindow?.postMessage(
+                {
+                  type: "farol-panorama-select",
+                  section: requestedTopic,
+                },
+                window.location.origin,
+              );
+            }}
             className={loaded ? "is-loaded" : ""}
           />
         </div>

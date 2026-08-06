@@ -295,7 +295,8 @@ test("exibe somente a navegação contextual da área ativa", async () => {
 
   assert.match(html, /class="sidebar-services"/);
   assert.doesNotMatch(html, /sidebar-panel-groups|panorama-topic-list/);
-  assert.match(source, /useState<string \| null>\(activeGroup\)/);
+  assert.match(source, /groupPreference\.path === path/);
+  assert.doesNotMatch(source, /<Sidebar\s+key=\{path\}/);
   assert.doesNotMatch(source, /activeGroup \?\? "economic"/);
 });
 
