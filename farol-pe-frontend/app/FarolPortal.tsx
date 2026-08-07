@@ -110,7 +110,7 @@ const sidebarPanelGroups = [
     id: "economic",
     label: "Dinâmica Econômica",
     summary:
-      "Acompanhe atividade, indústria, comércio, serviços e turismo em Pernambuco.",
+      "Acompanhe os principais indicadores conjunturais que mostram o ritmo da economia pernambucana.",
     icon: ChartNoAxesCombined,
     tone: "economic",
     slugs: ["atividade-economica", "industria", "comercio", "servicos", "turismo"],
@@ -128,7 +128,7 @@ const sidebarPanelGroups = [
     id: "income",
     label: "Produção e Renda",
     summary:
-      "Consulte produção, renda, arrecadação e movimentações financeiras no estado.",
+      "Acompanhe indicadores que revelam a geração de riqueza, renda e atividade econômica em Pernambuco.",
     icon: HandCoins,
     tone: "income",
     slugs: [
@@ -143,7 +143,7 @@ const sidebarPanelGroups = [
     id: "agriculture",
     label: "Agropecuária",
     summary:
-      "Acompanhe agricultura, aquicultura, produção animal e rebanhos de Pernambuco.",
+      "Explore a produção agrícola, pecuária e aquícola, acompanhando sua evolução e importância para o estado.",
     icon: Leaf,
     tone: "agriculture",
     slugs: ["agricultura"],
@@ -154,7 +154,7 @@ const sidebarPanelGroups = [
     id: "employment",
     label: "Emprego",
     summary:
-      "Veja estoque, fluxo e outros indicadores do mercado de trabalho formal.",
+      "Monitore a evolução do emprego, da ocupação, dos rendimentos e das condições do mercado de trabalho.",
     icon: Users,
     tone: "employment",
     slugs: [
