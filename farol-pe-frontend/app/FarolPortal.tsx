@@ -182,7 +182,11 @@ function Brand({ compact = false }: { compact?: boolean }) {
     <div className={`brand-lockup ${compact ? "is-compact" : ""}`}>
       <img
         className="brand-logo"
-        src="/SDEC_FAROLPE_VARIAÇÃO.png"
+        src={
+          compact
+            ? "/SDEC_FAROLPE_VARIAÇÃO_VERTICAL.png"
+            : "/SDEC_FAROLPE_VARIAÇÃO.png"
+        }
         alt="FarolPE — Observatório Socioeconômico de Pernambuco"
       />
     </div>
@@ -666,13 +670,18 @@ function Sidebar({
       />
       <aside className={`sidebar ${open ? "is-open" : ""}`}>
         <div className="sidebar-brand">
-          <button className="brand-button" onClick={() => go("/")}>
-            <Brand />
-          </button>
-          <button className="drawer-close" onClick={onClose} aria-label="Fechar menu">
-            <X aria-hidden="true" />
-          </button>
-        </div>
+        <button className="brand-button" onClick={() => go("/")}>
+          <Brand compact />
+        </button>
+
+        <button
+          className="drawer-close"
+          onClick={onClose}
+          aria-label="Fechar menu"
+        >
+          <X aria-hidden="true" />
+        </button>
+      </div>
 
         <button
           className="sidebar-search"

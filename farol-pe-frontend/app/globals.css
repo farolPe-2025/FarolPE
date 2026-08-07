@@ -4800,10 +4800,38 @@ button {
 
 .brand-lockup.is-compact {
   width: 150px;
+  aspect-ratio: auto;
+  height: auto;
+  overflow: visible;
+}
+
+.brand-lockup.is-compact .brand-logo {
+  position: static;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.sidebar-brand .brand-lockup.is-compact {
+  margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .sidebar-brand .brand-lockup.is-compact {
+    transform: translatex(30px);
+  }
 }
 
 .reference-home .brand-lockup {
   width: clamp(210px, 16vw, 290px);
+  margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+  .reference-home .brand-lockup {
+    margin-top: 20px;
+  }
 }
 
 .sidebar-brand .brand-lockup {
