@@ -1381,27 +1381,84 @@ function SummaryPage() {
 }
 
 function AboutPage({ navigate }: { navigate: Navigate }) {
-  const cards = [
-    ["O que é", "O FarolPE reúne os principais indicadores oficiais sobre a economia e a sociedade pernambucanas, atualizados na periodicidade de cada pesquisa e organizados por tema."],
-    ["Para que serve", "A plataforma oferece a gestores públicos, pesquisadores, imprensa e à sociedade uma leitura confiável e atualizada do desempenho de Pernambuco."],
-    ["Como explorar", "Os painéis permitem consultar séries históricas, comparar estados, regiões e municípios e visualizar os dados em gráficos, mapas e tabelas."],
-    ["Realização", "Uma iniciativa da Secretaria de Desenvolvimento Econômico do Estado de Pernambuco — SDEC-PE."],
-  ];
-  const team = [
-    { name: "Pedro Albuquerque" },
-    { name: "Eduardo Silva" },
-    { name: "Caio Coutinho" },
-    { name: "Marcus Ferraz" },
-    {
-      name: "Pedro Lacerda",
-      role: "Secretário Executivo de Atração de Investimentos e Estudos Econômicos",
-    },
-    {
-      name: "Danielle Jar",
-      role: "Secretária de Desenvolvimento Econômico",
-    },
-  ];
+const cards = [
+  [
+    "Conhecimento que guia",
+    "Desde a Antiguidade, os faróis orientam quem navega em busca de novos horizontes. Hoje, o FarolPE leva esse mesmo princípio para a economia pernambucana: transformar dados em conhecimento para orientar decisões, reduzir incertezas e apoiar o desenvolvimento do estado."
+  ],
 
+  [
+    "O que é",
+    "O FarolPE reúne os principais indicadores oficiais sobre a economia e a sociedade pernambucanas, organizados por tema e atualizados conforme a periodicidade de cada fonte."
+  ],
+
+  [
+    "Para que serve",
+    "O FarolPE transforma dados em informação acessível para apoiar gestores públicos, pesquisadores, empresas, investidores, imprensa e cidadãos na compreensão da realidade socioeconômica de Pernambuco e na tomada de decisões baseadas em evidências."
+  ],
+
+  [
+    "Como explorar",
+    "Navegue pelos painéis temáticos para consultar séries históricas, comparar estados, regiões e municípios e visualizar os dados por meio de gráficos, mapas e tabelas interativas."
+  ],
+
+  [
+    "Fontes dos dados",
+    "Os indicadores são provenientes de órgãos oficiais, como IBGE, Banco Central, Ministério do Trabalho e Emprego, Receita Federal, ANAC, ANTAQ, Comex Stat e demais instituições produtoras de estatísticas."
+  ],
+
+  [
+    "Realização",
+    "Uma iniciativa da Secretaria de Desenvolvimento Econômico de Pernambuco (SDEC-PE), desenvolvida desde junho de 2026 para ampliar a transparência, fortalecer a inteligência de dados e apoiar o desenvolvimento econômico e social do estado."
+  ],
+  ];
+const team = [
+  {
+    role: "Secretária de Desenvolvimento Econômico",
+    members: ["Danielle Jar Souto"],
+  },
+  {
+    role: "Secretário Executivo de Gestão",
+    members: ["Marcelo Guimarães do Rego"],
+  },
+  {
+    role: "Secretário Executivo de Atração de Investimentos e Estudos Econômicos",
+    members: ["Pedro Leonardo Lacerda"],
+  },
+  {
+    role: "Coordenação",
+    members: ["Caio Coutinho"],
+  },
+  {
+    role: "Estudos Econômicos",
+    members: [
+      "Pedro Melo",
+      "Eduardo Aguiar",
+    ],
+  },
+  {
+    role: "Comunicação",
+    members: [
+      "Valdecarlos Alves",
+      "Allan Torres",
+      "Jota Gomes",
+      "Raul Batista",
+    ],
+  },
+  {
+    role: "Apoio",
+    members: [
+      "Marcus Ferraz",
+      "Paulo Oliveira",
+      "João Marcelo Menezes",
+      "Aldicéia Rodrigues",
+      "Luiz Riio",
+      "Thiago Paz",
+      "Vanessa Silva",
+      "Rosa Suruá",
+    ],
+  },
+];
   return (
     <main className="about-page">
       <header className="about-hero">
@@ -1431,14 +1488,16 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
             Projeto desenvolvido de forma colaborativa, unindo conhecimento
             técnico, análise de dados e construção digital.
           </span>
-          <ul>
-            {team.map((member, index) => (
-              <li key={member.name}>
-                <small>{String(index + 1).padStart(2, "0")}</small>
-                <span>
-                  <strong>{member.name}</strong>
-                  {member.role && <em>{member.role}</em>}
-                </span>
+                <ul className="credits-groups">
+            {team.map((group) => (
+              <li className="credits-group" key={group.role}>
+                <span className="credits-role">{group.role}</span>
+
+                <div className="credits-members">
+                  {group.members.map((name) => (
+                    <strong key={name}>{name}</strong>
+                  ))}
+                </div>
               </li>
             ))}
           </ul>
