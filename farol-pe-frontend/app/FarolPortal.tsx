@@ -18,6 +18,7 @@ import {
   Search,
   Users,
   X,
+  BarChart3,
 } from "lucide-react";
 import {
   dataRequestUrl,
@@ -445,14 +446,21 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               O farol sobre os dados de Pernambuco para orientar gestores,
               pesquisadores e investidores na leitura da economia pernambucana.
             </p>
-            <div className="hero-actions">
-              <button className="button button-primary" onClick={() => navigate("/paineis/atividade-economica")}>
-                <span className="action-icon" aria-hidden="true">▦</span>
-                <span>Visualizar dados</span>
+           <div className="hero-actions">
+              <button
+                className="button button-primary"
+                onClick={() => navigate("/paineis/atividade-economica")}
+              >
+                <BarChart3 className="action-icon" aria-hidden="true" />
+                <span>Navegue pelos dados</span>
               </button>
-              <button className="button button-ghost" onClick={() => navigate("/resumo")}>
-                <span className="action-icon" aria-hidden="true">◫</span>
-                <span>Ler panorama</span>
+
+              <button
+                className="button button-ghost"
+                onClick={() => navigate("/resumo")}
+              >
+                <Compass className="action-icon" aria-hidden="true" />
+                <span>Conheça o panorama do estado</span>
               </button>
             </div>
           </div>

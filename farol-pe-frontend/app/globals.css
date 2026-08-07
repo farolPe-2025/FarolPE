@@ -276,6 +276,7 @@ iframe:focus-visible {
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: #f7a600;
 }
 
 .eyebrow.dark {
@@ -1862,21 +1863,10 @@ kbd {
   position: relative;
   padding: 54px clamp(28px, 5vw, 74px) 48px;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 82% 12%, rgba(75, 145, 237, .22), transparent 26%),
-    linear-gradient(125deg, var(--navy-950), var(--navy-800) 64%, #0d4165);
-  color: var(--white);
+  background: transparent;
+  color: #00466e;
 }
 
-.publications-hero::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #289657, var(--gold) 50%, var(--red));
-  content: "";
-}
 
 .publications-hero h1 {
   position: relative;
@@ -1898,7 +1888,7 @@ kbd {
 .publications-hero > p:last-child {
   max-width: 700px;
   margin: 18px 0 0;
-  color: #c2cede;
+  color: #00466e;
   font-size: 14px;
   line-height: 1.65;
 }
@@ -3560,23 +3550,63 @@ kbd {
 .reference-home .hero-actions {
   display: flex;
   margin-top: 25px;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
+
 .reference-home .hero-actions .button {
-  min-height: 43px;
-  padding: 0 19px;
-  border-radius: 7px;
-  font-size: 12px;
-  letter-spacing: .01em;
+  min-height: 50px;
+  padding: 0 22px;
+  gap: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease,
+    border-color .2s ease;
 }
+
+.reference-home .hero-actions .action-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* NAVEGUE PELOS DADOS */
 .reference-home .hero-actions .button-primary {
   border: 1px solid #ffc20e;
   background: #ffc20e;
   color: #071634;
+  box-shadow: 0 7px 18px rgba(255, 194, 14, .18);
 }
+
+.reference-home .hero-actions .button-primary:hover {
+  background: #ffd044;
+  border-color: #ffd044;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255, 194, 14, .25);
+}
+
+/* CONHEÇA O PANORAMA DO ESTADO */
 .reference-home .hero-actions .button-ghost {
-  border-color: rgba(255, 255, 255, .65);
+  border: 1px solid rgba(255, 255, 255, .45);
+  background: rgba(255, 255, 255, .07);
   color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+.reference-home .hero-actions .button-ghost:hover {
+  border-color: rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, .13);
+  transform: translateY(-2px);
 }
 .hero-data-art { top: 58%; }
 .reference-home .manifesto {
@@ -5212,10 +5242,7 @@ button {
 .sidebar {
   scrollbar-width: thin;
   scrollbar-color: rgba(111, 178, 236, .34) transparent;
-  background:
-    radial-gradient(circle at 8% 12%, rgba(31, 112, 191, .2), transparent 28%),
-    radial-gradient(circle at 92% 92%, rgba(15, 117, 93, .12), transparent 31%),
-    linear-gradient(180deg, #061a39 0%, #04152f 52%, #031126 100%);
+  background: #00466E;
 }
 
 .sidebar::-webkit-scrollbar {
