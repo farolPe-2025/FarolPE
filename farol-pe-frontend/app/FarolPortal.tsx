@@ -185,8 +185,8 @@ function Brand({ compact = false }: { compact?: boolean }) {
         className="brand-logo"
         src={
           compact
-            ? "/SDEC_FAROLPE_VARIAÇÃO_VERTICAL.png"
-            : "/SDEC_FAROLPE_VARIAÇÃO.png"
+            ? "/SDEC_FAROLPE_VERTICAL_VARIAÇÃO.png"
+            : "/SDEC_FAROLPE_HORIZONTAL_VARIAÇÃO.png"
         }
         alt="FarolPE — Observatório Socioeconômico de Pernambuco"
       />
@@ -519,14 +519,18 @@ function Sidebar({
   path,
   navigate,
   open,
+  collapsed,
   onClose,
   onSearch,
+  onToggleCollapse,
 }: {
   path: string;
   navigate: Navigate;
   open: boolean;
+  collapsed: boolean;
   onClose: () => void;
   onSearch: () => void;
+  onToggleCollapse: () => void;
 }) {
   const isPanoramaContext = path === "/resumo";
   const isPanelsContext =
@@ -676,23 +680,45 @@ function Sidebar({
         onClick={onClose}
         aria-label="Fechar menu"
       />
-      <aside className={`sidebar ${open ? "is-open" : ""}`}>
+      <aside className={`sidebar ${open ? "is-open" : ""} ${collapsed ? "is-collapsed" : ""}`}>
         <div className="sidebar-brand">
-        <button className="brand-button" onClick={() => go("/")}>
-          <Brand compact />
-        </button>
+          <button className="brand-button" onClick={() => go("/")}>
+            <Brand compact />
+          </button>
+
+          <div className="sidebar-actions">
+            <button
+              className="sidebar-collapse-toggle"
+              onClick={onToggleCollapse}
+              aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
+              title={collapsed ? "Expandir menu" : "Recolher menu"}
+            >
+              <svg
+                className="sidebar-collapse-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M4 7h16M4 12h16M4 17h16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+            <button
+              className="drawer-close"
+              onClick={onClose}
+              aria-label="Fechar menu"
+            >
+              <X aria-hidden="true" />
+            </button>
+          </div>
+        </div>
 
         <button
-          className="drawer-close"
-          onClick={onClose}
-          aria-label="Fechar menu"
-        >
-          <X aria-hidden="true" />
-        </button>
-      </div>
-
-        <button
-          className="sidebar-search"
+          className={`sidebar-search ${collapsed ? "is-collapsed" : ""}`}
           onClick={() => {
             onClose();
             onSearch();
@@ -912,6 +938,13 @@ function Sidebar({
 
         <div className="sidebar-footer">
           <SdecLogo compact />
+          {collapsed && (
+            <img
+              className="sidebar-symbol-logo"
+              src="/SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview.png"
+              alt="Símbolo FarolPE"
+            />
+          )}
         </div>
       </aside>
     </>
@@ -930,6 +963,7 @@ function AppShell({
   children: React.ReactNode;
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -945,13 +979,15 @@ function AppShell({
   }, [drawerOpen]);
 
   return (
-    <div className="portal-shell">
+    <div className={`portal-shell ${sidebarCollapsed ? "is-sidebar-collapsed" : ""}`}>
       <Sidebar
         path={path}
         navigate={navigate}
         open={drawerOpen}
+        collapsed={sidebarCollapsed}
         onClose={() => setDrawerOpen(false)}
         onSearch={onSearch}
+        onToggleCollapse={() => setSidebarCollapsed((value) => !value)}
       />
       <div className="portal-main">
         <header className="mobile-topbar">
@@ -1131,7 +1167,7 @@ function EconomicPanoramaPage() {
           )}
           <iframe
             id="panorama-frame"
-            src="/painel-conjuntura-2026-08-07.html"
+            src="/painel-conjuntura-2026-08-07 (5).html"
             title="Painel de Conjuntura Econômica de Pernambuco"
             onLoad={(event) => {
               setLoaded(true);

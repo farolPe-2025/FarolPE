@@ -111,6 +111,8 @@ iframe:focus-visible {
   text-align: left;
 }
 
+
+
 .brand-lockup {
   display: flex;
   align-items: center;
@@ -852,6 +854,11 @@ kbd {
   min-height: 100vh;
   min-height: 100dvh;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  transition: grid-template-columns 0.28s ease;
+}
+
+.portal-shell.is-sidebar-collapsed {
+  --sidebar-width: 92px;
 }
 
 .sidebar {
@@ -866,6 +873,7 @@ kbd {
   overflow-y: auto;
   background: linear-gradient(180deg, var(--navy-800), var(--navy-950));
   color: var(--white);
+  transition: width 0.28s ease;
 }
 
 .sidebar-brand {
@@ -5108,7 +5116,7 @@ button {
 .brand-lockup {
   position: relative;
   display: block;
-  width: 240px;
+  width: 280px;
   max-width: 100%;
   aspect-ratio: 3.25 / 1;
   overflow: hidden;
@@ -5116,12 +5124,14 @@ button {
 
 .brand-lockup .brand-logo {
   position: absolute;
-  top: -80%;
-  left: -14.6%;
-  width: 127.5%;
+  top: -82%;
+  left: -17%;
+  width: 132%;
   height: auto;
   max-width: none;
   object-fit: contain;
+  transform: scale(1.16);
+  transform-origin: center;
 }
 
 .brand-lockup.is-compact {
@@ -5140,7 +5150,15 @@ button {
 }
 
 .sidebar-brand .brand-lockup.is-compact {
+  width: 200px;
+  max-width: 100%;
   margin-left: 10px;
+}
+
+.sidebar-brand .brand-lockup.is-compact .brand-logo {
+  width: 100%;
+  height: auto;
+  max-width: none;
 }
 
 @media (max-width: 768px) {
@@ -5161,7 +5179,7 @@ button {
 }
 
 .sidebar-brand .brand-lockup {
-  width: 188px;
+  width: 260px;
 }
 
 .mobile-topbar .brand-lockup {
@@ -5242,9 +5260,11 @@ button {
 }
 
 .search-glyph {
+  display: block;
   width: 19px;
   height: 19px;
   flex: 0 0 19px;
+  margin: 0 auto;
   color: currentColor;
   stroke-width: 1.8;
 }
@@ -5553,7 +5573,161 @@ button {
 .sidebar-brand {
   min-height: 112px;
   padding: 20px 18px 14px;
+  align-items: center;
+  gap: 12px;
   border-bottom: 0;
+}
+
+.sidebar-brand .brand-button {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+
+.sidebar-actions {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.sidebar-collapse-toggle {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+  line-height: 1;
+}
+
+.sidebar-collapse-toggle:hover {
+  background: rgba(255, 255, 255, .12);
+}
+
+.sidebar-collapse-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  color: currentColor;
+  line-height: 1;
+}
+
+.sidebar-collapse-icon path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Ajuste manual aqui: alinhe o botão e o ícone com estes pontos */
+.sidebar-collapse-toggle {
+  margin-inline: 0;
+  padding: 0;
+  align-self: center;
+}
+
+.sidebar-actions {
+  align-items: center;
+}
+
+.sidebar.is-collapsed {
+  width: 92px;
+}
+
+.sidebar.is-collapsed .brand-button,
+.sidebar.is-collapsed .sidebar-search span,
+.sidebar.is-collapsed .sidebar-search kbd,
+.sidebar.is-collapsed .sidebar-primary-tabs > button span:not(.primary-icon),
+.sidebar.is-collapsed .sidebar-context,
+.sidebar.is-collapsed .sidebar-services {
+  display: none;
+}
+
+.sidebar.is-collapsed .sidebar-footer {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 16px;
+}
+
+.sidebar.is-collapsed .sidebar-footer .sdec-lockup {
+  display: none;
+}
+
+.sidebar.is-collapsed .sidebar-footer .sidebar-symbol-logo {
+  display: block;
+}
+
+.sidebar.is-collapsed .sidebar-actions {
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar.is-collapsed .sidebar-collapse-toggle {
+  margin: 0 auto;
+}
+
+.sidebar.is-collapsed .sidebar-search {
+  width: 48px;
+  min-height: 48px;
+  margin: 18px auto 12px;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  grid-template-columns: 1fr;
+}
+
+.sidebar-search.is-collapsed {
+  display: flex;
+  width: 48px;
+  min-height: 48px;
+  margin: 18px auto 12px;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  grid-template-columns: 1fr;
+}
+
+.sidebar-search.is-collapsed > span:not(.search-glyph),
+.sidebar-search.is-collapsed > kbd {
+  display: none;
+}
+
+.sidebar-search.is-collapsed .search-glyph {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  justify-self: center;
+  align-self: center;
+}
+
+.sidebar.is-collapsed .sidebar-search .search-glyph {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+.sidebar.is-collapsed .sidebar-primary-tabs {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.sidebar.is-collapsed .sidebar-primary-tabs > button {
+  min-height: 48px;
+  border-radius: 10px;
+}
+
+.sidebar.is-collapsed .sidebar-nav {
+  padding: 0 8px;
+}
+
+.sidebar.is-collapsed .sidebar-panel-groups {
+  display: none;
 }
 
 .sidebar-brand .brand-button {
@@ -6055,11 +6229,29 @@ button {
 }
 
 .sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 0;
-  min-height: 76px;
+  min-height: 89px;
   padding: 14px 18px 17px;
-  border-top-color: rgba(255, 255, 255, .065);
-  background: rgba(0, 8, 23, .18);
+  border-top: none;
+  background: #00466E;
+}
+.sidebar.collapsed {
+  background: #00446B;
+}
+
+.sidebar-footer .sidebar-symbol-logo {
+  display: none;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
 }
 
 @keyframes sidebarContextIn {
