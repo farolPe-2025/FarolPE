@@ -443,9 +443,9 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               Construir o futuro de Pernambuco.
             </h1>
             <p className="hero-lead">
-              O farol sobre os dados de Pernambuco para orientar gestores,
-              pesquisadores e investidores na leitura da economia pernambucana.
-            </p>
+  Mudaram as embarcações. Mudaram as rotas. A necessidade de orientação permanece. 
+  O <span className="farol-highlight">FarolPE</span> transforma dados em direção para compreender Pernambuco.
+</p>
            <div className="hero-actions">
               <button
                 className="button button-primary"
@@ -509,7 +509,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
 
       <footer className="home-footer">
         <SdecLogo />
-        <span>Dados · Conhecimento · Estratégia · Desenvolvimento</span>
+        <span>Conhecimento que guia</span>
       </footer>
     </div>
   );

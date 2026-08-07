@@ -3495,6 +3495,12 @@ kbd {
   .reference-home .manifesto > span { display: none; }
 }
 
+
+.farol-highlight {
+  color: #ffc20e;
+  font-weight: 700;
+} 
+
 /* Refinamento da home e bloco de análises */
 .home-page { overflow: visible; }
 .reference-home .home-header {
