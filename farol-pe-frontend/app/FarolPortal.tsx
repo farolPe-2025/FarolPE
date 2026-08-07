@@ -1114,7 +1114,7 @@ function EconomicPanoramaPage() {
           )}
           <iframe
             id="panorama-frame"
-            src="/painel-conjuntura-2026-08-03.html"
+            src="/painel-conjuntura-2026-08-07.html"
             title="Painel de Conjuntura Econômica de Pernambuco"
             onLoad={(event) => {
               setLoaded(true);

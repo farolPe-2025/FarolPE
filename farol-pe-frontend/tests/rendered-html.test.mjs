@@ -28,7 +28,7 @@ async function render(path = "/") {
 
 test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-03.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-07.html", import.meta.url),
     "utf8",
   );
 
@@ -447,7 +447,7 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
   const panelsResponse = await render("/paineis/atividade-economica");
   const panelsHtml = await panelsResponse.text();
   const panoramaDocument = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-03.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-07.html", import.meta.url),
     "utf8",
   );
 
@@ -486,7 +486,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-03.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-07.html", import.meta.url),
     "utf8",
   );
   const stylesheet = await readFile(
