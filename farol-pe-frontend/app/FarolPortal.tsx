@@ -1811,17 +1811,18 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
     role: "Secretária de Desenvolvimento Econômico",
     members: ["Danielle Jar Souto"],
   },
-  {
-    role: "Secretário Executivo de Gestão",
-    members: ["Marcelo Guimarães do Rego"],
-  },
-  {
+   {
     role: "Secretário Executivo de Atração de Investimentos e Estudos Econômicos",
     members: ["Pedro Leonardo Lacerda"],
   },
   {
+    role: "Secretário Executivo de Gestão",
+    members: ["Marcelo Guimarães do Rego"],
+  },
+ 
+  {
     role: "Coordenação",
-    members: ["Caio Coutinho"],
+    members: ["Caio Coutinho", "Marcus Ferraz"],
   },
   {
     role: "Estudos Econômicos",
@@ -1839,19 +1840,7 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
       "Raul Batista",
     ],
   },
-  {
-    role: "Apoio",
-    members: [
-      "Marcus Ferraz",
-      "Paulo Oliveira",
-      "João Marcelo Menezes",
-      "Aldicéia Rodrigues",
-      "Luiz Riio",
-      "Thiago Paz",
-      "Vanessa Silva",
-      "Rosa Suruá",
-    ],
-  },
+  
   ];
   return (
     <main className="about-page">
