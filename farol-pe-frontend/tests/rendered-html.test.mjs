@@ -634,9 +634,11 @@ test("usa logo horizontal e azul oficial no topo móvel", async () => {
   );
 });
 
-test("aplica azul escuro ao tema aberto e brilho ao painel ativo", async () => {
+test("aplica azul escuro ao tema aberto e o mesmo brilho ao painel e panorama ativos", async () => {
   const response = await render("/paineis/atividade-economica");
   const html = await response.text();
+  const panoramaResponse = await render("/resumo");
+  const panoramaHtml = await panoramaResponse.text();
   const stylesheet = await readFile(
     new URL("../app/globals.css", import.meta.url),
     "utf8",
@@ -658,7 +660,19 @@ test("aplica azul escuro ao tema aberto e brilho ao painel ativo", async () => {
   );
   assert.match(
     stylesheet,
-    /\.sidebar-panel-row:has\(\.sidebar-link\.is-active\) \{[\s\S]*?rgba\(255, 255, 255, \.17\)[\s\S]*?backdrop-filter: blur\(6px\)/,
+    /\.panorama-topic-list button\.is-active,\s*\.sidebar-panel-row:has\(\.sidebar-link\.is-active\) \{[\s\S]*?rgba\(255, 255, 255, \.17\)[\s\S]*?backdrop-filter: blur\(6px\)/,
+  );
+  assert.match(
+    panoramaHtml,
+    /class="panorama-topic-list"[\s\S]*?class="is-active"[\s\S]*?aria-current="true"[\s\S]*?Panorama geral/,
+  );
+  assert.match(
+    stylesheet,
+    /\.panorama-topic-list button\.is-active::before \{[\s\S]*?z-index: 2;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.panorama-topic-list button\.is-active::after \{[\s\S]*?height: 1px;[\s\S]*?rgba\(255, 255, 255, \.58\)/,
   );
   assert.match(
     stylesheet,
