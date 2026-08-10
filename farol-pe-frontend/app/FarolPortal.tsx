@@ -707,7 +707,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
         <div className="home-why-heading reveal-on-scroll">
           <p>Conhecimento que orienta</p>
           <h2 id="home-why-title">
-            Por que ‘<FarolName />’?
+            Por que <FarolName />?
           </h2>
           <span className="home-why-symbol" aria-hidden="true">
             <img
