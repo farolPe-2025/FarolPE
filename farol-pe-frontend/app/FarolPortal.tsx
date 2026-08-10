@@ -32,7 +32,6 @@ import {
   BarChart3,
 } from "lucide-react";
 import {
-  dataRequestUrl,
   mainLinks,
   panels,
   searchItems,
@@ -52,7 +51,7 @@ const subscribeToHydration = () => () => {};
 const getClientHydrationSnapshot = () => true;
 const getServerHydrationSnapshot = () => false;
 
-type PublicationKind = "news" | "report" | "bulletin";
+type PublicationKind = "technical-note" | "news" | "report" | "bulletin";
 type PublicationRange = "all" | "30" | "90" | "365";
 
 function FarolName({ className = "" }: { className?: string }) {
@@ -97,10 +96,17 @@ const jobsBars = [
 
 const publicationKindOptions = [
   { value: "all", label: "Todos" },
-  { value: "news", label: "Notícias" },
-  { value: "report", label: "Relatórios analíticos" },
-  { value: "bulletin", label: "Boletim econômico" },
+  { value: "technical-note", label: "Notas Técnicas" },
+  { value: "news", label: "Notícias de PE" },
+  { value: "report", label: "Relatórios Analíticos" },
+  { value: "bulletin", label: "Boletins Econômicos" },
 ] as const;
+
+const dataRequestUrls: Partial<Record<(typeof sidebarPanelGroups)[number]["id"], string>> = {
+  economic: "https://forms.gle/Ky4y4akU6UJJ3GTv7",
+  agriculture: "https://forms.gle/eeio4YLBs8V47fKE7",
+  sectoral: "https://forms.gle/7G81FS6xyxwVhHjj6",
+};
 
 const publicationRangeOptions = [
   { value: "all", label: "Todo o período" },
@@ -110,27 +116,38 @@ const publicationRangeOptions = [
 ] as const;
 
 const publicationTypeLabels: Record<PublicationKind, string> = {
-  news: "Notícia",
-  report: "Relatório analítico",
-  bulletin: "Boletim econômico",
+  "technical-note": "Nota Técnica",
+  news: "Notícia de PE",
+  report: "Relatório Analítico",
+  bulletin: "Boletim Econômico",
 };
 
 const publicationItems = [
   {
-    id: "clipping-varejo-pernambuco-2026",
-    kind: "news" as const,
-    title:
-      "Pernambuco lidera alta do comércio varejista em 2026 no país, aponta IBGE",
+    id: "nota-tecnica-dinamica-empresarial-junho-2026",
+    kind: "technical-note" as const,
+    title: "Dinâmica empresarial de Pernambuco em junho de 2026",
     summary:
-      "Exemplo de clipping para demonstrar a organização das manchetes. Os próximos conteúdos poderão ser incluídos nesta mesma estrutura.",
-    source: "Diario de Pernambuco",
-    publishedAt: "2026-07-17",
-    displayDate: "17 jul. 2026",
-    image: "/farol-home.jpg",
-    imageAlt:
-      "Farol iluminando o litoral, imagem ilustrativa do exemplo de clipping",
-    href: "https://www.diariodepernambuco.com.br/economia/2026/07/11719036-pernambuco-lidera-alta-do-comercio-varejista-no-pais-aponta-ibge.html",
-    isExample: true,
+      "Em junho de 2026, Pernambuco registrou a abertura de 12.226 empresas – o 10º maior volume do país e o 3º do Nordeste. Desde 2009, é o maior resultado para um mês de junho, 11,6% acima de junho de 2025 (10.958 aberturas).",
+    source: "SDEC-PE",
+    publishedAt: "2026-06-30",
+    displayDate: "jun. 2026",
+    image: "/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png",
+    imageAlt: "Símbolo do FarolPE",
+    href: "https://drive.google.com/file/d/1SEgyO4ynuPrVY3zeXbGKrafxkQS5Rr3/view?usp=sharing",
+  },
+  {
+    id: "relatorio-analitico-piscicultura-pernambuco",
+    kind: "report" as const,
+    title: "Relatório Analítico Setorial: Piscicultura de Pernambuco",
+    summary:
+      "A piscicultura da tilápia é uma das principais atividades do agronegócio no Sertão de Pernambuco. A atividade apresenta elevada relevância econômica, social e ambiental, contribuindo para a geração de emprego, renda e segurança alimentar, além de impulsionar a diversificação da economia regional.",
+    source: "SDEC-PE",
+    publishedAt: "2026-06-30",
+    displayDate: "2026",
+    image: "/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png",
+    imageAlt: "Símbolo do FarolPE",
+    href: "https://drive.google.com/file/d/15JXPhjlnoo4Lqm_AMG9MKz52RDeZL2Uu/view?usp=sharing",
   },
 ];
 
@@ -930,6 +947,22 @@ function Sidebar({
           <button className="brand-button" onClick={() => go("/")}>
             <Brand compact />
           </button>
+        </div>
+
+        <div className="sidebar-tools">
+          <button
+            className={`sidebar-search ${collapsed ? "is-collapsed" : ""}`}
+            onClick={() => {
+              onClose();
+              onSearch();
+            }}
+            aria-label="Pesquisar no FarolPE"
+            title="Pesquisar no FarolPE"
+          >
+            <SearchIcon />
+            <span>Buscar indicadores e temas</span>
+            <kbd>/</kbd>
+          </button>
 
           <div className="sidebar-actions">
             <button
@@ -961,20 +994,6 @@ function Sidebar({
             </button>
           </div>
         </div>
-
-        <button
-          className={`sidebar-search ${collapsed ? "is-collapsed" : ""}`}
-          onClick={() => {
-            onClose();
-            onSearch();
-          }}
-          aria-label="Pesquisar no FarolPE"
-          title="Pesquisar no FarolPE"
-        >
-          <SearchIcon />
-          <span>Buscar indicadores e temas</span>
-          <kbd>/</kbd>
-        </button>
 
         <nav className="sidebar-nav" aria-label="Navegação principal">
           <div className="sidebar-primary-tabs" aria-label="Áreas do FarolPE">
@@ -1402,7 +1421,7 @@ function EconomicPanoramaPage() {
       <section className="panel-stage">
         <DeferredFrame
           id="panorama-frame"
-          src="/painel-conjuntura-2026-08-07 (5).html"
+          src="/painel-conjuntura-2026-08-10 (5).html"
           title="Painel de Conjuntura Econômica de Pernambuco"
           loaderTitle="Carregando o panorama econômico"
           loaderDescription="Preparando os indicadores de Pernambuco…"
@@ -1815,41 +1834,42 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
 }
 
 function DataDictionaryPage() {
-  const downloadablePanels = panels.filter(
-    (panel) => panel.embedUrl && panel.downloadTitle && panel.research,
-  );
-
   return (
     <main className="dictionary-page">
       <PageHero
         className="dictionary-hero"
         eyebrow="Download dos Dados"
-        title="Solicite as bases dos painéis."
-        description={
-          <>
-          Consulte um resumo de cada painel e acesse os dados pelo canal
-          indicado.
-          </>
-        }
+        title="Acesse os dados"
+        description="Escolha o tema de seu interesse, informe os dados da sua instituição e acesse a base correspondente."
       />
 
-      <section className="dictionary-list" aria-label="Painéis disponíveis">
-        {downloadablePanels.map((panel) => (
-          <article className="dictionary-card" key={panel.slug}>
-            <h2>
-              {panel.downloadTitle} <span>({panel.research})</span>
-            </h2>
-            <p>{panel.description}</p>
-            <a
-              href={dataRequestUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Acessar dados do painel ${panel.downloadTitle} (${panel.research})`}
-            >
-              Acessar dados <span aria-hidden="true">↗</span>
-            </a>
-          </article>
-        ))}
+      <section className="dictionary-list" aria-label="Temas com bases de dados">
+        {sidebarPanelGroups.map((group) => {
+          const Icon = group.icon;
+          const requestUrl = dataRequestUrls[group.id];
+
+          return (
+            <article className={`dictionary-card tone-${group.tone}`} key={group.id}>
+              <span className="dictionary-card-icon" aria-hidden="true">
+                <Icon />
+              </span>
+              <h2>{group.label}</h2>
+              <p>{group.summary}</p>
+              {requestUrl ? (
+                <a
+                  href={requestUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Acessar os dados de ${group.label}`}
+                >
+                  Acessar dados <span aria-hidden="true">↗</span>
+                </a>
+              ) : (
+                <span className="dictionary-card-pending">Disponível em breve</span>
+              )}
+            </article>
+          );
+        })}
       </section>
     </main>
   );
@@ -1878,8 +1898,8 @@ function PublicationsPage() {
         title="Informação para acompanhar Pernambuco."
         description={
           <>
-            Consulte notícias selecionadas, relatórios analíticos e boletins
-            econômicos em uma linha do tempo organizada pelo <FarolName />.
+            Consulte notas técnicas, notícias de Pernambuco, relatórios analíticos
+            e boletins econômicos em uma linha do tempo organizada pelo <FarolName />.
           </>
         }
       />
@@ -1935,7 +1955,6 @@ function PublicationsPage() {
               <article className="publication-card" key={item.id}>
                 <div className="publication-card-image">
                   <img src={item.image} alt={item.imageAlt} />
-                  {item.isExample && <span>Exemplo de clipping</span>}
                 </div>
                 <div className="publication-card-copy">
                   <div className="publication-card-meta">
@@ -1947,7 +1966,7 @@ function PublicationsPage() {
                   <footer>
                     <strong>{item.source}</strong>
                     <a href={item.href} target="_blank" rel="noreferrer">
-                      Ler clipping <span aria-hidden="true">↗</span>
+                      Acessar publicação <span aria-hidden="true">↗</span>
                     </a>
                   </footer>
                 </div>

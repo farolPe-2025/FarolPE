@@ -1841,6 +1841,23 @@ kbd {
   letter-spacing: -0.025em;
 }
 
+.dictionary-card-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  place-items: center;
+  border: 1px solid rgba(0, 70, 110, .16);
+  border-radius: 11px;
+  background: rgba(0, 70, 110, .07);
+  color: var(--brand-blue);
+}
+
+.dictionary-card-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
 .dictionary-card h2 span {
   color: var(--blue);
   font-size: 0.72em;
@@ -1881,6 +1898,21 @@ kbd {
 .dictionary-card a span {
   color: var(--gold);
   font-size: 15px;
+}
+
+.dictionary-card-pending {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 40px;
+  margin-top: auto;
+  padding: 0 15px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
 }
 
 /* Publications */
@@ -2061,6 +2093,12 @@ kbd {
   height: 100%;
   object-fit: cover;
   transition: transform .35s ease;
+}
+
+.publication-card-image img[src*="SDEC_FAROLPE_SÍMBOLO_SITE_v2"] {
+  padding: clamp(34px, 6vw, 66px);
+  background: #eef4f7;
+  object-fit: contain;
 }
 
 .publication-card:hover .publication-card-image img {
@@ -5359,7 +5397,15 @@ button {
 }
 
 .home-page > .home-footer .sdec-lockup {
-  max-height: 86px;
+  display: flex;
+  width: min(270px, 45vw);
+  max-height: none;
+  align-self: center;
+  align-items: center;
+}
+
+.home-page > .home-footer .sdec-logo-crop {
+  margin-block: auto;
 }
 
 @keyframes moreCue {
@@ -5430,6 +5476,7 @@ button {
 
 /* Transição da abertura para a leitura rápida */
 .home-more-strip {
+  bottom: clamp(56px, 7vh, 84px);
   border: 0;
   background: transparent;
   pointer-events: none;
@@ -6756,7 +6803,10 @@ body * {
 
   .mobile-topbar .brand-button {
     display: flex;
+    height: 100%;
+    min-height: 62px;
     min-width: 0;
+    align-self: stretch;
     align-items: center;
     justify-content: center;
   }
@@ -6764,11 +6814,18 @@ body * {
   .mobile-topbar .brand-lockup {
     width: clamp(148px, 37vw, 182px);
     max-width: 44vw;
+    transform: translateY(4px);
   }
 
   .mobile-topbar .search-glyph,
   .mobile-topbar > button:not(.brand-button) {
     color: #fff;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-topbar .brand-button {
+    min-height: 58px;
   }
 }
 
@@ -6968,6 +7025,311 @@ body * {
     width: 98px;
     height: 98px;
     flex-basis: 98px;
+  }
+}
+
+/* Menu lateral ampliado no desktop, com rolagem independente. */
+@media (min-width: 861px) {
+  :root {
+    --sidebar-width: 325px;
+  }
+
+  .sidebar:not(.is-collapsed) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-brand {
+    min-height: 140px;
+    padding: 25px 22px 18px;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-brand .brand-lockup.is-compact {
+    width: 220px;
+    margin-inline: auto;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-brand .brand-button {
+    flex: 0 1 220px;
+    justify-content: center;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-tools {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    margin: 20px 20px 15px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    isolation: isolate;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-collapse-toggle {
+    position: relative;
+    z-index: 3;
+    width: 43px;
+    height: 43px;
+    border-radius: 10px;
+    pointer-events: auto;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-search {
+    width: auto;
+    min-width: 0;
+    min-height: 53px;
+    margin: 0;
+    flex: 1;
+    padding: 0 15px;
+    overflow: hidden;
+    border-radius: 13px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-search > span:not(.search-glyph) {
+    font-size: 14px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-search .search-glyph {
+    width: 24px;
+    height: 24px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-search kbd {
+    width: 25px;
+    height: 25px;
+    font-size: 11px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-nav {
+    padding-inline: 18px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-primary-tabs {
+    margin-bottom: 20px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-primary-tabs > button {
+    min-height: 90px;
+    gap: 9px;
+    font-size: 13px;
+  }
+
+  .sidebar:not(.is-collapsed) .primary-icon {
+    width: 31px;
+    height: 31px;
+  }
+
+  .sidebar:not(.is-collapsed) .primary-icon svg {
+    width: 29px;
+    height: 29px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-context-heading {
+    min-height: 35px;
+    padding: 0 7px 10px;
+    font-size: 11px;
+  }
+
+  .sidebar:not(.is-collapsed) .panorama-topic-list {
+    gap: 7px;
+  }
+
+  .sidebar:not(.is-collapsed) .panorama-topic-list button {
+    min-height: 53px;
+    padding: 0 17px 0 19px;
+    border-radius: 11px;
+    font-size: 13.5px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-toggle {
+    min-height: 63px;
+    padding: 10px 12px;
+    gap: 0 11px;
+    font-size: 13.5px;
+  }
+
+  .sidebar:not(.is-collapsed) .group-title-line strong {
+    font-size: 13.5px;
+  }
+
+  .sidebar:not(.is-collapsed) .group-toggle .group-summary {
+    margin: 10px 26px 4px 37px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-icon,
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-icon.tone-economic,
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-icon.tone-sectoral,
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-icon.tone-income,
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-icon.tone-agriculture,
+  .sidebar:not(.is-collapsed) .sidebar-panel-groups .group-icon.tone-employment {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+
+  .sidebar:not(.is-collapsed) .group-count {
+    min-width: 27px;
+    height: 27px;
+    font-size: 10.5px;
+  }
+
+  .sidebar:not(.is-collapsed) .group-children {
+    margin: 0 10px 10px 43px;
+    padding: 4px 0 4px 10px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-link {
+    min-height: 46px;
+    padding-left: 11px;
+    font-size: 13px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-info-link {
+    right: 5px;
+    width: 29px;
+    height: 29px;
+    font-size: 11px;
+  }
+
+  .sidebar:not(.is-collapsed) .subgroup-toggle {
+    min-height: 44px;
+    font-size: 12.5px;
+  }
+
+  .sidebar:not(.is-collapsed) .group-toggle .nav-chevron,
+  .sidebar:not(.is-collapsed) .subgroup-toggle .nav-chevron {
+    width: 19px;
+    height: 19px;
+    flex-basis: 19px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-services {
+    padding-top: 22px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-services .sidebar-context-heading {
+    min-height: 38px;
+    font-size: 11px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-services .sidebar-main {
+    min-height: 58px;
+    padding-inline: 11px;
+    font-size: 15px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-services .nav-symbol {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-footer {
+    min-height: 111px;
+    padding: 18px 23px 21px;
+  }
+}
+
+.sidebar-tools {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.sidebar-tools .sidebar-search {
+  width: 100%;
+  min-width: 0;
+}
+
+.sidebar-tools .sidebar-actions {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  pointer-events: auto;
+}
+
+.sidebar.is-collapsed .sidebar-brand {
+  min-height: 0;
+  padding: 0;
+}
+
+.sidebar.is-collapsed .sidebar-tools {
+  display: flex;
+  padding: 18px 0 12px;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar.is-collapsed .sidebar-tools .sidebar-search {
+  margin: 0;
+  flex: 0 0 48px;
+}
+
+@media (max-width: 860px) {
+  .sidebar:not(.is-collapsed) .sidebar-brand {
+    min-height: 132px;
+    padding-top: 22px;
+    justify-content: center;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-brand .brand-button {
+    flex: 0 1 220px;
+    justify-content: center;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-brand .brand-lockup.is-compact {
+    margin-inline: auto;
+    transform: none;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-tools {
+    margin: 14px 16px 10px;
+    gap: 8px;
+  }
+
+  /* No drawer móvel o menu fecha pelo X; recolher é uma ação exclusiva do desktop. */
+  .sidebar:not(.is-collapsed) .sidebar-collapse-toggle {
+    display: none;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-tools .sidebar-search {
+    width: auto;
+    margin: 0;
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1366px) {
+  :root {
+    --sidebar-width: 305px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-brand {
+    min-height: 125px;
+    padding-block: 22px 16px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-primary-tabs > button {
+    min-height: 85px;
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1080px) {
+  :root {
+    --sidebar-width: 285px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-nav {
+    padding-inline: 14px;
   }
 }
 

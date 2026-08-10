@@ -28,7 +28,7 @@ async function render(path = "/") {
 
 test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
     "utf8",
   );
 
@@ -47,6 +47,15 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   assert.match(
     panorama,
     /\.blocogrid \.tblscroll\{[^}]*overflow-x:auto;[^}]*touch-action:pan-x pan-y;/,
+  );
+  assert.equal((panorama.match(/class="tblscroll trab-table-scroll"/g) ?? []).length, 2);
+  assert.match(
+    panorama,
+    /\.trab-table-scroll table\.mini\{width:100%; min-width:640px; table-layout:fixed;\}/,
+  );
+  assert.match(
+    panorama,
+    /\.trab-table-scroll table\.mini th:first-child,[\s\S]*?position:sticky; left:0;/,
   );
   assert.match(
     panorama,
@@ -80,11 +89,19 @@ test("renderiza a home institucional do FarolPE", async () => {
   );
   assert.match(
     stylesheet,
-    /\.home-more-strip \{\s*border: 0;\s*background: transparent;\s*pointer-events: none;/,
+    /\.home-more-strip \{\s*bottom: clamp\(56px, 7vh, 84px\);\s*border: 0;\s*background: transparent;\s*pointer-events: none;/,
   );
   assert.match(
     stylesheet,
     /\.home-more-strip button \{[^}]*color: #fff;[^}]*pointer-events: auto;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.home-page > \.home-footer \.sdec-lockup \{[\s\S]*?align-self: center;[\s\S]*?align-items: center;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.home-page > \.home-footer \.sdec-logo-crop \{\s*margin-block: auto;/,
   );
 });
 
@@ -188,9 +205,29 @@ test("mantém a busca acessível com ícone profissional", async () => {
   );
 
   assert.match(html, /class="sidebar-search\s*"/);
+  assert.match(
+    source,
+    /className="sidebar-brand"[\s\S]*?className="sidebar-tools"[\s\S]*?className=\{`sidebar-search[\s\S]*?className="sidebar-actions"/,
+  );
   assert.match(html, /Buscar indicadores e temas/);
   assert.match(html, /<kbd>\/<\/kbd>/);
   assert.match(source, /return <Search className="search-glyph"/);
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \{[\s\S]*?justify-content: center;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-tools \{[\s\S]*?z-index: 5;[\s\S]*?display: grid;[\s\S]*?margin: 20px 20px 15px;[\s\S]*?grid-template-columns: minmax\(0, 1fr\) auto;[\s\S]*?gap: 10px;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-search \{[\s\S]*?min-width: 0;[\s\S]*?flex: 1;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-collapse-toggle \{[\s\S]*?z-index: 3;[\s\S]*?pointer-events: auto;/,
+  );
   assert.doesNotMatch(
     stylesheet,
     /\.sidebar-search \.search-glyph\s*\{[\s\S]*?transform: scaleX\(-1\)/,
@@ -301,7 +338,7 @@ test("mantém na busca os mesmos nomes exibidos no menu", async () => {
   assert.doesNotMatch(source, /\/noticias/i);
 });
 
-test("entrega somente os painéis publicados no catálogo de dados", async () => {
+test("organiza o acesso aos dados pelos mesmos temas dos painéis", async () => {
   const response = await render("/dicionario-de-dados");
   const html = await response.text();
   const catalog = html.match(/<section class="dictionary-list"[\s\S]*?<\/section>/)?.[0] ?? "";
@@ -312,58 +349,50 @@ test("entrega somente os painéis publicados no catálogo de dados", async () =>
     .replace(/\s+\)/g, ")");
 
   assert.equal(response.status, 200);
-  assert.match(html, /Solicite as bases dos painéis/);
+  assert.match(html, /Acesse os dados/);
+  assert.match(html, /Escolha o tema de seu interesse/);
   assert.match(html, /Acessar dados/);
-  assert.match(html, /https:\/\/forms\.gle\/aMfCQQ8N4aU1pt4m6/);
-  assert.equal(catalog.match(/class="dictionary-card"/g)?.length, 10);
+  assert.match(html, /https:\/\/forms\.gle\/Ky4y4akU6UJJ3GTv7/);
+  assert.match(html, /https:\/\/forms\.gle\/eeio4YLBs8V47fKE7/);
+  assert.match(html, /https:\/\/forms\.gle\/7G81FS6xyxwVhHjj6/);
+  assert.equal(catalog.match(/<article class="dictionary-card[^\"]*"/g)?.length, 5);
 
-  for (const panelName of [
-    "Indústria (PIM-PF)",
-    "Atividade Econômica (IBCR)",
-    "Serviços (PMS)",
-    "Turismo (PMS)",
-    "Estrutura industrial (PIA-Empresa)",
-    "Comércio (PMC)",
-    "Agricultura (PAM)",
-    "Aquicultura (PPM)",
-    "Produção de origem animal (PPM)",
-    "Rebanhos (PPM)",
+  for (const theme of [
+    "Dinâmica Econômica",
+    "Estrutura Setorial",
+    "Produção e Renda",
+    "Agropecuária",
+    "Emprego",
   ]) {
-    assert.ok(catalogText.includes(panelName), `catálogo deveria conter ${panelName}`);
+    assert.ok(catalogText.includes(theme), `catálogo deveria conter ${theme}`);
   }
 
-  for (const unavailablePanel of [
-    "Movimentações Financeiras",
-    "Produto Interno Bruto",
-    "Valor Adicionado Bruto",
-    "Estoque de Emprego",
-    "Fluxo de Emprego",
-  ]) {
-    assert.ok(
-      !catalogText.includes(unavailablePanel),
-      `catálogo não deveria conter ${unavailablePanel}`,
-    );
-  }
+  assert.equal(catalog.match(/Disponível em breve/g)?.length, 2);
 
   assert.doesNotMatch(html, /Buscar termo no dicionário|termos disponíveis/);
 });
 
-test("estrutura publicações com clipping e filtros", async () => {
+test("estrutura publicações oficiais com filtros", async () => {
   const response = await render("/publicacoes");
   const html = await response.text();
 
   assert.equal(response.status, 200);
   assert.match(html, /Tipo de publicação/);
-  assert.match(html, /Notícias/);
-  assert.match(html, /Relatórios analíticos/);
-  assert.match(html, /Boletim econômico/);
+  assert.match(html, /Notas Técnicas/);
+  assert.match(html, /Notícias de PE/);
+  assert.match(html, /Relatórios Analíticos/);
+  assert.match(html, /Boletins Econômicos/);
   assert.match(html, /Janela de tempo/);
   assert.match(html, /Últimos 30 dias/);
-  assert.match(html, /Exemplo de clipping/);
-  assert.match(html, /Pernambuco lidera alta do comércio varejista/);
-  assert.match(html, /Diario de Pernambuco/);
-  assert.match(html, /17 jul\. 2026/);
-  assert.equal(html.match(/class="publication-card"/g)?.length, 1);
+  assert.match(html, /Dinâmica empresarial de Pernambuco em junho de 2026/);
+  assert.match(html, /12\.226 empresas/);
+  assert.match(html, /Relatório Analítico Setorial: Piscicultura de Pernambuco/);
+  assert.match(html, /piscicultura da tilápia/);
+  assert.match(html, /Acessar publicação/);
+  assert.match(html, /1SEgyO4ynuPrVY3zeXbGKrafxkQS5Rr3/);
+  assert.match(html, /15JXPhjlnoo4Lqm_AMG9MKz52RDeZL2Uu/);
+  assert.doesNotMatch(html, /Exemplo|clipping|Diario de Pernambuco/i);
+  assert.equal(html.match(/class="publication-card"/g)?.length, 2);
 });
 
 test("organiza a navegação dos painéis e sinaliza conteúdos em preparação", async () => {
@@ -460,13 +489,58 @@ test("ancora serviços junto à logo e amplia seus itens", async () => {
   assert.match(stylesheet, /\.sidebar-footer \{[\s\S]*?margin-top: 0;/);
 });
 
+test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    stylesheet,
+    /@media \(min-width: 861px\) \{\s*:root \{\s*--sidebar-width: 325px;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \{[\s\S]*?overflow-y: auto;[\s\S]*?scrollbar-gutter: stable;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-search > span:not\(\.search-glyph\) \{\s*font-size: 14px;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-primary-tabs > button \{[\s\S]*?min-height: 90px;[\s\S]*?font-size: 13px;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.panorama-topic-list button \{[\s\S]*?min-height: 53px;[\s\S]*?font-size: 13\.5px;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-panel-groups \.group-toggle \{[\s\S]*?min-height: 63px;[\s\S]*?font-size: 13\.5px;/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(min-width: 861px\) and \(max-width: 1366px\) \{\s*:root \{\s*--sidebar-width: 305px;[\s\S]*?min-height: 125px;[\s\S]*?min-height: 85px;/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(min-width: 861px\) and \(max-width: 1080px\) \{\s*:root \{\s*--sidebar-width: 285px;/,
+  );
+  assert.match(stylesheet, /\.portal-shell\.is-sidebar-collapsed \{\s*--sidebar-width: 92px;/);
+  assert.match(
+    stylesheet,
+    /@media \(max-width: 860px\)[\s\S]*?\.sidebar \{\s*width: min\(350px, 91vw\);/,
+  );
+});
+
 test("troca a lateral entre tópicos do panorama e catálogo de painéis", async () => {
   const panoramaResponse = await render("/resumo");
   const panoramaHtml = await panoramaResponse.text();
   const panelsResponse = await render("/paineis/atividade-economica");
   const panelsHtml = await panelsResponse.text();
   const panoramaDocument = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
     "utf8",
   );
 
@@ -588,7 +662,7 @@ test("carrega e aplica Inter no portal e no panorama incorporado", async () => {
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
     "utf8",
   );
   const font = await readFile(
@@ -661,6 +735,14 @@ test("usa logo horizontal e azul oficial no topo móvel", async () => {
   assert.match(
     stylesheet,
     /@media \(max-width: 860px\)[\s\S]*?\.mobile-topbar \{[\s\S]*?background: var\(--brand-blue\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.mobile-topbar \.brand-button \{[\s\S]*?align-self: stretch;[\s\S]*?align-items: center;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.mobile-topbar \.brand-lockup \{[\s\S]*?transform: translateY\(4px\);/,
   );
 });
 
@@ -741,8 +823,11 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
   assert.match(source, /Tentar novamente/);
   assert.match(source, /className="lighthouse-loader-base"/);
   assert.match(source, /className="lighthouse-loader-yellow"/);
+  const deferredFrameSource = source.match(
+    /function DeferredFrame[\s\S]*?function AnimatedMetric/,
+  )?.[0] ?? "";
   assert.equal(
-    (source.match(/SDEC_FAROLPE_SÍMBOLO_SITE_v2\.png/g) ?? []).length,
+    (deferredFrameSource.match(/SDEC_FAROLPE_SÍMBOLO_SITE_v2\.png/g) ?? []).length,
     2,
   );
   assert.ok(symbol.length > 10_000);
@@ -771,7 +856,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
     "utf8",
   );
   const stylesheet = await readFile(
