@@ -957,7 +957,7 @@ function Sidebar({
               onSearch();
             }}
             aria-label="Pesquisar no FarolPE"
-            title="Pesquisar no FarolPE"
+            data-tooltip="Pesquisar"
           >
             <SearchIcon />
             <span>Buscar indicadores e temas</span>
@@ -969,7 +969,7 @@ function Sidebar({
               className="sidebar-collapse-toggle"
               onClick={onToggleCollapse}
               aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
-              title={collapsed ? "Expandir menu" : "Recolher menu"}
+              data-tooltip={collapsed ? "Expandir menu" : "Recolher menu"}
             >
               <svg
                 className="sidebar-collapse-icon"
@@ -1000,7 +1000,7 @@ function Sidebar({
             <button
               className={path === "/" ? "is-active" : ""}
               onClick={() => go("/")}
-              title="Início"
+              data-tooltip="Início"
               aria-current={path === "/" ? "page" : undefined}
             >
               <span className="primary-icon icon-home" aria-hidden="true">
@@ -1011,7 +1011,7 @@ function Sidebar({
             <button
               className={isPanoramaContext ? "is-active" : ""}
               onClick={showPanorama}
-              title="Panorama"
+              data-tooltip="Panorama"
               aria-current={isPanoramaContext ? "page" : undefined}
             >
               <span className="primary-icon icon-panorama" aria-hidden="true">
@@ -1022,7 +1022,7 @@ function Sidebar({
             <button
               className={isPanelsContext ? "is-active" : ""}
               onClick={showPanels}
-              title="Painéis"
+              data-tooltip="Painéis"
               aria-current={isPanelsContext ? "page" : undefined}
             >
               <span className="primary-icon icon-panels" aria-hidden="true">
@@ -1231,7 +1231,6 @@ function Sidebar({
                   : "sidebar-main"
               }
               onClick={() => go("/dicionario-de-dados")}
-              title="Download dos Dados"
               data-tooltip="Download dos Dados"
               aria-current={
                 path === "/dicionario-de-dados" ? "page" : undefined
@@ -1249,7 +1248,6 @@ function Sidebar({
                   : "sidebar-main"
               }
               onClick={() => go("/publicacoes")}
-              title="Publicações"
               data-tooltip="Publicações"
               aria-current={path === "/publicacoes" ? "page" : undefined}
             >
@@ -1263,7 +1261,6 @@ function Sidebar({
                 path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"
               }
               onClick={() => go("/sobre")}
-              title="Sobre"
               data-tooltip="Sobre"
               aria-current={path === "/sobre" ? "page" : undefined}
             >
@@ -1282,7 +1279,7 @@ function Sidebar({
               className="sidebar-symbol-home"
               onClick={() => go("/")}
               aria-label="Voltar para a página inicial"
-              title="Início"
+              data-tooltip="Início"
             >
               <img
                 className="sidebar-symbol-logo"

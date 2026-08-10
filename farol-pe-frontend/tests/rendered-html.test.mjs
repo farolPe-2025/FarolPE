@@ -503,7 +503,7 @@ test("mantém o ritmo vertical uniforme e aproxima os serviços da navegação",
   );
   assert.match(
     stylesheet,
-    /\.sidebar:not\(\.is-collapsed\) \.sidebar-services \{\s*margin-top: 14px;\s*border-top: 0;/,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-services \{\s*margin-top: auto;\s*border-top: 0;/,
   );
   assert.match(
     stylesheet,
@@ -593,6 +593,14 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   assert.match(source, /data-tooltip="Download dos Dados"/);
   assert.match(source, /data-tooltip="Publicações"/);
   assert.match(source, /data-tooltip="Sobre"/);
+  assert.match(source, /data-tooltip="Início"/);
+  assert.match(source, /data-tooltip="Panorama"/);
+  assert.match(source, /data-tooltip="Painéis"/);
+  assert.match(source, /data-tooltip="Pesquisar"/);
+  assert.match(
+    stylesheet,
+    /Tooltips do menu recolhido[\s\S]*?\.sidebar\.is-collapsed \[data-tooltip\]:not\(\.sidebar-main\)::before \{[\s\S]*?background: #06142f;[\s\S]*?content: attr\(data-tooltip\);/,
+  );
   assert.match(source, /className="collapsed-panels-flyout"/);
   assert.match(source, /aria-label="Acesso rápido aos painéis"/);
   assert.match(source, /className="collapsed-panels-group-toggle"/);
@@ -610,7 +618,7 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   );
   assert.match(
     stylesheet,
-    /\.collapsed-panels-flyout-title \.farol-name-word \{\s*color: #000;[\s\S]*?\.collapsed-panels-flyout-title \.farol-name-state \{\s*color: var\(--brand-yellow\);/,
+    /\.collapsed-panels-flyout-title \.farol-name-word \{\s*color: var\(--brand-blue\);[\s\S]*?\.collapsed-panels-flyout-title \.farol-name-state \{\s*color: var\(--brand-yellow\);/,
   );
   assert.doesNotMatch(
     stylesheet,
