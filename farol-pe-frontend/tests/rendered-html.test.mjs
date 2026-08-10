@@ -647,7 +647,7 @@ test("usa logo horizontal e azul oficial no topo móvel", async () => {
   );
 });
 
-test("aplica azul escuro ao tema aberto e o mesmo brilho ao painel e panorama ativos", async () => {
+test("mantém o tema aberto no azul oficial e o mesmo brilho ao painel e panorama ativos", async () => {
   const response = await render("/paineis/atividade-economica");
   const html = await response.text();
   const panoramaResponse = await render("/resumo");
@@ -669,7 +669,11 @@ test("aplica azul escuro ao tema aberto e o mesmo brilho ao painel e panorama at
   );
   assert.match(
     stylesheet,
-    /\.sidebar-panel-groups \.nav-group\.is-open \{[\s\S]*?var\(--brand-blue-dark\);/,
+    /\.sidebar-panel-groups \.nav-group\.is-open \{\s*background: transparent;\s*box-shadow: none;/,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /\.sidebar-panel-groups \.nav-group\.is-open \{[^}]*var\(--brand-blue-dark\)/,
   );
   assert.match(
     stylesheet,
