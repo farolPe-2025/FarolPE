@@ -6365,6 +6365,10 @@ body * {
   box-shadow: none;
 }
 
+.hero-lead .farol-name.is-on-dark .farol-name-word {
+  color: #fff;
+}
+
 /* Cabeçalhos internos seguem o mesmo sistema visual da página Sobre. */
 .page-hero,
 .info-hero.page-hero,
