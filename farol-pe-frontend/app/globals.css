@@ -6358,11 +6358,11 @@ body * {
 
 .hero-lead .farol-name.is-on-dark {
   display: inline-flex;
-  padding: 1px 5px 2px;
+  padding: 0;
   align-items: baseline;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, .94);
-  box-shadow: 0 2px 9px rgba(0, 0, 0, .16);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 /* Cabeçalhos internos seguem o mesmo sistema visual da página Sobre. */

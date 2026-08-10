@@ -555,6 +555,10 @@ test("usa a marca bicolor e a paleta oficial", async () => {
     stylesheet,
     /\.farol-name-state \{[\s\S]*?color: var\(--brand-yellow\);/,
   );
+  assert.match(
+    stylesheet,
+    /\.hero-lead \.farol-name\.is-on-dark \{[\s\S]*?padding: 0;[\s\S]*?background: transparent;[\s\S]*?box-shadow: none;/,
+  );
 });
 
 test("carrega e aplica Inter no portal e no panorama incorporado", async () => {
