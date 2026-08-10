@@ -28,7 +28,7 @@ async function render(path = "/") {
 
 test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
     "utf8",
   );
 
@@ -64,7 +64,7 @@ test("renderiza a home institucional do FarolPE", async () => {
   assert.match(html, /FarolPE/i);
   assert.match(html, /Ver com clareza\./);
   assert.match(html, /Decidir com segurança\./);
-  assert.match(html, /Visualizar dados/);
+  assert.match(html, /Navegue pelos dados/);
   assert.match(html, /Painéis dos Dados/);
   assert.doesNotMatch(html, /\/noticias/i);
   assert.doesNotMatch(html, /<iframe\b/i);
@@ -107,14 +107,17 @@ test("renderiza rotas internas por URL", async () => {
   }
 });
 
-test("carrega somente o iframe da rota ativa", async () => {
+test("protege o carregamento do iframe até a hidratação", async () => {
   const response = await render("/paineis/agricultura");
   const html = await response.text();
   const iframes = html.match(/<iframe\b/gi) ?? [];
 
-  assert.equal(iframes.length, 1);
-  assert.match(html, /MWUxY2I2YTEtNmZkMC00Mzk4/);
-  assert.doesNotMatch(html, /Y2YzZDY2OTMtMDViZS00MmMz/);
+  assert.equal(iframes.length, 0);
+  assert.match(html, /class="iframe-wrap"/);
+  assert.match(html, /aria-busy="true"/);
+  assert.match(html, /data-frame-state="loading"/);
+  assert.match(html, /class="lighthouse-loader-icon"/);
+  assert.doesNotMatch(html, /app\.powerbi\.com|app\.fabric\.microsoft\.com/);
 });
 
 test("aplica a centralização padrão a qualquer painel incorporado", async () => {
@@ -168,7 +171,7 @@ test("mantém a busca acessível com ícone profissional", async () => {
     "utf8",
   );
 
-  assert.match(html, /class="sidebar-search"/);
+  assert.match(html, /class="sidebar-search\s*"/);
   assert.match(html, /Buscar indicadores e temas/);
   assert.match(html, /<kbd>\/<\/kbd>/);
   assert.match(source, /return <Search className="search-glyph"/);
@@ -224,7 +227,7 @@ test("resume cada categoria e informa sua quantidade de painéis", async () => {
   const categories = [
     [
       "/paineis/atividade-economica",
-      "Acompanhe atividade, indústria, comércio, serviços e turismo em Pernambuco.",
+      "Acompanhe os principais indicadores conjunturais que mostram o ritmo da economia pernambucana.",
     ],
     [
       "/paineis/estrutura-industrial",
@@ -232,15 +235,15 @@ test("resume cada categoria e informa sua quantidade de painéis", async () => {
     ],
     [
       "/paineis/produto-interno-bruto",
-      "Consulte produção, renda, arrecadação e movimentações financeiras no estado.",
+      "Acompanhe indicadores que revelam a geração de riqueza, renda e atividade econômica em Pernambuco.",
     ],
     [
       "/paineis/agricultura",
-      "Acompanhe agricultura, aquicultura, produção animal e rebanhos de Pernambuco.",
+      "Explore a produção agrícola, pecuária e aquícola, acompanhando sua evolução e importância para o estado.",
     ],
     [
       "/paineis/estoque-de-emprego",
-      "Veja estoque, fluxo e outros indicadores do mercado de trabalho formal.",
+      "Monitore a evolução do emprego, da ocupação, dos rendimentos e das condições do mercado de trabalho.",
     ],
   ];
 
@@ -398,7 +401,7 @@ test("faz o marcador amarelo acompanhar o título do painel ativo", async () => 
   assert.doesNotMatch(stylesheet, /\.sidebar-panel-groups::before/);
   assert.match(
     stylesheet,
-    /\.sidebar-link\.is-active::before \{[\s\S]*?left: -13px;[\s\S]*?background: #f8c630;/,
+    /\.sidebar-link\.is-active::before \{[\s\S]*?left: -13px;[\s\S]*?background: var\(--brand-yellow\);/,
   );
 });
 
@@ -447,7 +450,7 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
   const panelsResponse = await render("/paineis/atividade-economica");
   const panelsHtml = await panelsResponse.text();
   const panoramaDocument = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
     "utf8",
   );
 
@@ -455,7 +458,7 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
   assert.match(panoramaHtml, /class="panorama-topic-list"/);
   assert.match(panoramaHtml, /Panorama geral/);
   assert.match(panoramaHtml, /Calendário de Dados/);
-  assert.match(panoramaHtml, /id="panorama-frame"/);
+  assert.match(panoramaHtml, /data-frame-state="loading"/);
   assert.doesNotMatch(panoramaHtml, /class="topic-index"|<small>8<\/small>|<i aria-hidden="true">›<\/i>/);
   assert.doesNotMatch(panoramaHtml, /class="sidebar-panel-groups"/);
 
@@ -465,7 +468,10 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
 
   assert.match(panoramaDocument, /farol-panorama-select/);
   assert.match(panoramaDocument, /farol-panorama-section/);
-  assert.match(panoramaDocument, /html\.is-embedded \.sitenav\{display:none;\}/);
+  assert.match(
+    panoramaDocument,
+    /html\.is-embedded \.sitenav\{\s*display:none;\s*\}/,
+  );
 });
 
 test("conclui a página Sobre com cabeçalho textual e equipe ampliada", async () => {
@@ -473,11 +479,193 @@ test("conclui a página Sobre com cabeçalho textual e equipe ampliada", async (
   const html = await response.text();
 
   assert.doesNotMatch(html, /Farol%20de%20Olinda2\.jpg|about-photo/);
-  assert.match(html, /Pedro Lacerda/);
+  assert.match(html, /Pedro Leonardo Lacerda/);
   assert.match(html, /Secretário Executivo de Atração de Investimentos e Estudos Econômicos/);
   assert.match(html, /Danielle Jar/);
   assert.match(html, /Secretária de Desenvolvimento Econômico/);
   assert.doesNotMatch(html, /O FarolPE é uma plataforma pública de inteligência socioeconômica/);
+});
+
+test("adiciona o link oficial da SDEC e diferencia cargos de nomes", async () => {
+  const response = await render("/sobre");
+  const html = await response.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    html,
+    /href="https:\/\/www\.sdec\.pe\.gov\.br\/"[^>]*>Secretaria de Desenvolvimento Econômico de Pernambuco \(SDEC-PE\)<\/a>/,
+  );
+  assert.match(
+    stylesheet,
+    /\.about-credits-panel \.credits-role \{[\s\S]*?color: var\(--brand-blue\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.about-credits-panel \.credits-members strong \{[\s\S]*?color: #000;/,
+  );
+});
+
+test("explica por que o nome FarolPE logo após os quatro sinais", async () => {
+  const response = await render("/");
+  const html = await response.text();
+
+  assert.match(html, /class="home-why"/);
+  assert.match(html, /id="home-why-title"/);
+  assert.match(html, /Desde a Antiguidade, os faróis representam muito mais/);
+  assert.match(html, /O farol não substituía a decisão do comandante/);
+  assert.match(html, /fortalecer a governança, ampliar a transparência/);
+  assert.ok(
+    html.indexOf('class="home-analysis"') < html.indexOf('class="home-why"'),
+  );
+});
+
+test("usa a marca bicolor e a paleta oficial", async () => {
+  const homeResponse = await render("/");
+  const homeHtml = await homeResponse.text();
+  const aboutResponse = await render("/sobre");
+  const aboutHtml = await aboutResponse.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  for (const html of [homeHtml, aboutHtml]) {
+    assert.match(html, /class="farol-name-word"[^>]*>Farol<\/span>/);
+    assert.match(html, /class="farol-name-state"[^>]*>PE<\/span>/);
+    assert.doesNotMatch(html, /class="farol-name-(?:word|state)"[^>]*aria-hidden/);
+  }
+
+  assert.match(stylesheet, /--brand-blue: #00466e;/);
+  assert.match(stylesheet, /--brand-yellow: #f7a600;/);
+  assert.match(
+    stylesheet,
+    /\.farol-name-word \{[\s\S]*?color: var\(--brand-blue\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.farol-name-state \{[\s\S]*?color: var\(--brand-yellow\);/,
+  );
+});
+
+test("carrega e aplica Inter no portal e no panorama incorporado", async () => {
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+  const panorama = await readFile(
+    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
+    "utf8",
+  );
+  const font = await readFile(
+    new URL("../public/fonts/InterVariable.woff2", import.meta.url),
+  );
+
+  assert.ok(font.byteLength > 300_000);
+  assert.match(stylesheet, /@font-face \{[\s\S]*?InterVariable\.woff2/);
+  assert.match(stylesheet, /body \*[\s\S]*?font-family: var\(--font-inter\) !important;/);
+  assert.match(panorama, /@font-face\{font-family:'Inter'/);
+  assert.match(panorama, /--mono:var\(--font\);/);
+});
+
+test("padroniza cabeçalhos internos e mantém o Sobre neutro no mobile", async () => {
+  for (const [path, className] of [
+    ["/sobre", "about-hero"],
+    ["/publicacoes", "publications-hero"],
+    ["/dicionario-de-dados", "dictionary-hero"],
+    ["/indicadores/agricultura", "info-hero"],
+    ["/paineis/estoque-de-emprego", "panel-page-hero"],
+  ]) {
+    const response = await render(path);
+    const html = await response.text();
+    assert.match(html, new RegExp(`class="page-hero ${className}"`));
+  }
+
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /radial-gradient\(circle at top left, rgba\(247, 166, 0, 0\.12\)/,
+  );
+  assert.match(
+    stylesheet,
+    /\.page-hero h1,[\s\S]*?color: #000;/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(max-width: 560px\)[\s\S]*?\.about-content-layout \{[\s\S]*?padding: 34px 16px 52px;/,
+  );
+});
+
+test("usa logo horizontal e azul oficial no topo móvel", async () => {
+  const response = await render("/sobre");
+  const html = await response.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    html,
+    /class="mobile-topbar"[\s\S]*?SDEC_FAROLPE_HORIZONTAL_VARIAÇÃO\.png/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(max-width: 860px\)[\s\S]*?\.mobile-topbar \{[\s\S]*?background: var\(--brand-blue\);/,
+  );
+});
+
+test("aplica azul escuro apenas aos itens ativos do menu lateral", async () => {
+  const response = await render("/paineis/atividade-economica");
+  const html = await response.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(html, /class="group-toggle contains-active"/);
+  assert.match(
+    stylesheet,
+    /\.sidebar-primary-tabs > button\.is-active,[\s\S]*?background: transparent;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar-link\.is-active,[\s\S]*?background: var\(--brand-blue-dark\);/,
+  );
+});
+
+test("anima o farol durante o carregamento protegido do BI", async () => {
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /PANEL_REVEAL_MINIMUM_MS = 2_800/);
+  assert.match(source, /FRAME_LOAD_TIMEOUT_MS = 30_000/);
+  assert.match(source, /useSyncExternalStore/);
+  assert.match(source, /useLayoutEffect/);
+  assert.match(source, /getServerHydrationSnapshot = \(\) => false/);
+  assert.match(source, /aria-busy=\{busy\}/);
+  assert.match(source, /loading="eager"/);
+  assert.match(source, /Tentar novamente/);
+  assert.match(source, /SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview\.png/);
+  assert.match(stylesheet, /@keyframes lighthouseBlink/);
+  assert.match(
+    stylesheet,
+    /\.iframe-wrap iframe \{[\s\S]*?visibility: hidden;[\s\S]*?pointer-events: none;/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.lighthouse-loader-icon \{[\s\S]*?animation: none !important;/,
+  );
 });
 
 test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async () => {
@@ -486,7 +674,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-07.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-07 (5).html", import.meta.url),
     "utf8",
   );
   const stylesheet = await readFile(

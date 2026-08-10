@@ -1,6 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type ReactNode,
+  type SyntheticEvent,
+} from "react";
 import { usePathname } from "next/navigation";
 import {
   Building2,
@@ -32,8 +43,26 @@ import {
 
 type Navigate = (href: string) => void;
 
+const PANEL_REVEAL_MINIMUM_MS = 2_800;
+const PANEL_REVEAL_SETTLE_MS = 700;
+const PANORAMA_REVEAL_MINIMUM_MS = 900;
+const FRAME_LOAD_TIMEOUT_MS = 30_000;
+
+const subscribeToHydration = () => () => {};
+const getClientHydrationSnapshot = () => true;
+const getServerHydrationSnapshot = () => false;
+
 type PublicationKind = "news" | "report" | "bulletin";
 type PublicationRange = "all" | "30" | "90" | "365";
+
+function FarolName({ className = "" }: { className?: string }) {
+  return (
+    <span className={`farol-name ${className}`.trim()}>
+      <span className="farol-name-word">Farol</span>
+      <span className="farol-name-state">PE</span>
+    </span>
+  );
+}
 
 const activityBars = [
   ["Atividade", "+5,1%", 34, "blue"],
@@ -211,6 +240,164 @@ function SearchIcon() {
   return <Search className="search-glyph" aria-hidden="true" />;
 }
 
+function PageHero({
+  className = "",
+  eyebrow,
+  title,
+  description,
+  action,
+}: {
+  className?: string;
+  eyebrow: ReactNode;
+  title: ReactNode;
+  description?: ReactNode;
+  action?: ReactNode;
+}) {
+  return (
+    <header className={`page-hero ${className}`.trim()}>
+      <div className="page-hero-copy">
+        <p className="eyebrow">{eyebrow}</p>
+        <h1>{title}</h1>
+        {description && <p className="page-hero-description">{description}</p>}
+      </div>
+      {action && <div className="page-hero-action">{action}</div>}
+    </header>
+  );
+}
+
+type FramePhase = "loading" | "settling" | "ready" | "timeout";
+
+function DeferredFrame({
+  id,
+  src,
+  title,
+  loaderTitle,
+  loaderDescription,
+  minimumMs = PANEL_REVEAL_MINIMUM_MS,
+  settleMs = PANEL_REVEAL_SETTLE_MS,
+  onFrameLoad,
+}: {
+  id?: string;
+  src: string;
+  title: string;
+  loaderTitle: string;
+  loaderDescription: string;
+  minimumMs?: number;
+  settleMs?: number;
+  onFrameLoad?: (event: SyntheticEvent<HTMLIFrameElement>) => void;
+}) {
+  const clientReady = useSyncExternalStore(
+    subscribeToHydration,
+    getClientHydrationSnapshot,
+    getServerHydrationSnapshot,
+  );
+  const [attempt, setAttempt] = useState(0);
+  const [phase, setPhase] = useState<FramePhase>("loading");
+  const startedAtRef = useRef(0);
+  const revealTimerRef = useRef<number | null>(null);
+  const timeoutTimerRef = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    if (!clientReady) return;
+
+    startedAtRef.current = performance.now();
+    timeoutTimerRef.current = window.setTimeout(() => {
+      setPhase("timeout");
+    }, FRAME_LOAD_TIMEOUT_MS);
+
+    return () => {
+      if (revealTimerRef.current !== null) {
+        window.clearTimeout(revealTimerRef.current);
+      }
+      if (timeoutTimerRef.current !== null) {
+        window.clearTimeout(timeoutTimerRef.current);
+      }
+    };
+  }, [attempt, clientReady, src]);
+
+  const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
+    if (timeoutTimerRef.current !== null) {
+      window.clearTimeout(timeoutTimerRef.current);
+    }
+    if (revealTimerRef.current !== null) {
+      window.clearTimeout(revealTimerRef.current);
+    }
+
+    const elapsed = performance.now() - startedAtRef.current;
+    const revealDelay = Math.max(settleMs, minimumMs - elapsed);
+    setPhase("settling");
+    revealTimerRef.current = window.setTimeout(() => {
+      setPhase("ready");
+    }, revealDelay);
+    onFrameLoad?.(event);
+  };
+
+  const handleRetry = () => {
+    setPhase("loading");
+    setAttempt((value) => value + 1);
+  };
+
+  const ready = phase === "ready";
+  const busy = phase === "loading" || phase === "settling";
+
+  return (
+    <div
+      className="iframe-wrap"
+      aria-busy={busy}
+      data-frame-state={phase}
+    >
+      {!ready && (
+        <div
+          className="panel-loading"
+          role={phase === "timeout" ? "alert" : "status"}
+          aria-live="polite"
+        >
+          {phase === "timeout" ? (
+            <div className="panel-loading-timeout">
+              <strong>O painel está demorando para responder</strong>
+              <small>Verifique sua conexão e tente carregar novamente.</small>
+              <button
+                className="button panel-retry-button"
+                type="button"
+                onClick={handleRetry}
+              >
+                Tentar novamente
+              </button>
+            </div>
+          ) : (
+            <>
+              <span className="lighthouse-loader-icon" aria-hidden="true">
+                <img
+                  src="/SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview.png"
+                  alt=""
+                />
+              </span>
+              <strong>
+                {phase === "settling" ? "Finalizando a visualização" : loaderTitle}
+              </strong>
+              <small>{loaderDescription}</small>
+            </>
+          )}
+        </div>
+      )}
+      {clientReady && (
+        <iframe
+          key={`${src}-${attempt}`}
+          id={id}
+          src={src}
+          title={title}
+          loading="eager"
+          allowFullScreen
+          onLoad={handleLoad}
+          className={ready ? "is-loaded" : ""}
+          tabIndex={ready ? 0 : -1}
+          aria-hidden={!ready}
+        />
+      )}
+    </div>
+  );
+}
+
 function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number }) {
   const elementRef = useRef<HTMLElement>(null);
   const metric = useMemo(() => {
@@ -226,7 +413,7 @@ function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number })
     };
   }, [value]);
 
-  const formatValue = (current: number) => {
+  const formatValue = useCallback((current: number) => {
     const formatted = current.toLocaleString("pt-BR", {
       minimumFractionDigits: metric.decimals,
       maximumFractionDigits: metric.decimals,
@@ -235,7 +422,7 @@ function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number })
     return `${metric.showPlus && current >= 0 ? "+" : ""}${formatted}${
       metric.showPercent ? "%" : ""
     }`;
-  };
+  }, [metric]);
 
   const [displayValue, setDisplayValue] = useState(() => formatValue(0));
 
@@ -244,8 +431,10 @@ function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number })
     if (!element) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDisplayValue(value);
-      return;
+      const reducedMotionTimer = window.setTimeout(() => {
+        setDisplayValue(value);
+      }, 0);
+      return () => window.clearTimeout(reducedMotionTimer);
     }
 
     let animationFrame = 0;
@@ -285,7 +474,7 @@ function AnimatedMetric({ value, delay = 0 }: { value: string; delay?: number })
       window.clearTimeout(startTimer);
       window.cancelAnimationFrame(animationFrame);
     };
-  }, [delay, metric, value]);
+  }, [delay, formatValue, metric, value]);
 
   return (
     <strong ref={elementRef} aria-label={value}>
@@ -443,9 +632,10 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               Construir o futuro de Pernambuco.
             </h1>
             <p className="hero-lead">
-  Mudaram as embarcações. Mudaram as rotas. A necessidade de orientação permanece. 
-  O <span className="farol-highlight">FarolPE</span> transforma dados em direção para compreender Pernambuco.
-</p>
+              Mudaram as embarcações. Mudaram as rotas. A necessidade de
+              orientação permanece. O <FarolName className="is-on-dark" />
+              {" "}transforma dados em direção para compreender Pernambuco.
+            </p>
            <div className="hero-actions">
               <button
                 className="button button-primary"
@@ -504,6 +694,55 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               <small>{item.note}</small>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="home-why" aria-labelledby="home-why-title">
+        <div className="home-why-heading reveal-on-scroll">
+          <p>Conhecimento que orienta</p>
+          <h2 id="home-why-title">
+            Por que ‘<FarolName />’?
+          </h2>
+          <span className="home-why-symbol" aria-hidden="true">
+            <img
+              src="/SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview.png"
+              alt=""
+            />
+          </span>
+        </div>
+        <div className="home-why-copy reveal-on-scroll">
+          <p>
+            Desde a Antiguidade, os faróis representam muito mais do que
+            estruturas construídas à beira-mar. São símbolos de orientação,
+            segurança e confiança. Em meio à imensidão dos oceanos, sua luz
+            nunca conduziu embarcações diretamente, mas ofereceu aos navegantes
+            a informação necessária para que escolhessem, com segurança, o
+            melhor caminho até seu destino. O farol não substituía a decisão do
+            comandante; iluminava o percurso para que ela fosse tomada com
+            maior precisão.
+          </p>
+          <p>
+            Hoje, os mares deram lugar a um ambiente igualmente dinâmico e
+            desafiador: a economia, a sociedade e os mercados. Gestores
+            públicos, investidores, empresários, pesquisadores e cidadãos
+            também enfrentam incertezas e precisam tomar decisões em um cenário
+            de constantes transformações. Nesse contexto, surge o <FarolName />.
+          </p>
+          <p>
+            Por meio da análise de informações, do monitoramento contínuo e da
+            produção de conhecimento qualificado, o <FarolName /> revela
+            tendências, identifica oportunidades, antecipa desafios e oferece
+            subsídios para decisões fundamentadas em evidências. Cada indicador
+            analisado representa um ponto de luz que, integrado a diversos
+            outros, forma um amplo panorama da realidade socioeconômica do
+            Estado.
+          </p>
+          <p>
+            Dessa forma, o compromisso do <FarolName /> é fortalecer a
+            governança, ampliar a transparência, estimular o ambiente de
+            negócios e contribuir para um desenvolvimento sustentável, baseado
+            em informação confiável e visão de longo prazo.
+          </p>
         </div>
       </section>
 
@@ -812,7 +1051,9 @@ function Sidebar({
                   return (
                     <div className="nav-group" key={group.id}>
                       <button
-                        className="group-toggle"
+                        className={`group-toggle ${
+                          activeGroup === group.id ? "contains-active" : ""
+                        }`.trim()}
                         onClick={() =>
                           setGroupPreference({
                             path,
@@ -994,8 +1235,12 @@ function AppShell({
           <button onClick={() => setDrawerOpen(true)} aria-label="Abrir menu">
             <Menu aria-hidden="true" />
           </button>
-          <button className="brand-button" onClick={() => navigate("/")}>
-            <Brand compact />
+          <button
+            className="brand-button"
+            onClick={() => navigate("/")}
+            aria-label="FarolPE — início"
+          >
+            <Brand />
           </button>
           <button onClick={onSearch} aria-label="Pesquisar">
             <SearchIcon />
@@ -1008,30 +1253,17 @@ function AppShell({
 }
 
 function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
-  const [loaded, setLoaded] = useState(false);
-
   if (panel.embedUrl) {
     return (
       <main className="panel-page is-embedded" aria-label={panel.title}>
         <section className="panel-stage">
-          <div className="iframe-wrap">
-            {!loaded && (
-              <div className="panel-loading" role="status">
-                <span className="loader-beam" />
-                <strong>Carregando o painel</strong>
-                <small>Conectando à fonte de dados oficial…</small>
-              </div>
-            )}
-            <iframe
-              key={panel.slug}
-              src={panel.embedUrl}
-              title={panel.title}
-              loading="lazy"
-              allowFullScreen
-              onLoad={() => setLoaded(true)}
-              className={loaded ? "is-loaded" : ""}
-            />
-          </div>
+          <DeferredFrame
+            key={panel.embedUrl}
+            src={panel.embedUrl}
+            title={panel.title}
+            loaderTitle="Carregando o painel"
+            loaderDescription="Conectando à fonte de dados oficial…"
+          />
         </section>
       </main>
     );
@@ -1039,22 +1271,19 @@ function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
 
   return (
     <main className="panel-page">
-      <header className="content-header">
-        <div>
-          <p className="breadcrumb">
-            Painéis <span>›</span> {panel.category}
-          </p>
-          <h1>{panel.title}</h1>
-          <p>{panel.description}</p>
-        </div>
-        <div className="content-actions">
-          {panel.info && (
+      <PageHero
+        className="panel-page-hero"
+        eyebrow={`Painéis · ${panel.category}`}
+        title={panel.title}
+        description={panel.description}
+        action={
+          panel.info ? (
             <button className="button button-outline" onClick={() => navigate(`/indicadores/${panel.slug}`)}>
               <span className="info-circle">i</span> Sobre o indicador
             </button>
-          )}
-        </div>
-      </header>
+          ) : undefined
+        }
+      />
 
       <section className="panel-stage">
         <div className="panel-toolbar">
@@ -1093,19 +1322,25 @@ function InfoPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
 
   return (
     <main className="info-page">
-      <header className="info-hero">
-        <div>
-          <p className="eyebrow">{panel.info.eyebrow}</p>
-          <h1>{panel.info.title}</h1>
-          <p>
+      <PageHero
+        className="info-hero"
+        eyebrow={panel.info.eyebrow}
+        title={panel.info.title}
+        description={
+          <>
             Entenda a origem, o cálculo e a melhor forma de interpretar este
             indicador.
-          </p>
-        </div>
-        <button className="button button-light" onClick={() => navigate(`/paineis/${panel.slug}`)}>
-          ← Voltar ao painel
-        </button>
-      </header>
+          </>
+        }
+        action={
+          <button
+            className="button button-outline"
+            onClick={() => navigate(`/paineis/${panel.slug}`)}
+          >
+            ← Voltar ao painel
+          </button>
+        }
+      />
       <section className="info-grid">
         {panel.info.cards.map((card, index) => (
           <article key={card.title} className={card.placeholder ? "is-placeholder" : ""}>
@@ -1152,25 +1387,18 @@ function BarChart({
 }
 
 function EconomicPanoramaPage() {
-  const [loaded, setLoaded] = useState(false);
-
   return (
     <main className="panel-page is-embedded is-panorama" aria-label="Panorama Econômico de Pernambuco">
       <section className="panel-stage">
-        <div className="iframe-wrap">
-          {!loaded && (
-            <div className="panel-loading" role="status">
-              <span className="loader-beam" />
-              <strong>Carregando o panorama econômico</strong>
-              <small>Preparando os indicadores de Pernambuco…</small>
-            </div>
-          )}
-          <iframe
-            id="panorama-frame"
-            src="/painel-conjuntura-2026-08-07 (5).html"
-            title="Painel de Conjuntura Econômica de Pernambuco"
-            onLoad={(event) => {
-              setLoaded(true);
+        <DeferredFrame
+          id="panorama-frame"
+          src="/painel-conjuntura-2026-08-07 (5).html"
+          title="Painel de Conjuntura Econômica de Pernambuco"
+          loaderTitle="Carregando o panorama econômico"
+          loaderDescription="Preparando os indicadores de Pernambuco…"
+          minimumMs={PANORAMA_REVEAL_MINIMUM_MS}
+          settleMs={250}
+          onFrameLoad={(event) => {
               const storedTopic = window.sessionStorage.getItem(
                 "farol-panorama-topic",
               ) as PanoramaTopicKey | null;
@@ -1187,10 +1415,8 @@ function EconomicPanoramaPage() {
                 },
                 window.location.origin,
               );
-            }}
-            className={loaded ? "is-loaded" : ""}
-          />
-        </div>
+          }}
+        />
       </section>
     </main>
   );
@@ -1417,38 +1643,67 @@ function SummaryPage() {
 }
 
 function AboutPage({ navigate }: { navigate: Navigate }) {
-const cards = [
-  [
-    "Conhecimento que guia",
-    "Desde a Antiguidade, os faróis orientam quem navega em busca de novos horizontes. Hoje, o FarolPE leva esse mesmo princípio para a economia pernambucana: transformar dados em conhecimento para orientar decisões, reduzir incertezas e apoiar o desenvolvimento do estado."
-  ],
-
-  [
-    "O que é",
-    "O FarolPE reúne os principais indicadores oficiais sobre a economia e a sociedade pernambucanas, organizados por tema e atualizados conforme a periodicidade de cada fonte."
-  ],
-
-  [
-    "Para que serve",
-    "O FarolPE transforma dados em informação acessível para apoiar gestores públicos, pesquisadores, empresas, investidores, imprensa e cidadãos na compreensão da realidade socioeconômica de Pernambuco e na tomada de decisões baseadas em evidências."
-  ],
-
-  [
-    "Como explorar",
-    "Navegue pelos painéis temáticos para consultar séries históricas, comparar estados, regiões e municípios e visualizar os dados por meio de gráficos, mapas e tabelas interativas."
-  ],
-
-  [
-    "Fontes dos dados",
-    "Os indicadores são provenientes de órgãos oficiais, como IBGE, Banco Central, Ministério do Trabalho e Emprego, Receita Federal, ANAC, ANTAQ, Comex Stat e demais instituições produtoras de estatísticas."
-  ],
-
-  [
-    "Realização",
-    "Uma iniciativa da Secretaria de Desenvolvimento Econômico de Pernambuco (SDEC-PE), desenvolvida desde junho de 2026 para ampliar a transparência, fortalecer a inteligência de dados e apoiar o desenvolvimento econômico e social do estado."
-  ],
+  const cards: Array<{ title: string; text: ReactNode }> = [
+    {
+      title: "Conhecimento que guia",
+      text: (
+        <>
+          Desde a Antiguidade, os faróis orientam quem navega em busca de novos
+          horizontes. Hoje, o <FarolName /> leva esse mesmo princípio para a
+          economia pernambucana: transformar dados em conhecimento para orientar
+          decisões, reduzir incertezas e apoiar o desenvolvimento do estado.
+        </>
+      ),
+    },
+    {
+      title: "O que é",
+      text: (
+        <>
+          O <FarolName /> reúne os principais indicadores oficiais sobre a
+          economia e a sociedade pernambucanas, organizados por tema e
+          atualizados conforme a periodicidade de cada fonte.
+        </>
+      ),
+    },
+    {
+      title: "Para que serve",
+      text: (
+        <>
+          O <FarolName /> transforma dados em informação acessível para apoiar
+          gestores públicos, pesquisadores, empresas, investidores, imprensa e
+          cidadãos na compreensão da realidade socioeconômica de Pernambuco e
+          na tomada de decisões baseadas em evidências.
+        </>
+      ),
+    },
+    {
+      title: "Como explorar",
+      text:
+        "Navegue pelos painéis temáticos para consultar séries históricas, comparar estados, regiões e municípios e visualizar os dados por meio de gráficos, mapas e tabelas interativas.",
+    },
+    {
+      title: "Fontes dos dados",
+      text:
+        "Os indicadores são provenientes de órgãos oficiais, como IBGE, Banco Central, Ministério do Trabalho e Emprego, Receita Federal, ANAC, ANTAQ, Comex Stat e demais instituições produtoras de estatísticas.",
+    },
+    {
+      title: "Realização",
+      text: (
+        <>
+          Uma iniciativa da{" "}
+          <a
+            href="https://www.sdec.pe.gov.br/"
+          >
+            Secretaria de Desenvolvimento Econômico de Pernambuco (SDEC-PE)
+          </a>
+          , desenvolvida desde junho de 2026 para ampliar a transparência,
+          fortalecer a inteligência de dados e apoiar o desenvolvimento
+          econômico e social do estado.
+        </>
+      ),
+    },
   ];
-const team = [
+  const team = [
   {
     role: "Secretária de Desenvolvimento Econômico",
     members: ["Danielle Jar Souto"],
@@ -1494,32 +1749,38 @@ const team = [
       "Rosa Suruá",
     ],
   },
-];
+  ];
   return (
     <main className="about-page">
-      <header className="about-hero">
-        <div>
-          <p className="eyebrow">FarolPE</p>
-          <h1>Dados que ajudam Pernambuco a enxergar mais longe.</h1>
-          <button className="button button-light" onClick={() => navigate("/paineis/agricultura")}>
+      <PageHero
+        className="about-hero"
+        eyebrow={<FarolName />}
+        title="Dados que ajudam Pernambuco a enxergar mais longe."
+        action={
+          <button
+            className="button button-primary"
+            onClick={() => navigate("/paineis/atividade-economica")}
+          >
             Conhecer os painéis →
           </button>
-        </div>
-      </header>
+        }
+      />
       <section className="about-content-layout">
         <div className="about-narrative">
           <p className="eyebrow dark">Sobre a plataforma</p>
-          {cards.map(([title, text]) => (
-            <section key={title}>
-              <h2>{title}</h2>
-              <p>{text}</p>
+          {cards.map((card) => (
+            <section key={card.title}>
+              <h2>{card.title}</h2>
+              <p>{card.text}</p>
             </section>
           ))}
         </div>
 
         <aside className="about-credits-panel" aria-labelledby="about-credits-title">
           <p>Colaboração e realização</p>
-          <h2 id="about-credits-title">Quem construiu o FarolPE</h2>
+          <h2 id="about-credits-title">
+            Quem construiu o <FarolName />
+          </h2>
           <span>
             Projeto desenvolvido de forma colaborativa, unindo conhecimento
             técnico, análise de dados e construção digital.
@@ -1550,14 +1811,17 @@ function DataDictionaryPage() {
 
   return (
     <main className="dictionary-page">
-      <header className="dictionary-hero">
-        <p className="eyebrow">Download dos Dados</p>
-        <h1>Solicite as bases dos painéis.</h1>
-        <p>
+      <PageHero
+        className="dictionary-hero"
+        eyebrow="Download dos Dados"
+        title="Solicite as bases dos painéis."
+        description={
+          <>
           Consulte um resumo de cada painel e acesse os dados pelo canal
           indicado.
-        </p>
-      </header>
+          </>
+        }
+      />
 
       <section className="dictionary-list" aria-label="Painéis disponíveis">
         {downloadablePanels.map((panel) => (
@@ -1584,9 +1848,8 @@ function DataDictionaryPage() {
 function PublicationsPage() {
   const [kind, setKind] = useState<"all" | PublicationKind>("all");
   const [range, setRange] = useState<PublicationRange>("all");
+  const [now] = useState(Date.now);
   const filteredPublications = useMemo(() => {
-    const now = Date.now();
-
     return publicationItems.filter((item) => {
       if (kind !== "all" && item.kind !== kind) return false;
       if (range === "all") return true;
@@ -1595,18 +1858,21 @@ function PublicationsPage() {
       const ageInDays = (now - publishedAt) / 86_400_000;
       return ageInDays >= 0 && ageInDays <= Number(range);
     });
-  }, [kind, range]);
+  }, [kind, now, range]);
 
   return (
     <main className="publications-page">
-      <header className="publications-hero">
-        <p className="eyebrow">Publicações</p>
-        <h1>Informação para acompanhar Pernambuco.</h1>
-        <p>
-          Consulte notícias selecionadas, relatórios analíticos e boletins
-          econômicos em uma linha do tempo organizada pelo FarolPE.
-        </p>
-      </header>
+      <PageHero
+        className="publications-hero"
+        eyebrow="Publicações"
+        title="Informação para acompanhar Pernambuco."
+        description={
+          <>
+            Consulte notícias selecionadas, relatórios analíticos e boletins
+            econômicos em uma linha do tempo organizada pelo <FarolName />.
+          </>
+        }
+      />
 
       <section className="publications-content" aria-labelledby="publications-results-title">
         <div className="publications-filters">
