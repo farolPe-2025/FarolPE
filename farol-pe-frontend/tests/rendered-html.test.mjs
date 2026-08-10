@@ -596,6 +596,18 @@ test("padroniza cabeçalhos internos e mantém o Sobre neutro no mobile", async 
   );
   assert.match(
     stylesheet,
+    /\.about-hero\.page-hero,\s*\.dictionary-hero\.page-hero,\s*\.publications-hero\.page-hero \{\s*border-bottom: 0;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.about-hero\.page-hero::after,\s*\.dictionary-hero\.page-hero::after,\s*\.publications-hero\.page-hero::after \{\s*display: none;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.page-hero,[\s\S]*?border-bottom: 3px solid var\(--brand-blue\);/,
+  );
+  assert.match(
+    stylesheet,
     /@media \(max-width: 560px\)[\s\S]*?\.about-content-layout \{[\s\S]*?padding: 34px 16px 52px;/,
   );
 });

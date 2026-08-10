@@ -6401,6 +6401,18 @@ body * {
   content: "";
 }
 
+.about-hero.page-hero,
+.dictionary-hero.page-hero,
+.publications-hero.page-hero {
+  border-bottom: 0;
+}
+
+.about-hero.page-hero::after,
+.dictionary-hero.page-hero::after,
+.publications-hero.page-hero::after {
+  display: none;
+}
+
 .page-hero-copy,
 .page-hero-action {
   position: relative;
