@@ -505,6 +505,14 @@ test("adiciona o link oficial da SDEC e diferencia cargos de nomes", async () =>
     stylesheet,
     /\.about-credits-panel \.credits-members strong \{[\s\S]*?color: #000;/,
   );
+  assert.match(
+    stylesheet,
+    /\.about-narrative > \.eyebrow,\s*\.about-credits-panel > p \{[\s\S]*?padding: 0;[\s\S]*?background: transparent;[\s\S]*?color: var\(--brand-yellow\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.home-why-heading > p \{[\s\S]*?padding: 0;[\s\S]*?background: transparent;[\s\S]*?color: var\(--brand-yellow\);/,
+  );
 });
 
 test("explica por que o nome FarolPE logo após os quatro sinais", async () => {
