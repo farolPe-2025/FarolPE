@@ -5373,6 +5373,7 @@ button {
 }
 
 .home-analysis {
+  scroll-margin-top: 0;
   padding-top: clamp(70px, 6vw, 96px);
 }
 
@@ -7335,15 +7336,29 @@ body * {
 
 /* Ritmo vertical comum do menu: marca com respiro e navegação mais próxima. */
 .sidebar:not(.is-collapsed) .sidebar-brand {
-  min-height: 146px;
-  padding: 36px 22px 16px;
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: 20px 22px 10px;
 }
 
 .sidebar:not(.is-collapsed) .sidebar-brand .brand-lockup.is-compact {
-  margin-top: 20px;
+  position: relative;
+  width: 220px;
+  height: 150px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.sidebar:not(.is-collapsed) .sidebar-brand .brand-lockup.is-compact .brand-logo {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: auto;
 }
 
 .sidebar:not(.is-collapsed) .sidebar-tools {
+  flex: 0 0 auto;
   margin-top: 8px;
   margin-bottom: 10px;
 }
@@ -7354,8 +7369,8 @@ body * {
 
 @media (max-width: 860px) {
   .sidebar:not(.is-collapsed) .sidebar-brand {
-    min-height: 146px;
-    padding: 36px 16px 16px;
+    min-height: 0;
+    padding: 20px 16px 10px;
   }
 
   .sidebar:not(.is-collapsed) .sidebar-tools {

@@ -61,6 +61,18 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
     panorama,
     /initialScrollers=document\.querySelectorAll\('\.colchart,\.tblwrap,\.tblscroll'\)/,
   );
+  assert.match(
+    panorama,
+    /Cabeçalho do Panorama[\s\S]*?\.siteheader\{[\s\S]*?min-height:350px;[\s\S]*?background:#F5F9FB;/,
+  );
+  assert.match(
+    panorama,
+    /\.site-eyebrow::before\{[\s\S]*?background:#F7A600;/,
+  );
+  assert.match(
+    panorama,
+    /\.site-h1\{[\s\S]*?color:#000;[\s\S]*?font-size:clamp\(42px,5vw,68px\);/,
+  );
 });
 
 test("renderiza a home institucional do FarolPE", async () => {
@@ -73,7 +85,12 @@ test("renderiza a home institucional do FarolPE", async () => {
     new URL("../app/globals.css", import.meta.url),
     "utf8",
   );
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
   assert.match(html, /<html lang="pt-BR">/i);
+  assert.match(html, /SDEC_FAROLPE_ICONE_SITE\.png/);
   assert.match(html, /FarolPE/i);
   assert.match(html, /Ver com clareza\./);
   assert.match(html, /Decidir com segurança\./);
@@ -83,6 +100,11 @@ test("renderiza a home institucional do FarolPE", async () => {
   assert.doesNotMatch(html, /<iframe\b/i);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
   assert.match(html, /class="home-more-strip"[\s\S]*?Veja mais/);
+  assert.match(
+    source,
+    /getElementById\("home-analysis"\)[\s\S]*?scrollIntoView/,
+  );
+  assert.match(html, /<section id="home-analysis" class="home-analysis"/);
   assert.match(
     stylesheet,
     /\.reference-home \{[^}]*min-height: 100dvh;[^}]*url\("\/farol-home\.jpg"\)/,
@@ -484,11 +506,15 @@ test("mantém o ritmo vertical uniforme e aproxima os serviços da navegação",
   );
   assert.match(
     stylesheet,
-    /Ritmo vertical comum[\s\S]*?\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \{[\s\S]*?min-height: 146px;[\s\S]*?padding: 36px 22px 16px;/,
+    /Ritmo vertical comum[\s\S]*?\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \{[\s\S]*?flex: 0 0 auto;[\s\S]*?min-height: 0;[\s\S]*?padding: 20px 22px 10px;/,
   );
   assert.match(
     stylesheet,
-    /\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \.brand-lockup\.is-compact \{\s*margin-top: 20px;/,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \.brand-lockup\.is-compact \{[\s\S]*?height: 150px;[\s\S]*?overflow: hidden;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-tools \{[\s\S]*?flex: 0 0 auto;/,
   );
   assert.match(
     stylesheet,

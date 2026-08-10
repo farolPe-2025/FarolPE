@@ -681,7 +681,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
           <div className="home-more-strip">
             <button
               onClick={() =>
-                document.getElementById("home-analysis-title")?.scrollIntoView({
+                document.getElementById("home-analysis")?.scrollIntoView({
                   behavior: "smooth",
                   block: "start",
                 })
@@ -693,7 +693,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
         </section>
       </main>
 
-      <section className="home-analysis" aria-labelledby="home-analysis-title">
+      <section id="home-analysis" className="home-analysis" aria-labelledby="home-analysis-title">
         <div className="analysis-heading reveal-on-scroll">
           <div>
             <p>Leitura rápida</p>
