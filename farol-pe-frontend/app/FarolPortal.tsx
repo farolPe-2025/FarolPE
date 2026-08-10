@@ -1000,6 +1000,7 @@ function Sidebar({
             <button
               className={path === "/" ? "is-active" : ""}
               onClick={() => go("/")}
+              title="Início"
               aria-current={path === "/" ? "page" : undefined}
             >
               <span className="primary-icon icon-home" aria-hidden="true">
@@ -1010,6 +1011,7 @@ function Sidebar({
             <button
               className={isPanoramaContext ? "is-active" : ""}
               onClick={showPanorama}
+              title="Panorama"
               aria-current={isPanoramaContext ? "page" : undefined}
             >
               <span className="primary-icon icon-panorama" aria-hidden="true">
@@ -1020,6 +1022,7 @@ function Sidebar({
             <button
               className={isPanelsContext ? "is-active" : ""}
               onClick={showPanels}
+              title="Painéis"
               aria-current={isPanelsContext ? "page" : undefined}
             >
               <span className="primary-icon icon-panels" aria-hidden="true">
@@ -1028,6 +1031,64 @@ function Sidebar({
               <span>Painéis</span>
             </button>
           </div>
+
+          {collapsed && (
+            <aside
+              className="collapsed-panels-flyout"
+              aria-label="Acesso rápido aos painéis"
+            >
+              <strong className="collapsed-panels-flyout-title">Painéis do FarolPE</strong>
+              {sidebarPanelGroups.map((group) => {
+                const GroupIcon = group.icon;
+                const groupSlugs = [
+                  ...group.slugs,
+                  ...("nestedSlugs" in group ? group.nestedSlugs : []),
+                ];
+                const isFlyoutGroupOpen = openGroup === group.id;
+                const flyoutGroupId = `collapsed-panels-${group.id}`;
+
+                return (
+                  <section className="collapsed-panels-group" key={group.id}>
+                    <button
+                      className="collapsed-panels-group-toggle"
+                      onClick={() =>
+                        setGroupPreference({
+                          path,
+                          group: isFlyoutGroupOpen ? null : group.id,
+                        })
+                      }
+                      aria-expanded={isFlyoutGroupOpen}
+                      aria-controls={flyoutGroupId}
+                    >
+                      <GroupIcon aria-hidden="true" />
+                      <span>{group.label}</span>
+                      <ChevronRight className="collapsed-panels-chevron" aria-hidden="true" />
+                    </button>
+                    {isFlyoutGroupOpen && (
+                      <div className="collapsed-panels-items" id={flyoutGroupId}>
+                        {groupSlugs.map((slug) => {
+                          const panel = panels.find((item) => item.slug === slug);
+                          if (!panel) return null;
+
+                          return (
+                            <button
+                              key={panel.slug}
+                              className={
+                                path === `/paineis/${panel.slug}` ? "is-active" : ""
+                              }
+                              onClick={() => go(`/paineis/${panel.slug}`)}
+                            >
+                              {panel.shortTitle}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </section>
+                );
+              })}
+            </aside>
+          )}
 
           {isPanoramaContext && (
             <section
@@ -1062,7 +1123,7 @@ function Sidebar({
               aria-labelledby="sidebar-panels-title"
             >
               <div className="sidebar-context-heading">
-                <span id="sidebar-panels-title">Painéis do Farol</span>
+                <span id="sidebar-panels-title">Painéis do FarolPE</span>
               </div>
               <div className="sidebar-panel-groups">
                 {sidebarPanelGroups.map((group) => {
@@ -1168,6 +1229,8 @@ function Sidebar({
                   : "sidebar-main"
               }
               onClick={() => go("/dicionario-de-dados")}
+              title="Download dos Dados"
+              data-tooltip="Download dos Dados"
               aria-current={
                 path === "/dicionario-de-dados" ? "page" : undefined
               }
@@ -1184,6 +1247,8 @@ function Sidebar({
                   : "sidebar-main"
               }
               onClick={() => go("/publicacoes")}
+              title="Publicações"
+              data-tooltip="Publicações"
               aria-current={path === "/publicacoes" ? "page" : undefined}
             >
               <span className="nav-symbol tone-publications" aria-hidden="true">
@@ -1196,6 +1261,8 @@ function Sidebar({
                 path === "/sobre" ? "sidebar-main is-active" : "sidebar-main"
               }
               onClick={() => go("/sobre")}
+              title="Sobre"
+              data-tooltip="Sobre"
               aria-current={path === "/sobre" ? "page" : undefined}
             >
               <span className="nav-symbol tone-about" aria-hidden="true">
@@ -1209,11 +1276,18 @@ function Sidebar({
         <div className="sidebar-footer">
           <SdecLogo compact />
           {collapsed && (
-            <img
-              className="sidebar-symbol-logo"
-              src="/SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview.png"
-              alt="Símbolo FarolPE"
-            />
+            <button
+              className="sidebar-symbol-home"
+              onClick={() => go("/")}
+              aria-label="Voltar para a página inicial"
+              title="Início"
+            >
+              <img
+                className="sidebar-symbol-logo"
+                src="/SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview.png"
+                alt=""
+              />
+            </button>
           )}
         </div>
       </aside>

@@ -503,15 +503,19 @@ test("mantém o ritmo vertical uniforme e aproxima os serviços da navegação",
   );
   assert.match(
     stylesheet,
-    /\.sidebar:not\(\.is-collapsed\) \.sidebar-services \{\s*margin-top: 14px;/,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-services \{\s*margin-top: 14px;\s*border-top: 0;/,
   );
   assert.match(
     stylesheet,
-    /Ritmo vertical comum[\s\S]*?\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \{[\s\S]*?flex: 0 0 auto;[\s\S]*?min-height: 0;[\s\S]*?padding: 20px 22px 10px;/,
+    /Ritmo vertical comum[\s\S]*?\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \{[\s\S]*?flex: 0 0 auto;[\s\S]*?min-height: 0;[\s\S]*?padding: 24px 22px 16px;/,
   );
   assert.match(
     stylesheet,
     /\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \.brand-lockup\.is-compact \{[\s\S]*?height: 150px;[\s\S]*?overflow: hidden;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \.brand-lockup\.is-compact \.brand-logo \{[\s\S]*?top: -35px;/,
   );
   assert.match(
     stylesheet,
@@ -527,6 +531,10 @@ test("mantém o ritmo vertical uniforme e aproxima os serviços da navegação",
 test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   const stylesheet = await readFile(
     new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
     "utf8",
   );
 
@@ -561,6 +569,47 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   assert.match(
     stylesheet,
     /@media \(min-width: 861px\) and \(max-width: 1080px\) \{\s*:root \{\s*--sidebar-width: 285px;/,
+  );
+  assert.match(
+    stylesheet,
+    /O recolhimento fica independente[\s\S]*?\.sidebar:not\(\.is-collapsed\) \.sidebar-collapse-toggle \{[\s\S]*?position: fixed;[\s\S]*?top: 18px;[\s\S]*?left: calc\(var\(--sidebar-width\) - 61px\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-services \{[\s\S]*?display: flex;[\s\S]*?margin-top: auto;[\s\S]*?border-top: 0;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main \{[\s\S]*?width: 60px;[\s\S]*?background: transparent;[\s\S]*?font-size: 0;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main\.is-active \{[\s\S]*?background: transparent;[\s\S]*?box-shadow: inset 0 -2px 0 var\(--brand-yellow\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main::after \{[\s\S]*?content: attr\(data-tooltip\);[\s\S]*?opacity: 0;/,
+  );
+  assert.match(source, /data-tooltip="Download dos Dados"/);
+  assert.match(source, /data-tooltip="Publicações"/);
+  assert.match(source, /data-tooltip="Sobre"/);
+  assert.match(source, /className="collapsed-panels-flyout"/);
+  assert.match(source, /aria-label="Acesso rápido aos painéis"/);
+  assert.match(source, /className="collapsed-panels-group-toggle"/);
+  assert.match(source, /aria-expanded=\{isFlyoutGroupOpen\}/);
+  assert.match(source, /group: isFlyoutGroupOpen \? null : group\.id/);
+  assert.match(source, /className="collapsed-panels-items"/);
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed:has\(\.sidebar-primary-tabs > button:nth-child\(3\):hover\)[\s\S]*?\.collapsed-panels-flyout[\s\S]*?opacity: 1;[\s\S]*?pointer-events: auto;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-primary-tabs \{\s*border-bottom: 0;/,
+  );
+  assert.match(
+    source,
+    /className="sidebar-symbol-home"[\s\S]*?onClick=\{\(\) => go\("\/"\)\}[\s\S]*?Voltar para a página inicial/,
   );
   assert.match(stylesheet, /\.portal-shell\.is-sidebar-collapsed \{\s*--sidebar-width: 92px;/);
   assert.match(
