@@ -465,7 +465,7 @@ test("exibe somente a navegação contextual da área ativa", async () => {
   assert.doesNotMatch(source, /activeGroup \?\? "economic"/);
 });
 
-test("ancora serviços junto à logo e amplia seus itens", async () => {
+test("mantém o ritmo vertical uniforme e aproxima os serviços da navegação", async () => {
   const response = await render("/sobre");
   const html = await response.text();
   const stylesheet = await readFile(
@@ -480,7 +480,15 @@ test("ancora serviços junto à logo e amplia seus itens", async () => {
   );
   assert.match(
     stylesheet,
-    /\.sidebar-services \{[\s\S]*?margin-top: auto;/,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-services \{\s*margin-top: 14px;/,
+  );
+  assert.match(
+    stylesheet,
+    /Ritmo vertical comum[\s\S]*?\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \{[\s\S]*?min-height: 146px;[\s\S]*?padding: 36px 22px 16px;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar:not\(\.is-collapsed\) \.sidebar-brand \.brand-lockup\.is-compact \{\s*margin-top: 20px;/,
   );
   assert.match(
     stylesheet,

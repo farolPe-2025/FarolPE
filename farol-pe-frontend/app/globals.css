@@ -7333,6 +7333,36 @@ body * {
   }
 }
 
+/* Ritmo vertical comum do menu: marca com respiro e navegação mais próxima. */
+.sidebar:not(.is-collapsed) .sidebar-brand {
+  min-height: 146px;
+  padding: 36px 22px 16px;
+}
+
+.sidebar:not(.is-collapsed) .sidebar-brand .brand-lockup.is-compact {
+  margin-top: 20px;
+}
+
+.sidebar:not(.is-collapsed) .sidebar-tools {
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+.sidebar:not(.is-collapsed) .sidebar-services {
+  margin-top: 14px;
+}
+
+@media (max-width: 860px) {
+  .sidebar:not(.is-collapsed) .sidebar-brand {
+    min-height: 146px;
+    padding: 36px 16px 16px;
+  }
+
+  .sidebar:not(.is-collapsed) .sidebar-tools {
+    margin-top: 8px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lighthouse-loader-yellow {
     animation: none !important;
