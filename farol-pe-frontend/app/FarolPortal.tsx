@@ -368,7 +368,13 @@ function DeferredFrame({
             <>
               <span className="lighthouse-loader-icon" aria-hidden="true">
                 <img
-                  src="/SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview.png"
+                  className="lighthouse-loader-base"
+                  src="/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png"
+                  alt=""
+                />
+                <img
+                  className="lighthouse-loader-yellow"
+                  src="/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png"
                   alt=""
                 />
               </span>

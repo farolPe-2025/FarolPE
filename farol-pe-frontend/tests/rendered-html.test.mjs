@@ -84,7 +84,6 @@ test("remove as faixas multicoloridas do menu e da home", async () => {
     new URL("../app/globals.css", import.meta.url),
     "utf8",
   );
-
   assert.doesNotMatch(homeHtml, /pe-color-rule/);
   assert.doesNotMatch(panelHtml, /pe-stripe/);
   assert.doesNotMatch(source, /pe-color-rule|pe-stripe/);
@@ -664,6 +663,9 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
     new URL("../app/globals.css", import.meta.url),
     "utf8",
   );
+  const symbol = await readFile(
+    new URL("../public/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png", import.meta.url),
+  );
 
   assert.match(source, /PANEL_REVEAL_MINIMUM_MS = 2_800/);
   assert.match(source, /FRAME_LOAD_TIMEOUT_MS = 30_000/);
@@ -673,15 +675,29 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
   assert.match(source, /aria-busy=\{busy\}/);
   assert.match(source, /loading="eager"/);
   assert.match(source, /Tentar novamente/);
-  assert.match(source, /SDEC_FAROLPE_SÍMBOLO_SITE-removebg-preview\.png/);
-  assert.match(stylesheet, /@keyframes lighthouseBlink/);
+  assert.match(source, /className="lighthouse-loader-base"/);
+  assert.match(source, /className="lighthouse-loader-yellow"/);
+  assert.equal(
+    (source.match(/SDEC_FAROLPE_SÍMBOLO_SITE_v2\.png/g) ?? []).length,
+    2,
+  );
+  assert.ok(symbol.length > 10_000);
+  assert.match(
+    stylesheet,
+    /\.panel-loading \{\s*z-index: 3;[\s\S]*?background: #fff;[\s\S]*?color: var\(--brand-blue\);/,
+  );
+  assert.match(stylesheet, /@keyframes lighthouseYellowBlink/);
+  assert.match(
+    stylesheet,
+    /\.lighthouse-loader-yellow \{[\s\S]*?clip-path: circle\(16% at 50% 50%\);[\s\S]*?animation: lighthouseYellowBlink/,
+  );
   assert.match(
     stylesheet,
     /\.iframe-wrap iframe \{[\s\S]*?visibility: hidden;[\s\S]*?pointer-events: none;/,
   );
   assert.match(
     stylesheet,
-    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.lighthouse-loader-icon \{[\s\S]*?animation: none !important;/,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.lighthouse-loader-yellow \{[\s\S]*?animation: none !important;/,
   );
 });
 

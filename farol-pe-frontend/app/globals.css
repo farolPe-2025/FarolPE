@@ -6785,70 +6785,50 @@ body * {
   z-index: 3;
   isolation: isolate;
   padding: 28px;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(247, 166, 0, .14), transparent 20%),
-    linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px),
-    var(--brand-blue);
-  background-size: auto, 38px 38px, 38px 38px, auto;
-  color: #fff;
+  background: #fff;
+  color: var(--brand-blue);
   text-align: center;
 }
 
 .panel-loading strong {
   margin-top: 20px;
-  color: #fff;
+  color: var(--brand-blue);
   font-size: 16px;
 }
 
 .panel-loading small {
   max-width: 420px;
   margin-top: 7px;
-  color: #d5e4ec;
+  color: #4d6878;
   font-size: 13px;
   line-height: 1.55;
 }
 
 .lighthouse-loader-icon {
   position: relative;
-  display: grid;
-  width: 94px;
-  height: 94px;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, .16);
-  border-radius: 50%;
-  background: rgba(0, 47, 75, .76);
-  box-shadow: 0 0 0 10px rgba(255, 255, 255, .035);
-  animation: lighthouseBlink 1.15s ease-in-out infinite;
-}
-
-.lighthouse-loader-icon::before,
-.lighthouse-loader-icon::after {
-  position: absolute;
-  top: 45px;
-  width: 58px;
-  height: 4px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, transparent, rgba(247, 166, 0, .9));
-  content: "";
-  opacity: .3;
-}
-
-.lighthouse-loader-icon::before {
-  right: 76px;
-}
-
-.lighthouse-loader-icon::after {
-  left: 76px;
-  transform: rotate(180deg);
+  display: block;
+  width: 118px;
+  height: 118px;
+  flex: 0 0 118px;
 }
 
 .lighthouse-loader-icon img {
-  position: relative;
-  z-index: 1;
-  width: 68px;
-  height: 68px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+}
+
+.lighthouse-loader-base {
+  z-index: 1;
+}
+
+.lighthouse-loader-yellow {
+  z-index: 2;
+  clip-path: circle(16% at 50% 50%);
+  animation: lighthouseYellowBlink 1.15s ease-in-out infinite;
+  will-change: filter, opacity, transform;
 }
 
 .panel-loading-timeout {
@@ -6869,16 +6849,16 @@ body * {
   color: #000;
 }
 
-@keyframes lighthouseBlink {
+@keyframes lighthouseYellowBlink {
   0%, 28%, 100% {
-    opacity: .62;
-    filter: drop-shadow(0 0 0 rgba(247, 166, 0, 0));
-    transform: scale(.97);
+    opacity: .12;
+    filter: brightness(.92) saturate(.92) drop-shadow(0 0 0 rgba(236, 171, 45, 0));
+    transform: scale(.985);
   }
   42%, 70% {
     opacity: 1;
-    filter: drop-shadow(0 0 15px rgba(247, 166, 0, .52));
-    transform: scale(1.03);
+    filter: brightness(1.16) saturate(1.16) drop-shadow(0 0 13px rgba(236, 171, 45, .68));
+    transform: scale(1.025);
   }
 }
 
@@ -6986,29 +6966,16 @@ body * {
   }
 
   .lighthouse-loader-icon {
-    width: 82px;
-    height: 82px;
-  }
-
-  .lighthouse-loader-icon::before,
-  .lighthouse-loader-icon::after {
-    top: 39px;
-    width: 36px;
-  }
-
-  .lighthouse-loader-icon::before {
-    right: 67px;
-  }
-
-  .lighthouse-loader-icon::after {
-    left: 67px;
+    width: 98px;
+    height: 98px;
+    flex-basis: 98px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lighthouse-loader-icon {
+  .lighthouse-loader-yellow {
     animation: none !important;
-    opacity: 1;
+    opacity: 0;
     filter: none;
     transform: none;
   }
