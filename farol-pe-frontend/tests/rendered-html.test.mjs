@@ -596,6 +596,7 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   assert.match(source, /className="collapsed-panels-flyout"/);
   assert.match(source, /aria-label="Acesso rápido aos painéis"/);
   assert.match(source, /className="collapsed-panels-group-toggle"/);
+  assert.match(source, /<span>Painéis do <\/span><FarolName \/>/);
   assert.match(source, /aria-expanded=\{isFlyoutGroupOpen\}/);
   assert.match(source, /group: isFlyoutGroupOpen \? null : group\.id/);
   assert.match(source, /className="collapsed-panels-items"/);
@@ -606,6 +607,14 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   assert.match(
     stylesheet,
     /\.sidebar\.is-collapsed \.sidebar-primary-tabs \{\s*border-bottom: 0;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.collapsed-panels-flyout-title \.farol-name-word \{\s*color: #000;[\s\S]*?\.collapsed-panels-flyout-title \.farol-name-state \{\s*color: var\(--brand-yellow\);/,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /\.collapsed-panels-flyout-title > span:first-child \{[\s\S]*?text-transform: uppercase;/,
   );
   assert.match(
     source,

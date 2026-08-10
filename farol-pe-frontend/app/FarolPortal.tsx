@@ -1037,7 +1037,9 @@ function Sidebar({
               className="collapsed-panels-flyout"
               aria-label="Acesso rápido aos painéis"
             >
-              <strong className="collapsed-panels-flyout-title">Painéis do FarolPE</strong>
+              <strong className="collapsed-panels-flyout-title">
+                <span>Painéis do </span><FarolName />
+              </strong>
               {sidebarPanelGroups.map((group) => {
                 const GroupIcon = group.icon;
                 const groupSlugs = [

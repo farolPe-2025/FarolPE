@@ -5852,10 +5852,17 @@ button {
 .collapsed-panels-flyout-title {
   display: block;
   margin-bottom: 14px;
-  color: #00466e;
-  font-size: 13px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  color: #000;
+  font-size: 14px;
+  letter-spacing: -.01em;
+}
+
+.collapsed-panels-flyout-title .farol-name-word {
+  color: #000;
+}
+
+.collapsed-panels-flyout-title .farol-name-state {
+  color: var(--brand-yellow);
 }
 
 .collapsed-panels-group + .collapsed-panels-group {
@@ -5875,7 +5882,7 @@ button {
   border: 0;
   border-radius: 7px;
   background: transparent;
-  color: #00466e;
+  color: #000;
   font-size: 12px;
   font-weight: 750;
   text-align: left;
@@ -5921,7 +5928,7 @@ button {
   border: 0;
   border-radius: 7px;
   background: transparent;
-  color: #41567a;
+  color: #000;
   font-size: 12px;
   font-weight: 650;
   text-align: left;
@@ -5931,7 +5938,7 @@ button {
 .collapsed-panels-items button:focus-visible,
 .collapsed-panels-items button.is-active {
   background: #eef4f8;
-  color: #00466e;
+  color: #000;
   outline: none;
 }
 
