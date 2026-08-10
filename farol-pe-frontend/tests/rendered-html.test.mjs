@@ -596,15 +596,19 @@ test("padroniza cabeçalhos internos e mantém o Sobre neutro no mobile", async 
   );
   assert.match(
     stylesheet,
-    /\.about-hero\.page-hero,\s*\.dictionary-hero\.page-hero,\s*\.publications-hero\.page-hero \{\s*border-bottom: 0;/,
+    /\.page-hero,\s*\.info-hero\.page-hero,\s*\.about-hero\.page-hero,\s*\.dictionary-hero\.page-hero,\s*\.publications-hero\.page-hero \{[\s\S]*?border-bottom: 0;/,
   );
   assert.match(
     stylesheet,
-    /\.about-hero\.page-hero::after,\s*\.dictionary-hero\.page-hero::after,\s*\.publications-hero\.page-hero::after \{\s*display: none;/,
+    /\.page-hero::after,[\s\S]*?bottom: 0;[\s\S]*?height: 4px;[\s\S]*?background: var\(--brand-yellow\);/,
   );
-  assert.match(
+  assert.doesNotMatch(
     stylesheet,
-    /\.page-hero,[\s\S]*?border-bottom: 3px solid var\(--brand-blue\);/,
+    /border-bottom: 3px solid var\(--brand-blue\);/,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /\.(?:about|dictionary|publications)-hero\.page-hero::after[^\{]*\{[^\}]*display: none;/,
   );
   assert.match(
     stylesheet,

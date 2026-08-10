@@ -6379,7 +6379,7 @@ body * {
   justify-content: space-between;
   gap: 42px;
   overflow: hidden;
-  border-bottom: 3px solid var(--brand-blue);
+  border-bottom: 0;
   background: #f5f9fb;
   color: #000;
 }
@@ -6389,28 +6389,16 @@ body * {
 .dictionary-hero.page-hero::after {
   position: absolute;
   right: auto;
-  bottom: -3px;
+  bottom: 0;
   left: clamp(28px, 6vw, 86px);
   display: block;
   width: 96px;
-  height: 6px;
+  height: 4px;
   border: 0;
-  border-radius: 999px 999px 0 0;
+  border-radius: 999px;
   background: var(--brand-yellow);
   box-shadow: none;
   content: "";
-}
-
-.about-hero.page-hero,
-.dictionary-hero.page-hero,
-.publications-hero.page-hero {
-  border-bottom: 0;
-}
-
-.about-hero.page-hero::after,
-.dictionary-hero.page-hero::after,
-.publications-hero.page-hero::after {
-  display: none;
 }
 
 .page-hero-copy,
