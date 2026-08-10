@@ -71,8 +71,9 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   );
   assert.match(
     panorama,
-    /\.site-h1\{[\s\S]*?color:#000;[\s\S]*?font-size:clamp\(42px,5vw,68px\);/,
+    /\.site-h1\{[\s\S]*?color:#000;[\s\S]*?font-size:clamp\(42px,4vw,56px\);[\s\S]*?white-space:nowrap;/,
   );
+  assert.match(panorama, /@media \(max-width:720px\)[\s\S]*?\.site-h1\{[^}]*white-space:normal;/);
 });
 
 test("renderiza a home institucional do FarolPE", async () => {
