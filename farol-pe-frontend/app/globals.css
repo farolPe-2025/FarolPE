@@ -6656,7 +6656,7 @@ body * {
   margin-top: 22px;
 }
 
-/* Apenas o item efetivamente ativo/aberto recebe o azul escuro. */
+/* O tema aberto envolve título, descrição e painéis; o item ativo recebe vidro. */
 .sidebar,
 .sidebar-footer,
 .sidebar.is-collapsed,
@@ -6668,14 +6668,31 @@ body * {
   background: transparent;
 }
 
+.sidebar-panel-groups .nav-group {
+  position: relative;
+  background: transparent;
+  transition: background .24s ease, box-shadow .24s ease;
+}
+
+.sidebar-panel-groups .nav-group.is-open {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(0, 0, 0, .035)),
+    var(--brand-blue-dark);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .1),
+    inset 0 -1px 0 rgba(0, 0, 0, .14);
+}
+
 .sidebar-primary-tabs > button.is-active,
-.sidebar-panel-groups .group-toggle.contains-active[aria-expanded="true"] {
+.sidebar-panel-groups .nav-group.is-open > .group-toggle {
   background: transparent;
 }
 
-.sidebar-panel-groups .group-toggle[aria-expanded="true"]:not(.contains-active),
+.sidebar-panel-groups .nav-group.is-open .group-summary {
+  color: #b8d1df;
+}
+
 .panorama-topic-list button.is-active,
-.sidebar-link.is-active,
 .sidebar-services .sidebar-main.is-active {
   background: var(--brand-blue-dark);
   color: #fff;
@@ -6685,6 +6702,45 @@ body * {
 .sidebar-services .sidebar-main:hover,
 .panorama-topic-list button:hover {
   background: rgba(0, 47, 75, .56);
+}
+
+.sidebar-panel-row:has(.sidebar-link.is-active) {
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 8px;
+  background: linear-gradient(
+    112deg,
+    rgba(255, 255, 255, .17) 0%,
+    rgba(255, 255, 255, .085) 48%,
+    rgba(255, 255, 255, .035) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .22),
+    0 7px 18px rgba(0, 18, 31, .16);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.sidebar-panel-row:has(.sidebar-link.is-active)::after {
+  position: absolute;
+  z-index: 1;
+  top: 1px;
+  right: 12px;
+  left: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .58), transparent);
+  content: "";
+  pointer-events: none;
+}
+
+.sidebar-panel-row .sidebar-link.is-active {
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+
+.sidebar-panel-row:has(.sidebar-link.is-active) .sidebar-info-link {
+  border-color: rgba(255, 255, 255, .24);
+  color: #d5e6ef;
 }
 
 /* Topo móvel: azul oficial e assinatura horizontal. */

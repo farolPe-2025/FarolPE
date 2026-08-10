@@ -619,7 +619,7 @@ test("usa logo horizontal e azul oficial no topo móvel", async () => {
   );
 });
 
-test("aplica azul escuro apenas aos itens ativos do menu lateral", async () => {
+test("aplica azul escuro ao tema aberto e brilho ao painel ativo", async () => {
   const response = await render("/paineis/atividade-economica");
   const html = await response.text();
   const stylesheet = await readFile(
@@ -627,14 +627,31 @@ test("aplica azul escuro apenas aos itens ativos do menu lateral", async () => {
     "utf8",
   );
 
-  assert.match(html, /class="group-toggle contains-active"/);
+  assert.match(html, /class="nav-group is-open"/);
+  assert.equal((html.match(/class="nav-group is-open"/g) ?? []).length, 1);
+  assert.match(
+    html,
+    /class="nav-group is-open"[\s\S]*?class="group-toggle contains-active"[\s\S]*?aria-expanded="true"/,
+  );
   assert.match(
     stylesheet,
     /\.sidebar-primary-tabs > button\.is-active,[\s\S]*?background: transparent;/,
   );
   assert.match(
     stylesheet,
-    /\.sidebar-link\.is-active,[\s\S]*?background: var\(--brand-blue-dark\);/,
+    /\.sidebar-panel-groups \.nav-group\.is-open \{[\s\S]*?var\(--brand-blue-dark\);/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar-panel-row:has\(\.sidebar-link\.is-active\) \{[\s\S]*?rgba\(255, 255, 255, \.17\)[\s\S]*?backdrop-filter: blur\(6px\)/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar-panel-row \.sidebar-link\.is-active \{[\s\S]*?background: transparent;/,
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /\.sidebar-link\.is-active[^\{]*\{[^\}]*background:\s*var\(--brand-blue-dark\)/,
   );
 });
 

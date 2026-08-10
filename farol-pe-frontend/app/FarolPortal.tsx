@@ -1047,12 +1047,16 @@ function Sidebar({
                   const panelCount =
                     group.slugs.length +
                     ("nestedSlugs" in group ? group.nestedSlugs.length : 0);
+                  const containsActivePanel = activeGroup === group.id;
 
                   return (
-                    <div className="nav-group" key={group.id}>
+                    <div
+                      className={`nav-group ${isOpen ? "is-open" : ""}`.trim()}
+                      key={group.id}
+                    >
                       <button
                         className={`group-toggle ${
-                          activeGroup === group.id ? "contains-active" : ""
+                          containsActivePanel ? "contains-active" : ""
                         }`.trim()}
                         onClick={() =>
                           setGroupPreference({
