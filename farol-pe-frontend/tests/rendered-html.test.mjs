@@ -60,6 +60,10 @@ test("renderiza a home institucional do FarolPE", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
   assert.match(html, /<html lang="pt-BR">/i);
   assert.match(html, /FarolPE/i);
   assert.match(html, /Ver com clareza\./);
@@ -69,6 +73,19 @@ test("renderiza a home institucional do FarolPE", async () => {
   assert.doesNotMatch(html, /\/noticias/i);
   assert.doesNotMatch(html, /<iframe\b/i);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
+  assert.match(html, /class="home-more-strip"[\s\S]*?Veja mais/);
+  assert.match(
+    stylesheet,
+    /\.reference-home \{[^}]*min-height: 100dvh;[^}]*url\("\/farol-home\.jpg"\)/,
+  );
+  assert.match(
+    stylesheet,
+    /\.home-more-strip \{\s*border: 0;\s*background: transparent;\s*pointer-events: none;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.home-more-strip button \{[^}]*color: #fff;[^}]*pointer-events: auto;/,
+  );
 });
 
 test("remove as faixas multicoloridas do menu e da home", async () => {

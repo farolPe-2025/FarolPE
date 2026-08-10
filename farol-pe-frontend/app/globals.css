@@ -5430,13 +5430,15 @@ button {
 
 /* Transição da abertura para a leitura rápida */
 .home-more-strip {
-  border-top-color: rgba(255, 255, 255, .1);
-  border-bottom: 1px solid rgba(91, 151, 220, .16);
-  background: #071a38;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
 }
 
 .home-more-strip button {
-  color: #d6e5f7;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .7);
+  pointer-events: auto;
 }
 
 .home-more-strip button span {
