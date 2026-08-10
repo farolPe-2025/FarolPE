@@ -6387,18 +6387,8 @@ body * {
 .page-hero::after,
 .info-hero.page-hero::after,
 .dictionary-hero.page-hero::after {
-  position: absolute;
-  right: auto;
-  bottom: 0;
-  left: clamp(28px, 6vw, 86px);
-  display: block;
-  width: 96px;
-  height: 4px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--brand-yellow);
-  box-shadow: none;
-  content: "";
+  display: none;
+  content: none;
 }
 
 .page-hero-copy,
@@ -6906,12 +6896,6 @@ body * {
     align-items: flex-start;
     flex-direction: column;
     gap: 26px;
-  }
-
-  .page-hero::after,
-  .info-hero.page-hero::after,
-  .dictionary-hero.page-hero::after {
-    left: 20px;
   }
 
   .page-hero h1,
