@@ -638,7 +638,7 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   );
   assert.match(
     stylesheet,
-    /\.collapsed-panels-flyout \{[\s\S]*?visibility: hidden;[\s\S]*?pointer-events: auto;[\s\S]*?opacity \.16s ease \.45s,[\s\S]*?visibility 0s linear \.61s;/,
+    /\.collapsed-panels-flyout \{[\s\S]*?visibility: hidden;[\s\S]*?pointer-events: auto;[\s\S]*?opacity \.14s ease \.18s,[\s\S]*?visibility 0s linear \.32s;/,
   );
   assert.match(
     stylesheet,

@@ -5887,9 +5887,9 @@ button {
   pointer-events: auto;
   transform: translateX(-8px);
   transition:
-    opacity .16s ease .45s,
-    transform .16s ease .45s,
-    visibility 0s linear .61s;
+    opacity .14s ease .18s,
+    transform .14s ease .18s,
+    visibility 0s linear .32s;
 }
 
 .sidebar.is-collapsed:has(.sidebar-primary-tabs > button:nth-child(2):hover) .collapsed-panorama-flyout,
