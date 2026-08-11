@@ -93,6 +93,14 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
     panorama,
     /Crescimento acumulado em 12 meses<span>jun\/25 a mai\/26 sobre jun\/24 a mai\/25<\/span>/,
   );
+  assert.equal(
+    (panorama.match(/Indústria geral \(PIM-PF\)\*/g) ?? []).length,
+    4,
+  );
+  assert.equal(
+    (panorama.match(/\* Dados referentes a jun\/2026\./g) ?? []).length,
+    4,
+  );
   assert.match(panorama, /@media \(max-width:720px\)[\s\S]*?\.site-h1\{[^}]*white-space:normal;/);
 });
 

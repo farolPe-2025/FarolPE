@@ -72,6 +72,42 @@ for (const [currentLabel, mayLabel] of [
   );
 }
 
+const comparisonStart = adaptedHtml.indexOf('<section data-sec="cmp">');
+const comparisonEnd = adaptedHtml.indexOf(
+  '<section data-sec="trab">',
+  comparisonStart,
+);
+
+if (comparisonStart === -1 || comparisonEnd === -1) {
+  throw new Error("Não foi possível localizar a seção Dinâmica Econômica.");
+}
+
+let comparisonSection = adaptedHtml.slice(comparisonStart, comparisonEnd);
+const comparisonNotePattern = /<div class="blocnota"><p>[\s\S]*?<\/p><\/div>/g;
+const comparisonNotes = comparisonSection.match(comparisonNotePattern) ?? [];
+const pimChartLabel = '<div class="colfoot">Indústria geral (PIM-PF)</div>';
+const pimChartLabels = comparisonSection.split(pimChartLabel).length - 1;
+
+if (comparisonNotes.length !== 4 || pimChartLabels !== 4) {
+  throw new Error(
+    `Esperadas 4 notas e 4 rótulos PIM no gráfico; encontrados ${comparisonNotes.length} e ${pimChartLabels}.`,
+  );
+}
+
+const comparisonNote =
+  '<div class="blocnota"><p>Pernambuco supera Nordeste e Brasil em todas as quatro janelas na atividade econômica. No acumulado do ano, a distância é maior na indústria, com 10,9% contra 1,5% do país, e no varejo, com 11,0% contra 1,7%. Os serviços são a única exceção: negativos no estado e positivos no país em todas as janelas. Na margem mensal, Pernambuco cresce enquanto o Nordeste recua na atividade econômica, e o turismo registra a maior queda do conjunto. * Dados referentes a jun/2026.</p></div>';
+
+comparisonSection = comparisonSection
+  .replace(comparisonNotePattern, comparisonNote)
+  .replaceAll(
+    pimChartLabel,
+    '<div class="colfoot">Indústria geral (PIM-PF)*</div>',
+  );
+adaptedHtml =
+  adaptedHtml.slice(0, comparisonStart) +
+  comparisonSection +
+  adaptedHtml.slice(comparisonEnd);
+
 adaptedHtml = replaceOnce(
   adaptedHtml,
   "<body>\n<header class=\"siteheader\">",
@@ -168,6 +204,8 @@ for (const requiredMarker of [
   "<span>mai/2026 sobre mai/2025</span>",
   "<span>jan a mai/2026 sobre jan a mai/2025</span>",
   "<span>jun/25 a mai/26 sobre jun/24 a mai/25</span>",
+  "Indústria geral (PIM-PF)*",
+  "* Dados referentes a jun/2026.",
 ]) {
   if (!adaptedHtml.includes(requiredMarker)) {
     throw new Error(`A saída não contém o marcador obrigatório: ${requiredMarker}`);
