@@ -5873,9 +5873,13 @@ button {
   color: #102d59;
   box-shadow: 18px 18px 44px rgba(0, 31, 54, .2);
   opacity: 0;
-  pointer-events: none;
+  visibility: hidden;
+  pointer-events: auto;
   transform: translateX(-8px);
-  transition: opacity .16s ease, transform .16s ease;
+  transition:
+    opacity .16s ease .45s,
+    transform .16s ease .45s,
+    visibility 0s linear .61s;
 }
 
 .sidebar.is-collapsed:has(.sidebar-primary-tabs > button:nth-child(3):hover) .collapsed-panels-flyout,
@@ -5883,8 +5887,10 @@ button {
 .collapsed-panels-flyout:hover,
 .collapsed-panels-flyout:focus-within {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateX(0);
+  transition-delay: 0s;
 }
 
 .collapsed-panels-flyout-title {
