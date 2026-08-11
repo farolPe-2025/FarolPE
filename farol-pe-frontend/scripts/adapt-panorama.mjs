@@ -57,6 +57,21 @@ adaptedHtml = replaceOnce(
   "fonte monoespaçada",
 );
 
+for (const [currentLabel, mayLabel] of [
+  ["jun/2026 sobre mai/2026", "mai/2026 sobre abr/2026"],
+  ["jun/2026 sobre jun/2025", "mai/2026 sobre mai/2025"],
+  ["jan a jun/2026 sobre jan a jun/2025", "jan a mai/2026 sobre jan a mai/2025"],
+  ["jul/25 a jun/26 sobre jul/24 a jun/25", "jun/25 a mai/26 sobre jun/24 a mai/25"],
+]) {
+  const buttonLabel = `<span>${currentLabel}</span>`;
+  adaptedHtml = replaceOnce(
+    adaptedHtml,
+    buttonLabel,
+    `<span>${mayLabel}</span>`,
+    `período do botão ${currentLabel}`,
+  );
+}
+
 adaptedHtml = replaceOnce(
   adaptedHtml,
   "<body>\n<header class=\"siteheader\">",
@@ -149,6 +164,10 @@ for (const requiredMarker of [
   "trab-table-scroll",
   "html.is-embedded .sitenav{display:none;}",
   "--mono:var(--font);",
+  "<span>mai/2026 sobre abr/2026</span>",
+  "<span>mai/2026 sobre mai/2025</span>",
+  "<span>jan a mai/2026 sobre jan a mai/2025</span>",
+  "<span>jun/25 a mai/26 sobre jun/24 a mai/25</span>",
 ]) {
   if (!adaptedHtml.includes(requiredMarker)) {
     throw new Error(`A saída não contém o marcador obrigatório: ${requiredMarker}`);

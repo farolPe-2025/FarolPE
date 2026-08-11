@@ -77,6 +77,22 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
     panorama,
     /\.dcard::after\{z-index:0; background:var\(--blue-100\);\}/,
   );
+  assert.match(
+    panorama,
+    /Crescimento mensal<span>mai\/2026 sobre abr\/2026<\/span>/,
+  );
+  assert.match(
+    panorama,
+    /Crescimento interanual<span>mai\/2026 sobre mai\/2025<\/span>/,
+  );
+  assert.match(
+    panorama,
+    /Crescimento acumulado no ano<span>jan a mai\/2026 sobre jan a mai\/2025<\/span>/,
+  );
+  assert.match(
+    panorama,
+    /Crescimento acumulado em 12 meses<span>jun\/25 a mai\/26 sobre jun\/24 a mai\/25<\/span>/,
+  );
   assert.match(panorama, /@media \(max-width:720px\)[\s\S]*?\.site-h1\{[^}]*white-space:normal;/);
 });
 
