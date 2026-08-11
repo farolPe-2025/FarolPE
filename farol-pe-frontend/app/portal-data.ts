@@ -580,8 +580,8 @@ export const summaryKpis = [
   },
   {
     label: "Produção industrial (PIM/IBGE)",
-    value: "+14,9%",
-    note: "Acumulado no ano até maio",
+    value: "+10,9%",
+    note: "Acumulado no ano até junho",
     tone: "green",
   },
   {
@@ -600,7 +600,7 @@ export const summaryKpis = [
 
 export const summaryTable = [
   ["Atividade econômica", "+5,1%", "2º", "1º", "IBCR · BCB", "Atualizado"],
-  ["Produção industrial", "+14,9%", "2º", "1º*", "PIM-PF · IBGE", "Atualizado"],
+  ["Produção industrial", "+10,9%", "2º", "1º*", "PIM-PF · IBGE", "Atualizado"],
   ["Comércio varejista", "+11,0%", "1º", "1º", "PMC · IBGE", "Atualizado"],
   ["Serviços", "-0,3%", "—", "—", "PMS · IBGE", "Atualizado"],
   ["Aberturas de empresas", "73.461", "9º", "2º", "Mapa de Empresas", "Pendente"],

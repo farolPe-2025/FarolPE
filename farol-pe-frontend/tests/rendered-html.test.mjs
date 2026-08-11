@@ -28,7 +28,7 @@ async function render(path = "/") {
 
 test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
     "utf8",
   );
 
@@ -681,7 +681,7 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
   const panelsResponse = await render("/paineis/atividade-economica");
   const panelsHtml = await panelsResponse.text();
   const panoramaDocument = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
     "utf8",
   );
 
@@ -803,7 +803,7 @@ test("carrega e aplica Inter no portal e no panorama incorporado", async () => {
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
     "utf8",
   );
   const font = await readFile(
@@ -997,7 +997,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-10 (5).html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
     "utf8",
   );
   const stylesheet = await readFile(
@@ -1006,12 +1006,13 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
   );
   const summaryKpis = dataSource.match(/export const summaryKpis = \[[\s\S]*?\n\];/)?.[0] ?? "";
 
-  for (const value of ["+5,1%", "+14,9%", "+11,0%", "+6.162"]) {
+  for (const value of ["+5,1%", "+10,9%", "+11,0%", "+6.162"]) {
     assert.ok(summaryKpis.includes(`value: "${value}"`));
     assert.ok(panorama.includes(value));
   }
 
   assert.match(panorama, /Panorama econômico de Pernambuco/i);
+  assert.match(panorama, /Atualizado em 11 de agosto de 2026/);
   assert.match(
     stylesheet,
     /\.home-analysis \{\s*background:[\s\S]*?linear-gradient\(145deg, #071a38 0%, #0a2447 54%, #0d3158 100%\);\s*color: #fff;/,

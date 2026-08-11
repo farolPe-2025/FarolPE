@@ -66,7 +66,7 @@ function FarolName({ className = "" }: { className?: string }) {
 
 const activityBars = [
   ["Atividade", "+5,1%", 34, "blue"],
-  ["Indústria", "+14,9%", 100, "green"],
+  ["Indústria", "+10,9%", 100, "green"],
   ["Varejo", "+11,0%", 74, "gold"],
   ["Serviços", "-0,3%", 2, "slate"],
   ["Turismo", "-2,6%", 17, "orange"],
@@ -1545,7 +1545,7 @@ function EconomicPanoramaPage() {
       <section className="panel-stage">
         <DeferredFrame
           id="panorama-frame"
-          src="/painel-conjuntura-2026-08-10 (5).html"
+          src="/painel-conjuntura-2026-08-11.html"
           title="Painel de Conjuntura Econômica de Pernambuco"
           loaderTitle="Carregando o panorama econômico"
           loaderDescription="Preparando os indicadores de Pernambuco…"
@@ -1580,16 +1580,16 @@ function SummaryPage() {
     <main className="summary-page">
       <header className="summary-hero">
         <div>
-          <p className="eyebrow">Panorama Econômico de PE · Julho / 2026</p>
+          <p className="eyebrow">Panorama Econômico de PE · Agosto / 2026</p>
           <h1>
             Boletim econômico
             <br />
             de Pernambuco
           </h1>
           <p>
-            Atividade, indústria, comércio e serviços atualizados com os dados
-            de maio de 2026. Os demais temas permanecem sinalizados até a
-            próxima atualização.
+            Atividade, comércio e serviços atualizados com os dados de maio de
+            2026, e indústria com os dados de junho. Os demais temas permanecem
+            sinalizados até a próxima atualização.
           </p>
         </div>
         <aside>
@@ -1627,7 +1627,7 @@ function SummaryPage() {
             <div className="insight-grid">
               {[
                 ["IBCR", "+5,1%", "Acumulado do ano; 2º do Brasil e 1º do Nordeste."],
-                ["Indústria", "+14,9%", "Acumulado do ano; 2º maior avanço do Brasil."],
+                ["Indústria", "+10,9%", "Acumulado até junho; 2º maior avanço do Brasil."],
                 ["Serviços", "-0,3%", "Acumulado do ano; queda de 0,6% na margem."],
                 ["Turismo", "-2,6%", "Recuo em maio frente a abril."],
               ].map(([label, value, note]) => (
@@ -1787,7 +1787,7 @@ function SummaryPage() {
         </section>
 
         <footer className="summary-footnote">
-          <span>Painel baseado no Boletim Econômico de Pernambuco — Julho/2026 · Atividade, indústria, comércio e serviços atualizados até maio/2026.</span>
+          <span>Painel baseado no Boletim Econômico de Pernambuco — Agosto/2026 · Atividade, comércio e serviços atualizados até maio; indústria até junho/2026.</span>
           <b>Secretaria de Desenvolvimento Econômico de Pernambuco</b>
         </footer>
       </div>
