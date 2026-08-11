@@ -581,7 +581,15 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   );
   assert.match(
     stylesheet,
-    /\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main \{[\s\S]*?width: 60px;[\s\S]*?background: transparent;[\s\S]*?font-size: 0;/,
+    /\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main \{[\s\S]*?width: 100%;[\s\S]*?min-height: 48px;[\s\S]*?border-radius: 10px;[\s\S]*?background: transparent;[\s\S]*?font-size: 0;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main:hover,\s*\.sidebar\.is-collapsed \.sidebar-services \.sidebar-main:focus-visible \{[\s\S]*?background: linear-gradient\(180deg, rgba\(255, 255, 255, \.055\), transparent\);[\s\S]*?transform: none;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed\s+\.sidebar-services\s+\.sidebar-main:is\(:hover, :focus-visible\)\s+\.nav-symbol \{[\s\S]*?background: transparent;[\s\S]*?filter: drop-shadow\(0 0 7px rgba\(255, 255, 255, \.28\)\);/,
   );
   assert.match(
     stylesheet,

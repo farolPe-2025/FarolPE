@@ -5727,24 +5727,33 @@ button {
 
 .sidebar.is-collapsed .sidebar-services .sidebar-main {
   position: relative;
-  width: 60px;
-  min-height: 52px;
+  width: 100%;
+  min-height: 48px;
   padding: 0;
   justify-content: center;
   gap: 0;
-  border-radius: 0;
+  border-radius: 10px;
   background: transparent;
   font-size: 0;
-}
-
-.sidebar.is-collapsed .sidebar-services .sidebar-main:hover {
-  background: rgba(255, 255, 255, .06);
-  transform: none;
 }
 
 .sidebar.is-collapsed .sidebar-services .sidebar-main.is-active {
   background: transparent;
   box-shadow: inset 0 -2px 0 var(--brand-yellow);
+}
+
+.sidebar.is-collapsed .sidebar-services .sidebar-main:hover,
+.sidebar.is-collapsed .sidebar-services .sidebar-main:focus-visible {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .055), transparent);
+  transform: none;
+}
+
+.sidebar.is-collapsed
+  .sidebar-services
+  .sidebar-main:is(:hover, :focus-visible)
+  .nav-symbol {
+  background: transparent;
+  filter: drop-shadow(0 0 7px rgba(255, 255, 255, .28));
 }
 
 .sidebar.is-collapsed .sidebar-services .sidebar-main.is-active .nav-symbol,
