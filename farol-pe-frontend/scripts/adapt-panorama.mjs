@@ -36,7 +36,13 @@ if (customCssStart === -1 || customCssEnd === -1) {
   throw new Error("Não foi possível localizar os ajustes visuais do panorama atual.");
 }
 
-const customCss = referenceHtml.slice(customCssStart, customCssEnd).trimEnd();
+const customCss = referenceHtml
+  .slice(customCssStart, customCssEnd)
+  .replace(
+    ".dcard::after{z-index:0; background:#00466E;}",
+    ".dcard::after{z-index:0; background:var(--blue-100);}",
+  )
+  .trimEnd();
 let adaptedHtml = replaceOnce(
   exportedHtml,
   "</style></head>",

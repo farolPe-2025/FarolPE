@@ -73,7 +73,10 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
     panorama,
     /\.site-h1\{[\s\S]*?color:#000;[\s\S]*?font-size:clamp\(42px,4vw,56px\);[\s\S]*?white-space:nowrap;/,
   );
-  assert.match(panorama, /\.dcard::after\{z-index:0; background:#00466E;\}/);
+  assert.match(
+    panorama,
+    /\.dcard::after\{z-index:0; background:var\(--blue-100\);\}/,
+  );
   assert.match(panorama, /@media \(max-width:720px\)[\s\S]*?\.site-h1\{[^}]*white-space:normal;/);
 });
 
