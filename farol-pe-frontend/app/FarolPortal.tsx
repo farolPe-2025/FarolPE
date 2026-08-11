@@ -895,6 +895,12 @@ function Sidebar({
     window.sessionStorage.setItem("farol-panorama-topic", topic);
     setActivePanoramaTopic(topic);
 
+    if (!isPanoramaContext) {
+      navigate("/resumo");
+      onClose();
+      return;
+    }
+
     const frame = document.getElementById(
       "panorama-frame",
     ) as HTMLIFrameElement | null;
@@ -1031,6 +1037,37 @@ function Sidebar({
               <span>Painéis</span>
             </button>
           </div>
+
+          {collapsed && (
+            <aside
+              className="collapsed-panorama-flyout"
+              aria-label="Acesso rápido aos tópicos do panorama"
+            >
+              <strong className="collapsed-panorama-flyout-title">
+                Tópicos do panorama
+              </strong>
+              <div className="collapsed-panorama-items">
+                {panoramaTopics.map((topic) => (
+                  <button
+                    key={topic.key}
+                    className={
+                      isPanoramaContext && activePanoramaTopic === topic.key
+                        ? "is-active"
+                        : ""
+                    }
+                    onClick={() => selectPanoramaTopic(topic.key)}
+                    aria-current={
+                      isPanoramaContext && activePanoramaTopic === topic.key
+                        ? "true"
+                        : undefined
+                    }
+                  >
+                    {topic.label}
+                  </button>
+                ))}
+              </div>
+            </aside>
+          )}
 
           {collapsed && (
             <aside

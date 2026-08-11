@@ -611,6 +611,13 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
     /Tooltips do menu recolhido[\s\S]*?\.sidebar\.is-collapsed \[data-tooltip\]:not\(\.sidebar-main\)::before \{[\s\S]*?background: #06142f;[\s\S]*?content: attr\(data-tooltip\);/,
   );
   assert.match(source, /className="collapsed-panels-flyout"/);
+  assert.match(source, /className="collapsed-panorama-flyout"/);
+  assert.match(source, /aria-label="Acesso r.pido aos t.picos do panorama"/);
+  assert.match(source, /className="collapsed-panorama-items"/);
+  assert.match(
+    source,
+    /if \(!isPanoramaContext\) \{\s*navigate\("\/resumo"\);\s*onClose\(\);\s*return;/,
+  );
   assert.match(source, /aria-label="Acesso rápido aos painéis"/);
   assert.match(source, /className="collapsed-panels-group-toggle"/);
   assert.match(source, /<span>Painéis do <\/span><FarolName \/>/);
@@ -620,6 +627,14 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   assert.match(
     stylesheet,
     /\.sidebar\.is-collapsed:has\(\.sidebar-primary-tabs > button:nth-child\(3\):hover\)[\s\S]*?\.collapsed-panels-flyout[\s\S]*?opacity: 1;[\s\S]*?pointer-events: auto;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed:has\(\.sidebar-primary-tabs > button:nth-child\(2\):hover\) \.collapsed-panorama-flyout[\s\S]*?opacity: 1;[\s\S]*?pointer-events: auto;/,
+  );
+  assert.match(
+    stylesheet,
+    /\.sidebar\.is-collapsed \.sidebar-primary-tabs > button:is\(:nth-child\(2\), :nth-child\(3\)\)::before \{\s*display: none;/,
   );
   assert.match(
     stylesheet,

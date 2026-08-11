@@ -5824,7 +5824,7 @@ button {
   transform: translate(0, -50%);
 }
 
-.sidebar.is-collapsed .sidebar-primary-tabs > button:nth-child(3)::before {
+.sidebar.is-collapsed .sidebar-primary-tabs > button:is(:nth-child(2), :nth-child(3))::before {
   display: none;
 }
 
@@ -5867,6 +5867,7 @@ button {
   outline-offset: 2px;
 }
 
+.collapsed-panorama-flyout,
 .collapsed-panels-flyout {
   position: fixed;
   z-index: 115;
@@ -5891,8 +5892,12 @@ button {
     visibility 0s linear .61s;
 }
 
+.sidebar.is-collapsed:has(.sidebar-primary-tabs > button:nth-child(2):hover) .collapsed-panorama-flyout,
+.sidebar.is-collapsed:has(.sidebar-primary-tabs > button:nth-child(2):focus-visible) .collapsed-panorama-flyout,
 .sidebar.is-collapsed:has(.sidebar-primary-tabs > button:nth-child(3):hover) .collapsed-panels-flyout,
 .sidebar.is-collapsed:has(.sidebar-primary-tabs > button:nth-child(3):focus-visible) .collapsed-panels-flyout,
+.collapsed-panorama-flyout:hover,
+.collapsed-panorama-flyout:focus-within,
 .collapsed-panels-flyout:hover,
 .collapsed-panels-flyout:focus-within {
   opacity: 1;
@@ -5902,12 +5907,38 @@ button {
   transition-delay: 0s;
 }
 
+.collapsed-panorama-flyout-title,
 .collapsed-panels-flyout-title {
   display: block;
   margin-bottom: 14px;
   color: #000;
   font-size: 14px;
   letter-spacing: -.01em;
+}
+
+.collapsed-panorama-items {
+  display: grid;
+  gap: 4px;
+}
+
+.collapsed-panorama-items button {
+  min-height: 38px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #000;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: left;
+}
+
+.collapsed-panorama-items button:hover,
+.collapsed-panorama-items button:focus-visible,
+.collapsed-panorama-items button.is-active {
+  background: #eef4f8;
+  color: #000;
+  outline: none;
 }
 
 .collapsed-panels-flyout-title .farol-name-word {
