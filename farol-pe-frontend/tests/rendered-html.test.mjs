@@ -616,6 +616,14 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   assert.match(source, /className="collapsed-panorama-items"/);
   assert.match(
     source,
+    /const releaseFlyoutPointerFocus[\s\S]*?event\.preventDefault\(\);[\s\S]*?activeElement instanceof HTMLElement[\s\S]*?activeElement\.blur\(\);/,
+  );
+  assert.equal(
+    [...source.matchAll(/onMouseDown=\{releaseFlyoutPointerFocus\}/g)].length,
+    3,
+  );
+  assert.match(
+    source,
     /if \(!isPanoramaContext\) \{\s*navigate\("\/resumo"\);\s*onClose\(\);\s*return;/,
   );
   assert.match(source, /aria-label="Acesso rápido aos painéis"/);

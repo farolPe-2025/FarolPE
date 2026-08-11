@@ -9,6 +9,7 @@ import {
   useState,
   useSyncExternalStore,
   type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
   type SyntheticEvent,
 } from "react";
@@ -869,6 +870,16 @@ function Sidebar({
     onClose();
   };
 
+  const releaseFlyoutPointerFocus = (
+    event: ReactMouseEvent<HTMLButtonElement>,
+  ) => {
+    if (event.button !== 0) return;
+
+    event.preventDefault();
+    const activeElement = event.currentTarget.ownerDocument.activeElement;
+    if (activeElement instanceof HTMLElement) activeElement.blur();
+  };
+
   const showPanorama = () => {
     window.sessionStorage.setItem("farol-panorama-topic", "__all");
     setActivePanoramaTopic("__all");
@@ -1055,6 +1066,7 @@ function Sidebar({
                         ? "is-active"
                         : ""
                     }
+                    onMouseDown={releaseFlyoutPointerFocus}
                     onClick={() => selectPanoramaTopic(topic.key)}
                     aria-current={
                       isPanoramaContext && activePanoramaTopic === topic.key
@@ -1090,6 +1102,7 @@ function Sidebar({
                   <section className="collapsed-panels-group" key={group.id}>
                     <button
                       className="collapsed-panels-group-toggle"
+                      onMouseDown={releaseFlyoutPointerFocus}
                       onClick={() =>
                         setGroupPreference({
                           path,
@@ -1113,8 +1126,9 @@ function Sidebar({
                             <button
                               key={panel.slug}
                               className={
-                                path === `/paineis/${panel.slug}` ? "is-active" : ""
+                                  path === `/paineis/${panel.slug}` ? "is-active" : ""
                               }
+                              onMouseDown={releaseFlyoutPointerFocus}
                               onClick={() => go(`/paineis/${panel.slug}`)}
                             >
                               {panel.shortTitle}
