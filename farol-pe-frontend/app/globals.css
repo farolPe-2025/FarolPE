@@ -1335,8 +1335,8 @@ kbd {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 34px;
-  background: #f4f5f7;
+  height: 76px;
+  background: #f5f9fb;
   content: "";
   pointer-events: none;
 }
@@ -4796,7 +4796,7 @@ button {
     height: calc(100vh - 62px);
     height: calc(100dvh - 62px);
   }
-  .panel-page.is-embedded .iframe-wrap::after { height: 26px; }
+  .panel-page.is-embedded .iframe-wrap::after { height: 76px; }
   .info-hero,
   .about-hero,
   .summary-hero,

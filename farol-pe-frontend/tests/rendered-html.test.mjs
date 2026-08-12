@@ -241,6 +241,14 @@ test("aplica a centralização padrão a qualquer painel incorporado", async () 
     stylesheet,
     /@media \(min-width: 1360px\)[\s\S]*?\.panel-page\.is-embedded \.iframe-wrap[\s\S]*?width: 100%[\s\S]*?height: 100%/,
   );
+  assert.match(
+    stylesheet,
+    /\.panel-page\.is-embedded \.iframe-wrap::after \{[\s\S]*?height: 76px;[\s\S]*?background: #f5f9fb;[\s\S]*?pointer-events: none;/,
+  );
+  assert.match(
+    stylesheet,
+    /@media \(max-width: 860px\)[\s\S]*?\.panel-page\.is-embedded \.iframe-wrap::after \{ height: 76px; \}/,
+  );
 });
 
 test("mantém a busca acessível com ícone profissional", async () => {
