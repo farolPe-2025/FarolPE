@@ -995,7 +995,9 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
 
   assert.match(source, /PANEL_REVEAL_MINIMUM_MS = 3_800/);
   assert.match(source, /PANEL_REVEAL_SETTLE_MS = 2_700/);
-  assert.match(source, /POWER_BI_RENDER_FALLBACK_MS = 6_000/);
+  assert.match(source, /POWER_BI_RENDER_FALLBACK_MS = 2_000/);
+  assert.match(source, /POWER_BI_CACHED_FALLBACK_MS = 350/);
+  assert.match(source, /POWER_BI_CACHED_MINIMUM_MS = 500/);
   assert.match(source, /FRAME_LOAD_TIMEOUT_MS = 30_000/);
   assert.match(source, /useSyncExternalStore/);
   assert.match(source, /useLayoutEffect/);
@@ -1005,7 +1007,9 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
   assert.match(source, /Tentar novamente/);
   assert.match(source, /getPowerBiEventName\(event\.data\) !== "rendered"/);
   assert.match(source, /event\.source !== iframeRef\.current\?\.contentWindow/);
-  assert.match(source, /revealFrame\(isPowerBiSource\(src\) \? POWER_BI_RENDER_FALLBACK_MS : settleMs\)/);
+  assert.match(source, /window\.sessionStorage\.getItem\(`\$\{FRAME_READY_CACHE_PREFIX\}\$\{src\}`\)/);
+  assert.match(source, /window\.sessionStorage\.setItem\(`\$\{FRAME_READY_CACHE_PREFIX\}\$\{src\}`, "1"\)/);
+  assert.match(source, /cached \? POWER_BI_CACHED_FALLBACK_MS : POWER_BI_RENDER_FALLBACK_MS/);
   assert.match(source, /className="lighthouse-loader-base"/);
   assert.match(source, /className="lighthouse-loader-yellow"/);
   const deferredFrameSource = source.match(

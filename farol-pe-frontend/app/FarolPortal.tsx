@@ -47,7 +47,10 @@ const PANEL_REVEAL_MINIMUM_MS = 3_800;
 const PANEL_REVEAL_SETTLE_MS = 2_700;
 const PANORAMA_REVEAL_MINIMUM_MS = 900;
 const FRAME_LOAD_TIMEOUT_MS = 30_000;
-const POWER_BI_RENDER_FALLBACK_MS = 6_000;
+const POWER_BI_RENDER_FALLBACK_MS = 2_000;
+const POWER_BI_CACHED_FALLBACK_MS = 350;
+const POWER_BI_CACHED_MINIMUM_MS = 500;
+const FRAME_READY_CACHE_PREFIX = "farol:frame-ready:";
 
 const subscribeToHydration = () => () => {};
 const getClientHydrationSnapshot = () => true;
@@ -349,6 +352,7 @@ function DeferredFrame({
   const [attempt, setAttempt] = useState(0);
   const [phase, setPhase] = useState<FramePhase>("loading");
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const renderedInSessionRef = useRef(false);
   const startedAtRef = useRef(0);
   const revealTimerRef = useRef<number | null>(null);
   const timeoutTimerRef = useRef<number | null>(null);
@@ -356,6 +360,12 @@ function DeferredFrame({
   useLayoutEffect(() => {
     if (!clientReady) return;
 
+    try {
+      renderedInSessionRef.current =
+        window.sessionStorage.getItem(`${FRAME_READY_CACHE_PREFIX}${src}`) === "1";
+    } catch {
+      renderedInSessionRef.current = false;
+    }
     startedAtRef.current = performance.now();
     timeoutTimerRef.current = window.setTimeout(() => {
       setPhase("timeout");
@@ -371,7 +381,7 @@ function DeferredFrame({
     };
   }, [attempt, clientReady, src]);
 
-  const revealFrame = useCallback((minimumDelay = settleMs) => {
+  const revealFrame = useCallback((minimumDelay = settleMs, useFullMinimum = true) => {
     if (timeoutTimerRef.current !== null) {
       window.clearTimeout(timeoutTimerRef.current);
     }
@@ -380,12 +390,23 @@ function DeferredFrame({
     }
 
     const elapsed = performance.now() - startedAtRef.current;
-    const revealDelay = Math.max(minimumDelay, minimumMs - elapsed);
+    const effectiveMinimum = useFullMinimum
+      ? minimumMs
+      : POWER_BI_CACHED_MINIMUM_MS;
+    const revealDelay = Math.max(minimumDelay, effectiveMinimum - elapsed);
     setPhase("settling");
     revealTimerRef.current = window.setTimeout(() => {
+      if (isPowerBiSource(src)) {
+        renderedInSessionRef.current = true;
+        try {
+          window.sessionStorage.setItem(`${FRAME_READY_CACHE_PREFIX}${src}`, "1");
+        } catch {
+          // The report still opens normally when browser storage is unavailable.
+        }
+      }
       setPhase("ready");
     }, revealDelay);
-  }, [minimumMs, settleMs]);
+  }, [minimumMs, settleMs, src]);
 
   useEffect(() => {
     if (!clientReady || !isPowerBiSource(src)) return;
@@ -398,7 +419,7 @@ function DeferredFrame({
       ) {
         return;
       }
-      revealFrame(150);
+      revealFrame(100, !renderedInSessionRef.current);
     };
 
     window.addEventListener("message", handlePowerBiMessage);
@@ -406,7 +427,15 @@ function DeferredFrame({
   }, [attempt, clientReady, revealFrame, src]);
 
   const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
-    revealFrame(isPowerBiSource(src) ? POWER_BI_RENDER_FALLBACK_MS : settleMs);
+    if (isPowerBiSource(src)) {
+      const cached = renderedInSessionRef.current;
+      revealFrame(
+        cached ? POWER_BI_CACHED_FALLBACK_MS : POWER_BI_RENDER_FALLBACK_MS,
+        !cached,
+      );
+    } else {
+      revealFrame(settleMs);
+    }
     onFrameLoad?.(event);
   };
 
