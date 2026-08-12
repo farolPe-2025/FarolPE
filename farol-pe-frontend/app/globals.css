@@ -1341,6 +1341,11 @@ kbd {
   pointer-events: none;
 }
 
+.panel-page.is-embedded
+  .iframe-wrap:not([data-frame-state="ready"])::after {
+  background: #fff;
+}
+
 .panel-page.is-panorama .iframe-wrap::after {
   display: none;
 }
