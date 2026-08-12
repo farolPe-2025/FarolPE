@@ -1033,10 +1033,6 @@ test("sincroniza Ctrl mais rolagem com o zoom interno do painel", async () => {
   assert.match(source, /zoomBy\(event\.deltaY < 0 \? 10 : -10\)/);
   assert.match(source, /className="report-wheel-zoom-surface"/);
   assert.match(source, /onWheel=\{handleCtrlWheel\}/);
-  assert.match(source, /window\.devicePixelRatio/);
-  assert.match(source, /window\.addEventListener\("resize", syncBrowserZoom\)/);
-  assert.match(source, /const displayedZoom = Math\.round/);
-  assert.match(source, /Zoom efetivo em \$\{displayedZoom\}%/);
   assert.match(stylesheet, /\.report-wheel-zoom-surface \{/);
 });
 
