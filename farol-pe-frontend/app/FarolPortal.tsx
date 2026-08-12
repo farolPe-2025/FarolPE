@@ -43,10 +43,11 @@ import {
 
 type Navigate = (href: string) => void;
 
-const PANEL_REVEAL_MINIMUM_MS = 2_800;
-const PANEL_REVEAL_SETTLE_MS = 700;
+const PANEL_REVEAL_MINIMUM_MS = 3_800;
+const PANEL_REVEAL_SETTLE_MS = 2_700;
 const PANORAMA_REVEAL_MINIMUM_MS = 900;
 const FRAME_LOAD_TIMEOUT_MS = 30_000;
+const POWER_BI_RENDER_FALLBACK_MS = 6_000;
 
 const subscribeToHydration = () => () => {};
 const getClientHydrationSnapshot = () => true;
@@ -285,6 +286,42 @@ function PageHero({
 
 type FramePhase = "loading" | "settling" | "ready" | "timeout";
 
+function getPowerBiEventName(data: unknown): string | undefined {
+  let message = data;
+  if (typeof message === "string") {
+    try {
+      message = JSON.parse(message) as unknown;
+    } catch {
+      return undefined;
+    }
+  }
+  if (!message || typeof message !== "object") return undefined;
+
+  const record = message as Record<string, unknown>;
+  for (const key of ["eventName", "name", "event", "type"]) {
+    if (typeof record[key] === "string") return record[key].toLowerCase();
+  }
+  return getPowerBiEventName(record.body ?? record.detail);
+}
+
+function isPowerBiSource(src: string) {
+  return /(?:app\.powerbi\.com|app\.fabric\.microsoft\.com)/i.test(src);
+}
+
+function isTrustedPowerBiOrigin(origin: string) {
+  try {
+    const hostname = new URL(origin).hostname.toLowerCase();
+    return (
+      hostname === "powerbi.com" ||
+      hostname.endsWith(".powerbi.com") ||
+      hostname === "microsoft.com" ||
+      hostname.endsWith(".microsoft.com")
+    );
+  } catch {
+    return false;
+  }
+}
+
 function DeferredFrame({
   id,
   src,
@@ -311,6 +348,7 @@ function DeferredFrame({
   );
   const [attempt, setAttempt] = useState(0);
   const [phase, setPhase] = useState<FramePhase>("loading");
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const startedAtRef = useRef(0);
   const revealTimerRef = useRef<number | null>(null);
   const timeoutTimerRef = useRef<number | null>(null);
@@ -333,7 +371,7 @@ function DeferredFrame({
     };
   }, [attempt, clientReady, src]);
 
-  const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
+  const revealFrame = useCallback((minimumDelay = settleMs) => {
     if (timeoutTimerRef.current !== null) {
       window.clearTimeout(timeoutTimerRef.current);
     }
@@ -342,11 +380,33 @@ function DeferredFrame({
     }
 
     const elapsed = performance.now() - startedAtRef.current;
-    const revealDelay = Math.max(settleMs, minimumMs - elapsed);
+    const revealDelay = Math.max(minimumDelay, minimumMs - elapsed);
     setPhase("settling");
     revealTimerRef.current = window.setTimeout(() => {
       setPhase("ready");
     }, revealDelay);
+  }, [minimumMs, settleMs]);
+
+  useEffect(() => {
+    if (!clientReady || !isPowerBiSource(src)) return;
+
+    const handlePowerBiMessage = (event: MessageEvent) => {
+      if (
+        event.source !== iframeRef.current?.contentWindow ||
+        !isTrustedPowerBiOrigin(event.origin) ||
+        getPowerBiEventName(event.data) !== "rendered"
+      ) {
+        return;
+      }
+      revealFrame(150);
+    };
+
+    window.addEventListener("message", handlePowerBiMessage);
+    return () => window.removeEventListener("message", handlePowerBiMessage);
+  }, [attempt, clientReady, revealFrame, src]);
+
+  const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
+    revealFrame(isPowerBiSource(src) ? POWER_BI_RENDER_FALLBACK_MS : settleMs);
     onFrameLoad?.(event);
   };
 
@@ -406,6 +466,7 @@ function DeferredFrame({
       )}
       {clientReady && (
         <iframe
+          ref={iframeRef}
           key={`${src}-${attempt}`}
           id={id}
           src={src}
