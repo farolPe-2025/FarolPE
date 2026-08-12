@@ -320,10 +320,12 @@ function DeferredFrame({
   const [attempt, setAttempt] = useState(0);
   const [phase, setPhase] = useState<FramePhase>("loading");
   const [zoom, setZoom] = useState(100);
+  const [browserZoom, setBrowserZoom] = useState(100);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [panMode, setPanMode] = useState(false);
   const [ctrlZoomActive, setCtrlZoomActive] = useState(false);
   const draggingRef = useRef(false);
+  const baselineDevicePixelRatioRef = useRef<number | null>(null);
   const lastWheelZoomRef = useRef(0);
   const dragStartRef = useRef({ pointerX: 0, pointerY: 0, panX: 0, panY: 0 });
   const startedAtRef = useRef(0);
@@ -369,6 +371,26 @@ function DeferredFrame({
     };
   }, [showZoomControls]);
 
+  useEffect(() => {
+    if (!clientReady || !showZoomControls) return;
+
+    const baselineDevicePixelRatio = window.devicePixelRatio || 1;
+    baselineDevicePixelRatioRef.current = baselineDevicePixelRatio;
+    const syncBrowserZoom = () => {
+      const baseline = baselineDevicePixelRatioRef.current ?? 1;
+      const current = window.devicePixelRatio || baseline;
+      const nextBrowserZoom = Math.round((current / baseline) * 100);
+      setBrowserZoom(Math.min(300, Math.max(50, nextBrowserZoom)));
+    };
+
+    window.addEventListener("resize", syncBrowserZoom);
+    window.visualViewport?.addEventListener("resize", syncBrowserZoom);
+    return () => {
+      window.removeEventListener("resize", syncBrowserZoom);
+      window.visualViewport?.removeEventListener("resize", syncBrowserZoom);
+    };
+  }, [clientReady, showZoomControls]);
+
   const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
     if (timeoutTimerRef.current !== null) {
       window.clearTimeout(timeoutTimerRef.current);
@@ -393,6 +415,7 @@ function DeferredFrame({
 
   const ready = phase === "ready";
   const busy = phase === "loading" || phase === "settling";
+  const displayedZoom = Math.round((zoom * browserZoom) / 100);
   const zoomBy = (delta: number) => {
     setZoom((value) => {
       const nextZoom = Math.min(140, Math.max(70, value + delta));
@@ -535,10 +558,14 @@ function DeferredFrame({
           </button>
           <output
             aria-live="polite"
-            aria-label={`Zoom em ${zoom}%`}
-            title="Use Ctrl + rolagem sobre o painel"
+            aria-label={`Zoom efetivo em ${displayedZoom}%`}
+            title={
+              browserZoom === 100
+                ? "Use Ctrl + rolagem sobre o painel"
+                : "Zoom combinado do painel e do navegador"
+            }
           >
-            {zoom}%
+            {displayedZoom}%
           </output>
           <button type="button" onClick={() => zoomBy(10)} disabled={zoom >= 140} aria-label="Aumentar zoom" title="Aumentar zoom">
             <ZoomIn aria-hidden="true" />
