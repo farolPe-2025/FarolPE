@@ -156,22 +156,6 @@ test("renderiza a home institucional do FarolPE", async () => {
   );
 });
 
-test("oferece troca persistente do portal entre portuguÃªs e inglÃªs", async () => {
-  const response = await render("/");
-  const html = await response.text();
-  const source = await readFile(
-    new URL("../app/FarolPortal.tsx", import.meta.url),
-    "utf8",
-  );
-
-  assert.match(html, /class="language-toggle notranslate"/);
-  assert.match(html, /aria-label="Mudar todo o site para English"/);
-  assert.match(html, />EN<\/span>/);
-  assert.match(source, /farol-language/);
-  assert.match(source, /translate\.google\.com\/translate_a\/element\.js/);
-  assert.match(source, /document\.documentElement\.lang = activeLanguage/);
-});
-
 test("remove as faixas multicoloridas do menu e da home", async () => {
   const homeResponse = await render("/");
   const homeHtml = await homeResponse.text();

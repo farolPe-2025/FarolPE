@@ -68,56 +68,6 @@ button {
   color: inherit;
 }
 
-.google-translate-host,
-.goog-te-banner-frame,
-.skiptranslate iframe {
-  display: none !important;
-}
-
-body {
-  top: 0 !important;
-}
-
-.language-toggle {
-  position: fixed;
-  z-index: 480;
-  right: 18px;
-  bottom: 18px;
-  display: inline-flex;
-  min-width: 74px;
-  min-height: 46px;
-  padding: 0 16px;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: 999px;
-  background: var(--brand-blue);
-  box-shadow: 0 12px 32px rgba(6, 20, 47, 0.24);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 850;
-  letter-spacing: 0.06em;
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.language-toggle:hover {
-  background: var(--brand-blue-dark);
-  box-shadow: 0 15px 38px rgba(6, 20, 47, 0.3);
-  transform: translateY(-2px);
-}
-
-.language-toggle svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2;
-}
-
-html[data-portal-language="en"] .language-toggle {
-  background: var(--brand-yellow);
-  color: var(--navy-950);
-}
-
 button:not(:disabled),
 a {
   cursor: pointer;
