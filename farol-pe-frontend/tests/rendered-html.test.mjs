@@ -251,7 +251,7 @@ test("aplica a centralização padrão a qualquer painel incorporado", async () 
   );
   assert.match(
     stylesheet,
-    /\.panel-page\.is-embedded[\s\S]*?\.iframe-wrap:not\(\[data-frame-state="ready"\]\)::after \{[\s\S]*?background: #fff;/,
+    /\.panel-page\.is-embedded[\s\S]*?\.iframe-wrap:not\(\[data-frame-state="ready"\]\)::after \{[\s\S]*?background: #f5f9fb;/,
   );
 });
 
@@ -1013,7 +1013,7 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
   assert.ok(symbol.length > 10_000);
   assert.match(
     stylesheet,
-    /\.panel-loading \{\s*z-index: 3;[\s\S]*?background: #fff;[\s\S]*?color: var\(--brand-blue\);/,
+    /\.panel-loading \{\s*z-index: 3;[\s\S]*?background: #f5f9fb;[\s\S]*?color: var\(--brand-blue\);/,
   );
   assert.match(stylesheet, /@keyframes lighthouseYellowBlink/);
   assert.match(

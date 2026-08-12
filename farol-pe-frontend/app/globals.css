@@ -1343,7 +1343,7 @@ kbd {
 
 .panel-page.is-embedded
   .iframe-wrap:not([data-frame-state="ready"])::after {
-  background: #fff;
+  background: #f5f9fb;
 }
 
 .panel-page.is-panorama .iframe-wrap::after {
@@ -1499,11 +1499,7 @@ kbd {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background:
-    linear-gradient(rgba(22, 99, 214, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(22, 99, 214, 0.035) 1px, transparent 1px),
-    #f8fafc;
-  background-size: 36px 36px;
+  background: #f5f9fb;
 }
 
 .panel-loading strong {
@@ -7158,7 +7154,7 @@ body * {
   z-index: 3;
   isolation: isolate;
   padding: 28px;
-  background: #fff;
+  background: #f5f9fb;
   color: var(--brand-blue);
   text-align: center;
 }
