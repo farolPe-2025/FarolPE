@@ -1361,6 +1361,15 @@ kbd {
   touch-action: none;
 }
 
+.report-wheel-zoom-surface {
+  position: absolute;
+  z-index: 7;
+  inset: 0 0 76px;
+  cursor: zoom-in;
+  pointer-events: auto;
+  touch-action: none;
+}
+
 .iframe-wrap.is-pan-mode iframe.is-loaded {
   pointer-events: none !important;
 }

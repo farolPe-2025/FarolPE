@@ -197,7 +197,7 @@ test("protege o carregamento do iframe até a hidratação", async () => {
   const iframes = html.match(/<iframe\b/gi) ?? [];
 
   assert.equal(iframes.length, 0);
-  assert.match(html, /class="iframe-wrap"/);
+  assert.match(html, /class="iframe-wrap(?: [^"]*)?"/);
   assert.match(html, /aria-busy="true"/);
   assert.match(html, /data-frame-state="loading"/);
   assert.match(html, /class="lighthouse-loader-icon"/);
@@ -1016,6 +1016,24 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
     stylesheet,
     /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.lighthouse-loader-yellow \{[\s\S]*?animation: none !important;/,
   );
+});
+
+test("sincroniza Ctrl mais rolagem com o zoom interno do painel", async () => {
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
+  const stylesheet = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /const handleCtrlWheel/);
+  assert.match(source, /event\.preventDefault\(\)/);
+  assert.match(source, /zoomBy\(event\.deltaY < 0 \? 10 : -10\)/);
+  assert.match(source, /className="report-wheel-zoom-surface"/);
+  assert.match(source, /onWheel=\{handleCtrlWheel\}/);
+  assert.match(stylesheet, /\.report-wheel-zoom-surface \{/);
 });
 
 test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async () => {
