@@ -213,7 +213,7 @@ test("protege o carregamento do iframe até a hidratação", async () => {
   const iframes = html.match(/<iframe\b/gi) ?? [];
 
   assert.equal(iframes.length, 0);
-  assert.match(html, /class="iframe-wrap(?: [^"]*)?"/);
+  assert.match(html, /class="iframe-wrap"/);
   assert.match(html, /aria-busy="true"/);
   assert.match(html, /data-frame-state="loading"/);
   assert.match(html, /class="lighthouse-loader-icon"/);
