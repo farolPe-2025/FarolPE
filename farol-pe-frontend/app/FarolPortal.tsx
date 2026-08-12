@@ -27,6 +27,7 @@ import {
   Info,
   LayoutGrid,
   Leaf,
+  Languages,
   Menu,
   Search,
   Users,
@@ -59,6 +60,106 @@ const getServerHydrationSnapshot = () => false;
 
 type PublicationKind = "technical-note" | "news" | "report" | "bulletin";
 type PublicationRange = "all" | "30" | "90" | "365";
+type PortalLanguage = "pt" | "en";
+
+const GOOGLE_TRANSLATE_SCRIPT_ID = "farol-google-translate";
+const GOOGLE_TRANSLATE_COOKIE = "googtrans";
+
+type GoogleTranslateWindow = Window & {
+  google?: {
+    translate?: {
+      TranslateElement: new (
+        options: {
+          pageLanguage: string;
+          includedLanguages: string;
+          autoDisplay: boolean;
+        },
+        elementId: string,
+      ) => void;
+    };
+  };
+  farolGoogleTranslateInit?: () => void;
+};
+
+function LanguageToggle() {
+  const [language, setLanguage] = useState<PortalLanguage>("pt");
+
+  useEffect(() => {
+    const savedLanguage = window.localStorage.getItem("farol-language");
+    const cookieLanguage = document.cookie.includes(`${GOOGLE_TRANSLATE_COOKIE}=/pt/en`)
+      ? "en"
+      : "pt";
+    const activeLanguage: PortalLanguage =
+      savedLanguage === "en" || savedLanguage === "pt"
+        ? savedLanguage
+        : cookieLanguage;
+
+    setLanguage(activeLanguage);
+    document.documentElement.lang = activeLanguage === "en" ? "en" : "pt-BR";
+    document.documentElement.dataset.portalLanguage = activeLanguage;
+
+    const translateWindow = window as GoogleTranslateWindow;
+    const initializeTranslate = () => {
+      const TranslateElement = translateWindow.google?.translate?.TranslateElement;
+      const host = document.getElementById("google_translate_element");
+      if (!TranslateElement || !host || host.childElementCount > 0) return;
+
+      new TranslateElement(
+        {
+          pageLanguage: "pt",
+          includedLanguages: "en,pt",
+          autoDisplay: false,
+        },
+        "google_translate_element",
+      );
+    };
+
+    if (activeLanguage === "en") {
+      translateWindow.farolGoogleTranslateInit = initializeTranslate;
+      if (translateWindow.google?.translate?.TranslateElement) {
+        initializeTranslate();
+      } else if (!document.getElementById(GOOGLE_TRANSLATE_SCRIPT_ID)) {
+        const script = document.createElement("script");
+        script.id = GOOGLE_TRANSLATE_SCRIPT_ID;
+        script.src =
+          "https://translate.google.com/translate_a/element.js?cb=farolGoogleTranslateInit";
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    }
+  }, []);
+
+  const toggleLanguage = () => {
+    const nextLanguage: PortalLanguage = language === "pt" ? "en" : "pt";
+    const cookieValue = nextLanguage === "en" ? "/pt/en" : "/pt/pt";
+
+    window.localStorage.setItem("farol-language", nextLanguage);
+    document.cookie = `${GOOGLE_TRANSLATE_COOKIE}=${cookieValue}; path=/; SameSite=Lax`;
+    if (window.location.hostname && window.location.hostname !== "localhost") {
+      document.cookie = `${GOOGLE_TRANSLATE_COOKIE}=${cookieValue}; domain=.${window.location.hostname}; path=/; SameSite=Lax`;
+    }
+    window.location.reload();
+  };
+
+  const targetLanguage = language === "pt" ? "English" : "português";
+
+  return (
+    <>
+      <div id="google_translate_element" className="google-translate-host" aria-hidden="true" />
+      <button
+        className="language-toggle notranslate"
+        type="button"
+        onClick={toggleLanguage}
+        aria-label={`Mudar todo o site para ${targetLanguage}`}
+        title={`Mudar para ${targetLanguage}`}
+        translate="no"
+      >
+        <Languages aria-hidden="true" />
+        <span>{language === "pt" ? "EN" : "PT"}</span>
+      </button>
+    </>
+  );
+}
 
 function FarolName({ className = "" }: { className?: string }) {
   return (
@@ -2262,6 +2363,7 @@ export default function FarolPortal() {
       {searchOpen && (
         <SearchDialog open onClose={() => setSearchOpen(false)} navigate={navigate} />
       )}
+      <LanguageToggle />
     </>
   );
 }
