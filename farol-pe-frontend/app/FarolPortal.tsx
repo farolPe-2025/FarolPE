@@ -10,7 +10,6 @@ import {
   useSyncExternalStore,
   type CSSProperties,
   type MouseEvent as ReactMouseEvent,
-  type PointerEvent as ReactPointerEvent,
   type ReactNode,
   type SyntheticEvent,
 } from "react";
@@ -32,10 +31,6 @@ import {
   Users,
   X,
   BarChart3,
-  Hand,
-  RotateCcw,
-  ZoomIn,
-  ZoomOut,
 } from "lucide-react";
 import {
   mainLinks,
@@ -299,7 +294,6 @@ function DeferredFrame({
   minimumMs = PANEL_REVEAL_MINIMUM_MS,
   settleMs = PANEL_REVEAL_SETTLE_MS,
   onFrameLoad,
-  showZoomControls = false,
 }: {
   id?: string;
   src: string;
@@ -309,7 +303,6 @@ function DeferredFrame({
   minimumMs?: number;
   settleMs?: number;
   onFrameLoad?: (event: SyntheticEvent<HTMLIFrameElement>) => void;
-  showZoomControls?: boolean;
 }) {
   const clientReady = useSyncExternalStore(
     subscribeToHydration,
@@ -318,11 +311,6 @@ function DeferredFrame({
   );
   const [attempt, setAttempt] = useState(0);
   const [phase, setPhase] = useState<FramePhase>("loading");
-  const [zoom, setZoom] = useState(100);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [panMode, setPanMode] = useState(false);
-  const draggingRef = useRef(false);
-  const dragStartRef = useRef({ pointerX: 0, pointerY: 0, panX: 0, panY: 0 });
   const startedAtRef = useRef(0);
   const revealTimerRef = useRef<number | null>(null);
   const timeoutTimerRef = useRef<number | null>(null);
@@ -369,59 +357,12 @@ function DeferredFrame({
 
   const ready = phase === "ready";
   const busy = phase === "loading" || phase === "settling";
-  const zoomBy = (delta: number) => {
-    setZoom((value) => {
-      const nextZoom = Math.min(140, Math.max(70, value + delta));
-      if (nextZoom <= 100) {
-        setPan({ x: 0, y: 0 });
-        setPanMode(false);
-      }
-      return nextZoom;
-    });
-  };
-  const resetView = () => {
-    setZoom(100);
-    setPan({ x: 0, y: 0 });
-    setPanMode(false);
-  };
-  const handlePanStart = (event: ReactPointerEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    draggingRef.current = true;
-    dragStartRef.current = {
-      pointerX: event.clientX,
-      pointerY: event.clientY,
-      panX: pan.x,
-      panY: pan.y,
-    };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    event.currentTarget.dataset.dragging = "true";
-  };
-  const handlePanMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!draggingRef.current) return;
-    event.preventDefault();
-    setPan({
-      x: dragStartRef.current.panX + event.clientX - dragStartRef.current.pointerX,
-      y: dragStartRef.current.panY + event.clientY - dragStartRef.current.pointerY,
-    });
-  };
-  const handlePanEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
-    draggingRef.current = false;
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-    delete event.currentTarget.dataset.dragging;
-  };
 
   return (
     <div
-      className={`iframe-wrap${showZoomControls ? " has-react-zoom" : ""}${panMode ? " is-pan-mode" : ""}`}
+      className="iframe-wrap"
       aria-busy={busy}
       data-frame-state={phase}
-      style={showZoomControls ? ({
-        "--report-zoom": zoom / 100,
-        "--report-pan-x": `${pan.x}px`,
-        "--report-pan-y": `${pan.y}px`,
-      } as CSSProperties) : undefined}
     >
       {!ready && (
         <div
@@ -476,42 +417,6 @@ function DeferredFrame({
           tabIndex={ready ? 0 : -1}
           aria-hidden={!ready}
         />
-      )}
-      {showZoomControls && ready && zoom > 100 && panMode && (
-        <div
-          className="report-pan-surface"
-          aria-label="Arraste para mover o painel ampliado"
-          onPointerDown={handlePanStart}
-          onPointerMove={handlePanMove}
-          onPointerUp={handlePanEnd}
-          onPointerCancel={handlePanEnd}
-          onLostPointerCapture={handlePanEnd}
-        />
-      )}
-      {showZoomControls && ready && (
-        <div className="report-zoom-controls" role="group" aria-label="Controles de zoom do painel">
-          <button type="button" onClick={() => zoomBy(-10)} disabled={zoom <= 70} aria-label="Diminuir zoom" title="Diminuir zoom">
-            <ZoomOut aria-hidden="true" />
-          </button>
-          <output aria-live="polite" aria-label={`Zoom em ${zoom}%`}>{zoom}%</output>
-          <button type="button" onClick={() => zoomBy(10)} disabled={zoom >= 140} aria-label="Aumentar zoom" title="Aumentar zoom">
-            <ZoomIn aria-hidden="true" />
-          </button>
-          <button
-            className={`report-pan-toggle${panMode ? " is-active" : ""}`}
-            type="button"
-            onClick={() => setPanMode((value) => !value)}
-            disabled={zoom <= 100}
-            aria-label={panMode ? "Desativar modo mover" : "Ativar modo mover"}
-            aria-pressed={panMode}
-            title={zoom <= 100 ? "Aumente o zoom para mover" : "Mover painel"}
-          >
-            <Hand aria-hidden="true" />
-          </button>
-          <button className="report-zoom-reset" type="button" onClick={resetView} disabled={zoom === 100 && pan.x === 0 && pan.y === 0} aria-label="Restaurar zoom para 100%" title="Restaurar zoom">
-            <RotateCcw aria-hidden="true" />
-          </button>
-        </div>
       )}
     </div>
   );
@@ -1511,7 +1416,6 @@ function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
             title={panel.title}
             loaderTitle="Carregando o painel"
             loaderDescription="Conectando à fonte de dados oficial…"
-            showZoomControls
           />
         </section>
       </main>
