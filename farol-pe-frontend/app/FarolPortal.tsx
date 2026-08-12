@@ -13,7 +13,6 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
   type SyntheticEvent,
-  type WheelEvent as ReactWheelEvent,
 } from "react";
 import { usePathname } from "next/navigation";
 import {
@@ -322,9 +321,7 @@ function DeferredFrame({
   const [zoom, setZoom] = useState(100);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [panMode, setPanMode] = useState(false);
-  const [ctrlZoomActive, setCtrlZoomActive] = useState(false);
   const draggingRef = useRef(false);
-  const lastWheelZoomRef = useRef(0);
   const dragStartRef = useRef({ pointerX: 0, pointerY: 0, panX: 0, panY: 0 });
   const startedAtRef = useRef(0);
   const revealTimerRef = useRef<number | null>(null);
@@ -347,27 +344,6 @@ function DeferredFrame({
       }
     };
   }, [attempt, clientReady, src]);
-
-  useEffect(() => {
-    if (!showZoomControls) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.key === "Control") setCtrlZoomActive(true);
-    };
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (!event.ctrlKey || event.key === "Control") setCtrlZoomActive(false);
-    };
-    const releaseCtrlZoom = () => setCtrlZoomActive(false);
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-    window.addEventListener("blur", releaseCtrlZoom);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-      window.removeEventListener("blur", releaseCtrlZoom);
-    };
-  }, [showZoomControls]);
 
   const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
     if (timeoutTimerRef.current !== null) {
@@ -407,15 +383,6 @@ function DeferredFrame({
     setZoom(100);
     setPan({ x: 0, y: 0 });
     setPanMode(false);
-  };
-  const handleCtrlWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
-    if (!event.ctrlKey) return;
-    event.preventDefault();
-
-    const now = performance.now();
-    if (now - lastWheelZoomRef.current < 80) return;
-    lastWheelZoomRef.current = now;
-    zoomBy(event.deltaY < 0 ? 10 : -10);
   };
   const handlePanStart = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -521,25 +488,12 @@ function DeferredFrame({
           onLostPointerCapture={handlePanEnd}
         />
       )}
-      {showZoomControls && ready && ctrlZoomActive && (
-        <div
-          className="report-wheel-zoom-surface"
-          aria-hidden="true"
-          onWheel={handleCtrlWheel}
-        />
-      )}
       {showZoomControls && ready && (
         <div className="report-zoom-controls" role="group" aria-label="Controles de zoom do painel">
           <button type="button" onClick={() => zoomBy(-10)} disabled={zoom <= 70} aria-label="Diminuir zoom" title="Diminuir zoom">
             <ZoomOut aria-hidden="true" />
           </button>
-          <output
-            aria-live="polite"
-            aria-label={`Zoom em ${zoom}%`}
-            title="Use Ctrl + rolagem sobre o painel"
-          >
-            {zoom}%
-          </output>
+          <output aria-live="polite" aria-label={`Zoom em ${zoom}%`}>{zoom}%</output>
           <button type="button" onClick={() => zoomBy(10)} disabled={zoom >= 140} aria-label="Aumentar zoom" title="Aumentar zoom">
             <ZoomIn aria-hidden="true" />
           </button>
