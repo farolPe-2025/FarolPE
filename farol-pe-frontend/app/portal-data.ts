@@ -586,8 +586,8 @@ export const summaryKpis = [
   },
   {
     label: "Comércio varejista restrito (PMC/IBGE)",
-    value: "+11,0%",
-    note: "Acumulado no ano até maio",
+    value: "+10,7%",
+    note: "Acumulado no ano até junho",
     tone: "gold",
   },
   {
@@ -601,7 +601,7 @@ export const summaryKpis = [
 export const summaryTable = [
   ["Atividade econômica", "+5,1%", "2º", "1º", "IBCR · BCB", "Atualizado"],
   ["Produção industrial", "+10,9%", "2º", "1º*", "PIM-PF · IBGE", "Atualizado"],
-  ["Comércio varejista", "+11,0%", "1º", "1º", "PMC · IBGE", "Atualizado"],
+  ["Comércio varejista", "+10,7%", "1º", "1º", "PMC · IBGE", "Atualizado"],
   ["Serviços", "-0,3%", "—", "—", "PMS · IBGE", "Atualizado"],
   ["Aberturas de empresas", "73.461", "9º", "2º", "Mapa de Empresas", "Pendente"],
   ["Saldo de empregos", "5.894", "6º", "2º", "Novo Caged", "Pendente"],

@@ -1660,7 +1660,7 @@ function EconomicPanoramaPage() {
       <section className="panel-stage">
         <DeferredFrame
           id="panorama-frame"
-          src="/painel-conjuntura-2026-08-11.html"
+          src="/painel-conjuntura-2026-08-13.html"
           title="Painel de Conjuntura Econômica de Pernambuco"
           loaderTitle="Carregando o panorama econômico"
           loaderDescription="Preparando os indicadores de Pernambuco…"

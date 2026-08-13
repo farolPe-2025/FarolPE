@@ -28,7 +28,7 @@ async function render(path = "/") {
 
 test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-13.html", import.meta.url),
     "utf8",
   );
 
@@ -79,26 +79,26 @@ test("mantem o panorama contido e rolavel em telas pequenas", async () => {
   );
   assert.match(
     panorama,
-    /Crescimento mensal<span>mai\/2026 sobre abr\/2026<\/span>/,
+    /Crescimento mensal<span>jun\/2026 sobre mai\/2026<\/span>/,
   );
   assert.match(
     panorama,
-    /Crescimento interanual<span>mai\/2026 sobre mai\/2025<\/span>/,
+    /Crescimento interanual<span>jun\/2026 sobre jun\/2025<\/span>/,
   );
   assert.match(
     panorama,
-    /Crescimento acumulado no ano<span>jan a mai\/2026 sobre jan a mai\/2025<\/span>/,
+    /Crescimento acumulado no ano<span>jan a jun\/2026 sobre jan a jun\/2025<\/span>/,
   );
   assert.match(
     panorama,
-    /Crescimento acumulado em 12 meses<span>jun\/25 a mai\/26 sobre jun\/24 a mai\/25<\/span>/,
+    /Crescimento acumulado em 12 meses<span>jul\/25 a jun\/26 sobre jul\/24 a jun\/25<\/span>/,
   );
   assert.equal(
-    (panorama.match(/Indústria geral \(PIM-PF\)\*/g) ?? []).length,
+    (panorama.match(/Indústria geral \(PIM-PF\)/g) ?? []).length,
     4,
   );
   assert.equal(
-    (panorama.match(/\* Dados referentes a jun\/2026\./g) ?? []).length,
+    (panorama.match(/¹ Dados referentes a mai\/2026\./g) ?? []).length,
     4,
   );
   assert.match(panorama, /@media \(max-width:720px\)[\s\S]*?\.site-h1\{[^}]*white-space:normal;/);
@@ -720,7 +720,7 @@ test("troca a lateral entre tópicos do panorama e catálogo de painéis", async
   const panelsResponse = await render("/paineis/atividade-economica");
   const panelsHtml = await panelsResponse.text();
   const panoramaDocument = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-13.html", import.meta.url),
     "utf8",
   );
 
@@ -842,7 +842,7 @@ test("carrega e aplica Inter no portal e no panorama incorporado", async () => {
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-13.html", import.meta.url),
     "utf8",
   );
   const font = await readFile(
@@ -998,7 +998,7 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
     "utf8",
   );
   const panoramaDocument = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-13.html", import.meta.url),
     "utf8",
   );
   const symbol = await readFile(
@@ -1106,7 +1106,7 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
     "utf8",
   );
   const panorama = await readFile(
-    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
+    new URL("../public/painel-conjuntura-2026-08-13.html", import.meta.url),
     "utf8",
   );
   const stylesheet = await readFile(
@@ -1115,13 +1115,13 @@ test("sincroniza os quatro sinais da home com fundo azul e cards brancos", async
   );
   const summaryKpis = dataSource.match(/export const summaryKpis = \[[\s\S]*?\n\];/)?.[0] ?? "";
 
-  for (const value of ["+5,1%", "+10,9%", "+11,0%", "+6.162"]) {
+  for (const value of ["+5,1%", "+10,9%", "+10,7%", "+6.162"]) {
     assert.ok(summaryKpis.includes(`value: "${value}"`));
     assert.ok(panorama.includes(value));
   }
 
   assert.match(panorama, /Panorama econômico de Pernambuco/i);
-  assert.match(panorama, /Atualizado em 11 de agosto de 2026/);
+  assert.match(panorama, /Atualizado em 13 de agosto de 2026/);
   assert.match(
     stylesheet,
     /\.home-analysis \{\s*background:[\s\S]*?linear-gradient\(145deg, #071a38 0%, #0a2447 54%, #0d3158 100%\);\s*color: #fff;/,
