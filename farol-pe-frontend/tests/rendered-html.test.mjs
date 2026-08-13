@@ -974,6 +974,10 @@ test("mantém o tema aberto no azul oficial e o mesmo brilho ao painel e panoram
     stylesheet,
     /\.sidebar-panel-row \.sidebar-link\.is-active \{[\s\S]*?background: transparent;/,
   );
+  assert.match(
+    stylesheet,
+    /\.sidebar-panel-row:has\(\.sidebar-link\.is-active\):hover \.sidebar-info-link,[\s\S]*?color: var\(--brand-yellow\);/,
+  );
   assert.doesNotMatch(
     stylesheet,
     /\.sidebar-link\.is-active[^\{]*\{[^\}]*background:\s*var\(--brand-blue-dark\)/,

@@ -7102,6 +7102,13 @@ body * {
   color: #d5e6ef;
 }
 
+.sidebar-panel-row:has(.sidebar-link.is-active):hover .sidebar-info-link,
+.sidebar-panel-row:has(.sidebar-link.is-active) .sidebar-info-link:hover,
+.sidebar-panel-row:has(.sidebar-link.is-active) .sidebar-info-link:focus-visible {
+  color: var(--brand-yellow);
+  transform: scale(1.12);
+}
+
 /* Topo móvel: azul oficial e assinatura horizontal. */
 @media (max-width: 860px) {
   .mobile-topbar {
