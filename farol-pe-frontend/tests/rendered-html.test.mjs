@@ -989,27 +989,41 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
     new URL("../app/globals.css", import.meta.url),
     "utf8",
   );
+  const readinessSource = await readFile(
+    new URL("../app/frame-readiness.ts", import.meta.url),
+    "utf8",
+  );
+  const panoramaDocument = await readFile(
+    new URL("../public/painel-conjuntura-2026-08-11.html", import.meta.url),
+    "utf8",
+  );
   const symbol = await readFile(
     new URL("../public/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png", import.meta.url),
   );
 
   assert.match(source, /PANEL_REVEAL_MINIMUM_MS = 3_800/);
   assert.match(source, /PANEL_REVEAL_SETTLE_MS = 2_700/);
-  assert.match(source, /POWER_BI_RENDER_FALLBACK_MS = 2_000/);
-  assert.match(source, /POWER_BI_CACHED_FALLBACK_MS = 350/);
-  assert.match(source, /POWER_BI_CACHED_MINIMUM_MS = 500/);
   assert.match(source, /FRAME_LOAD_TIMEOUT_MS = 30_000/);
+  assert.match(source, /FRAME_REVEAL_TRANSITION_MS = 400/);
+  assert.match(source, /POWER_BI_MAX_WAIT_MS = 4_500/);
+  assert.match(source, /POWER_BI_PAGE_LOADED_SETTLE_MS = 1_500/);
   assert.match(source, /useSyncExternalStore/);
   assert.match(source, /useLayoutEffect/);
   assert.match(source, /getServerHydrationSnapshot = \(\) => false/);
   assert.match(source, /aria-busy=\{busy\}/);
   assert.match(source, /loading="eager"/);
   assert.match(source, /Tentar novamente/);
-  assert.match(source, /getPowerBiEventName\(event\.data\) !== "rendered"/);
   assert.match(source, /event\.source !== iframeRef\.current\?\.contentWindow/);
-  assert.match(source, /window\.sessionStorage\.getItem\(`\$\{FRAME_READY_CACHE_PREFIX\}\$\{src\}`\)/);
-  assert.match(source, /window\.sessionStorage\.setItem\(`\$\{FRAME_READY_CACHE_PREFIX\}\$\{src\}`, "1"\)/);
-  assert.match(source, /cached \? POWER_BI_CACHED_FALLBACK_MS : POWER_BI_RENDER_FALLBACK_MS/);
+  assert.match(source, /isPowerBiRenderedMessage\(event\.data\)/);
+  assert.match(source, /isPowerBiPageLoadedMessage\(event\.data\)/);
+  assert.match(source, /completionStartedRef\.current/);
+  assert.match(source, /phase === "revealing" \|\| ready/);
+  assert.match(source, /readyMessageType="farol-panorama-ready"/);
+  assert.match(readinessSource, /POWER_BI_RENDERED_EVENT_PATH/);
+  assert.match(readinessSource, /reportpageloaded/);
+  assert.match(panoramaDocument, /document\.fonts\.ready/);
+  assert.match(panoramaDocument, /farol-panorama-ready/);
+  assert.match(panoramaDocument, /window\.requestAnimationFrame/);
   assert.match(source, /className="lighthouse-loader-base"/);
   assert.match(source, /className="lighthouse-loader-yellow"/);
   const deferredFrameSource = source.match(
@@ -1031,11 +1045,54 @@ test("anima o farol durante o carregamento protegido do BI", async () => {
   );
   assert.match(
     stylesheet,
-    /\.iframe-wrap iframe \{[\s\S]*?visibility: hidden;[\s\S]*?pointer-events: none;/,
+    /\.iframe-wrap iframe \{[\s\S]*?pointer-events: none;[\s\S]*?opacity: 0;/,
   );
+  assert.doesNotMatch(stylesheet, /\.iframe-wrap iframe \{[^}]*visibility: hidden;/);
   assert.match(
     stylesheet,
     /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.lighthouse-loader-yellow \{[\s\S]*?animation: none !important;/,
+  );
+});
+
+test("reconhece apenas sinais confiáveis de prontidão dos painéis", async () => {
+  const readinessModuleUrl = new URL(
+    "../app/frame-readiness.ts",
+    import.meta.url,
+  );
+  readinessModuleUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+  const {
+    isPowerBiPageLoadedMessage,
+    isPowerBiRenderedMessage,
+  } = await import(readinessModuleUrl.href);
+
+  assert.equal(isPowerBiRenderedMessage({ eventName: "rendered" }), true);
+  assert.equal(
+    isPowerBiRenderedMessage({
+      type: "event",
+      body: { path: "/reports/current/events/rendered" },
+    }),
+    true,
+  );
+  assert.equal(
+    isPowerBiRenderedMessage(
+      JSON.stringify({ detail: { name: "rendered" } }),
+    ),
+    true,
+  );
+  assert.equal(isPowerBiRenderedMessage({ eventName: "loaded" }), false);
+  assert.equal(
+    isPowerBiRenderedMessage({ telemetry: { type: "rendered" } }),
+    false,
+  );
+  assert.equal(
+    isPowerBiPageLoadedMessage(
+      JSON.stringify({ event: "reportPageLoaded", error: "" }),
+    ),
+    true,
+  );
+  assert.equal(
+    isPowerBiPageLoadedMessage({ event: "reportPageLoaded", error: "failed" }),
+    false,
   );
 });
 

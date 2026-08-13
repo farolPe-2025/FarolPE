@@ -2048,11 +2048,26 @@ function secao(k){
   for(var j=0;j<bs.length;j++){ bs[j].className='navbtn'+(bs[j].getAttribute('data-nav')===k?' active':''); }
   window.scrollTo({top:0,behavior:'smooth'});
   notificarSecao(k);
+  notificarPronto(k);
 }
 function notificarSecao(k){
   if(window.parent!==window){
     window.parent.postMessage({type:'farol-panorama-section',section:k},window.location.origin);
   }
+}
+var panoramaReadySequence=0;
+function notificarPronto(k){
+  if(window.parent===window){return;}
+  var sequence=++panoramaReadySequence;
+  var fontsReady=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
+  Promise.resolve(fontsReady).catch(function(){}).then(function(){
+    window.requestAnimationFrame(function(){
+      window.requestAnimationFrame(function(){
+        if(sequence!==panoramaReadySequence){return;}
+        window.parent.postMessage({type:'farol-panorama-ready',section:k},window.location.origin);
+      });
+    });
+  });
 }
 window.addEventListener('message',function(event){
   if(event.source!==window.parent || event.origin!==window.location.origin){return;}

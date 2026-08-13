@@ -40,6 +40,10 @@ import {
   summaryTable,
   type Panel,
 } from "./portal-data";
+import {
+  isPowerBiPageLoadedMessage,
+  isPowerBiRenderedMessage,
+} from "./frame-readiness";
 
 type Navigate = (href: string) => void;
 
@@ -47,10 +51,11 @@ const PANEL_REVEAL_MINIMUM_MS = 3_800;
 const PANEL_REVEAL_SETTLE_MS = 2_700;
 const PANORAMA_REVEAL_MINIMUM_MS = 900;
 const FRAME_LOAD_TIMEOUT_MS = 30_000;
-const POWER_BI_RENDER_FALLBACK_MS = 2_000;
-const POWER_BI_CACHED_FALLBACK_MS = 350;
-const POWER_BI_CACHED_MINIMUM_MS = 500;
-const FRAME_READY_CACHE_PREFIX = "farol:frame-ready:";
+const FRAME_REVEAL_TRANSITION_MS = 400;
+const POWER_BI_MAX_WAIT_MS = 4_500;
+// Publish-to-web exposes page initialization, but not all-visuals-rendered.
+// Keep our opaque cover up while its first visual queries finish painting.
+const POWER_BI_PAGE_LOADED_SETTLE_MS = 1_500;
 
 const subscribeToHydration = () => () => {};
 const getClientHydrationSnapshot = () => true;
@@ -228,6 +233,26 @@ const panoramaTopics = [
 ] as const;
 
 type PanoramaTopicKey = (typeof panoramaTopics)[number]["key"];
+const PANORAMA_TOPIC_STORAGE_KEY = "farol-panorama-topic";
+
+function readStoredPanoramaTopic(): PanoramaTopicKey | null {
+  try {
+    const topic = window.sessionStorage.getItem(
+      PANORAMA_TOPIC_STORAGE_KEY,
+    ) as PanoramaTopicKey | null;
+    return panoramaTopics.some((item) => item.key === topic) ? topic : null;
+  } catch {
+    return null;
+  }
+}
+
+function storePanoramaTopic(topic: PanoramaTopicKey) {
+  try {
+    window.sessionStorage.setItem(PANORAMA_TOPIC_STORAGE_KEY, topic);
+  } catch {
+    // Navigation continues normally when browser storage is unavailable.
+  }
+}
 
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
@@ -287,25 +312,7 @@ function PageHero({
   );
 }
 
-type FramePhase = "loading" | "settling" | "ready" | "timeout";
-
-function getPowerBiEventName(data: unknown): string | undefined {
-  let message = data;
-  if (typeof message === "string") {
-    try {
-      message = JSON.parse(message) as unknown;
-    } catch {
-      return undefined;
-    }
-  }
-  if (!message || typeof message !== "object") return undefined;
-
-  const record = message as Record<string, unknown>;
-  for (const key of ["eventName", "name", "event", "type"]) {
-    if (typeof record[key] === "string") return record[key].toLowerCase();
-  }
-  return getPowerBiEventName(record.body ?? record.detail);
-}
+type FramePhase = "loading" | "settling" | "revealing" | "ready" | "timeout";
 
 function isPowerBiSource(src: string) {
   return /(?:app\.powerbi\.com|app\.fabric\.microsoft\.com)/i.test(src);
@@ -333,6 +340,7 @@ function DeferredFrame({
   loaderDescription,
   minimumMs = PANEL_REVEAL_MINIMUM_MS,
   settleMs = PANEL_REVEAL_SETTLE_MS,
+  readyMessageType,
   onFrameLoad,
 }: {
   id?: string;
@@ -342,6 +350,7 @@ function DeferredFrame({
   loaderDescription: string;
   minimumMs?: number;
   settleMs?: number;
+  readyMessageType?: string;
   onFrameLoad?: (event: SyntheticEvent<HTMLIFrameElement>) => void;
 }) {
   const clientReady = useSyncExternalStore(
@@ -352,24 +361,26 @@ function DeferredFrame({
   const [attempt, setAttempt] = useState(0);
   const [phase, setPhase] = useState<FramePhase>("loading");
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const renderedInSessionRef = useRef(false);
+  const completionStartedRef = useRef(false);
   const startedAtRef = useRef(0);
   const revealTimerRef = useRef<number | null>(null);
   const timeoutTimerRef = useRef<number | null>(null);
+  const maximumWaitTimerRef = useRef<number | null>(null);
+  const revealFrameRef = useRef<((minimumDelay?: number) => void) | null>(null);
 
   useLayoutEffect(() => {
     if (!clientReady) return;
 
-    try {
-      renderedInSessionRef.current =
-        window.sessionStorage.getItem(`${FRAME_READY_CACHE_PREFIX}${src}`) === "1";
-    } catch {
-      renderedInSessionRef.current = false;
-    }
+    completionStartedRef.current = false;
     startedAtRef.current = performance.now();
     timeoutTimerRef.current = window.setTimeout(() => {
       setPhase("timeout");
     }, FRAME_LOAD_TIMEOUT_MS);
+    if (isPowerBiSource(src)) {
+      maximumWaitTimerRef.current = window.setTimeout(() => {
+        revealFrameRef.current?.(0);
+      }, POWER_BI_MAX_WAIT_MS);
+    }
 
     return () => {
       if (revealTimerRef.current !== null) {
@@ -378,62 +389,75 @@ function DeferredFrame({
       if (timeoutTimerRef.current !== null) {
         window.clearTimeout(timeoutTimerRef.current);
       }
+      if (maximumWaitTimerRef.current !== null) {
+        window.clearTimeout(maximumWaitTimerRef.current);
+      }
     };
   }, [attempt, clientReady, src]);
 
-  const revealFrame = useCallback((minimumDelay = settleMs, useFullMinimum = true) => {
+  const revealFrame = useCallback((minimumDelay = settleMs) => {
+    if (completionStartedRef.current) return;
+    completionStartedRef.current = true;
+
     if (timeoutTimerRef.current !== null) {
       window.clearTimeout(timeoutTimerRef.current);
     }
     if (revealTimerRef.current !== null) {
       window.clearTimeout(revealTimerRef.current);
     }
+    if (maximumWaitTimerRef.current !== null) {
+      window.clearTimeout(maximumWaitTimerRef.current);
+    }
 
     const elapsed = performance.now() - startedAtRef.current;
-    const effectiveMinimum = useFullMinimum
-      ? minimumMs
-      : POWER_BI_CACHED_MINIMUM_MS;
-    const revealDelay = Math.max(minimumDelay, effectiveMinimum - elapsed);
+    const revealDelay = Math.max(minimumDelay, minimumMs - elapsed);
     setPhase("settling");
     revealTimerRef.current = window.setTimeout(() => {
-      if (isPowerBiSource(src)) {
-        renderedInSessionRef.current = true;
-        try {
-          window.sessionStorage.setItem(`${FRAME_READY_CACHE_PREFIX}${src}`, "1");
-        } catch {
-          // The report still opens normally when browser storage is unavailable.
-        }
-      }
-      setPhase("ready");
+      setPhase("revealing");
+      revealTimerRef.current = window.setTimeout(() => {
+        setPhase("ready");
+      }, FRAME_REVEAL_TRANSITION_MS);
     }, revealDelay);
-  }, [minimumMs, settleMs, src]);
+  }, [minimumMs, settleMs]);
+  revealFrameRef.current = revealFrame;
 
-  useEffect(() => {
-    if (!clientReady || !isPowerBiSource(src)) return;
+  useLayoutEffect(() => {
+    if (!clientReady) return;
 
-    const handlePowerBiMessage = (event: MessageEvent) => {
-      if (
-        event.source !== iframeRef.current?.contentWindow ||
-        !isTrustedPowerBiOrigin(event.origin) ||
-        getPowerBiEventName(event.data) !== "rendered"
-      ) {
+    const powerBiSource = isPowerBiSource(src);
+    if (!powerBiSource && !readyMessageType) return;
+
+    const handleReadyMessage = (event: MessageEvent) => {
+      if (event.source !== iframeRef.current?.contentWindow) return;
+
+      if (powerBiSource) {
+        if (!isTrustedPowerBiOrigin(event.origin)) return;
+
+        const rendered = isPowerBiRenderedMessage(event.data);
+        if (
+          !rendered &&
+          !isPowerBiPageLoadedMessage(event.data)
+        ) {
+          return;
+        }
+        revealFrame(rendered ? 100 : POWER_BI_PAGE_LOADED_SETTLE_MS);
         return;
       }
-      revealFrame(100, !renderedInSessionRef.current);
+
+      if (
+        event.origin === window.location.origin &&
+        event.data?.type === readyMessageType
+      ) {
+        revealFrame(settleMs);
+      }
     };
 
-    window.addEventListener("message", handlePowerBiMessage);
-    return () => window.removeEventListener("message", handlePowerBiMessage);
-  }, [attempt, clientReady, revealFrame, src]);
+    window.addEventListener("message", handleReadyMessage);
+    return () => window.removeEventListener("message", handleReadyMessage);
+  }, [attempt, clientReady, readyMessageType, revealFrame, settleMs, src]);
 
   const handleLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
-    if (isPowerBiSource(src)) {
-      const cached = renderedInSessionRef.current;
-      revealFrame(
-        cached ? POWER_BI_CACHED_FALLBACK_MS : POWER_BI_RENDER_FALLBACK_MS,
-        !cached,
-      );
-    } else {
+    if (!isPowerBiSource(src) && !readyMessageType) {
       revealFrame(settleMs);
     }
     onFrameLoad?.(event);
@@ -445,7 +469,8 @@ function DeferredFrame({
   };
 
   const ready = phase === "ready";
-  const busy = phase === "loading" || phase === "settling";
+  const frameVisible = phase === "revealing" || ready;
+  const busy = phase !== "ready" && phase !== "timeout";
 
   return (
     <div
@@ -486,7 +511,9 @@ function DeferredFrame({
                 />
               </span>
               <strong>
-                {phase === "settling" ? "Finalizando a visualização" : loaderTitle}
+                {phase === "settling" || phase === "revealing"
+                  ? "Finalizando a visualização"
+                  : loaderTitle}
               </strong>
               <small>{loaderDescription}</small>
             </>
@@ -503,7 +530,7 @@ function DeferredFrame({
           loading="eager"
           allowFullScreen
           onLoad={handleLoad}
-          className={ready ? "is-loaded" : ""}
+          className={frameVisible ? "is-loaded" : ""}
           tabIndex={ready ? 0 : -1}
           aria-hidden={!ready}
         />
@@ -932,9 +959,7 @@ function Sidebar({
       if (message?.type !== "farol-panorama-section") return;
       if (!panoramaTopics.some((topic) => topic.key === message.section)) return;
 
-      const requestedTopic = window.sessionStorage.getItem(
-        "farol-panorama-topic",
-      ) as PanoramaTopicKey | null;
+      const requestedTopic = readStoredPanoramaTopic();
 
       if (
         requestedTopic &&
@@ -971,7 +996,7 @@ function Sidebar({
   };
 
   const showPanorama = () => {
-    window.sessionStorage.setItem("farol-panorama-topic", "__all");
+    storePanoramaTopic("__all");
     setActivePanoramaTopic("__all");
 
     if (!isPanoramaContext) {
@@ -993,7 +1018,7 @@ function Sidebar({
   };
 
   const selectPanoramaTopic = (topic: PanoramaTopicKey) => {
-    window.sessionStorage.setItem("farol-panorama-topic", topic);
+    storePanoramaTopic(topic);
     setActivePanoramaTopic(topic);
 
     if (!isPanoramaContext) {
@@ -1641,10 +1666,9 @@ function EconomicPanoramaPage() {
           loaderDescription="Preparando os indicadores de Pernambuco…"
           minimumMs={PANORAMA_REVEAL_MINIMUM_MS}
           settleMs={250}
+          readyMessageType="farol-panorama-ready"
           onFrameLoad={(event) => {
-              const storedTopic = window.sessionStorage.getItem(
-                "farol-panorama-topic",
-              ) as PanoramaTopicKey | null;
+              const storedTopic = readStoredPanoramaTopic();
               const requestedTopic = panoramaTopics.some(
                 (topic) => topic.key === storedTopic,
               )
