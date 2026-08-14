@@ -853,36 +853,23 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
         </div>
         <div className="home-why-copy reveal-on-scroll">
           <p>
-            Desde a Antiguidade, os faróis representam muito mais do que
-            estruturas construídas à beira-mar. São símbolos de orientação,
-            segurança e confiança. Em meio à imensidão dos oceanos, sua luz
-            nunca conduziu embarcações diretamente, mas ofereceu aos navegantes
-            a informação necessária para que escolhessem, com segurança, o
-            melhor caminho até seu destino. O farol não substituía a decisão do
-            comandante; iluminava o percurso para que ela fosse tomada com
-            maior precisão.
+            Assim como os faróis orientam navegadores em direção ao destino
+            seguro sem substituir o comando da embarcação, o <FarolName /> nasce
+            para iluminar a tomada de decisão em um ambiente econômico e social
+            dinâmico e desafiador.
           </p>
           <p>
-            Hoje, os mares deram lugar a um ambiente igualmente dinâmico e
-            desafiador: a economia, a sociedade e os mercados. Gestores
-            públicos, investidores, empresários, pesquisadores e cidadãos
-            também enfrentam incertezas e precisam tomar decisões em um cenário
-            de constantes transformações. Nesse contexto, surge o <FarolName />.
+            Gestores públicos, investidores, empresários e cidadãos enfrentam
+            incertezas diárias. Para navegar por esse cenário com precisão, o
+            {" "}<FarolName /> traduz dados, monitora tendências e antecipa desafios,
+            transformando análises complexas em um panorama claro da realidade
+            socioeconômica do Estado.
           </p>
           <p>
-            Por meio da análise de informações, do monitoramento contínuo e da
-            produção de conhecimento qualificado, o <FarolName /> revela
-            tendências, identifica oportunidades, antecipa desafios e oferece
-            subsídios para decisões fundamentadas em evidências. Cada indicador
-            analisado representa um ponto de luz que, integrado a diversos
-            outros, forma um amplo panorama da realidade socioeconômica do
-            Estado.
-          </p>
-          <p>
-            Dessa forma, o compromisso do <FarolName /> é fortalecer a
-            governança, ampliar a transparência, estimular o ambiente de
-            negócios e contribuir para um desenvolvimento sustentável, baseado
-            em informação confiável e visão de longo prazo.
+            Dessa forma, nosso compromisso é fortalecer a governança, ampliar a
+            transparência, estimular o ambiente de negócios e contribuir para
+            um desenvolvimento sustentável baseado em evidências e visão de
+            longo prazo.
           </p>
         </div>
       </section>

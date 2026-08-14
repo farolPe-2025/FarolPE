@@ -792,8 +792,8 @@ test("explica por que o nome FarolPE logo após os quatro sinais", async () => {
 
   assert.match(html, /class="home-why"/);
   assert.match(html, /id="home-why-title"/);
-  assert.match(html, /Desde a Antiguidade, os faróis representam muito mais/);
-  assert.match(html, /O farol não substituía a decisão do comandante/);
+  assert.match(html, /Assim como os faróis orientam navegadores/);
+  assert.match(html, /traduz dados, monitora tendências e antecipa desafios/);
   assert.match(html, /fortalecer a governança, ampliar a transparência/);
   assert.ok(
     html.indexOf('class="home-analysis"') < html.indexOf('class="home-why"'),
