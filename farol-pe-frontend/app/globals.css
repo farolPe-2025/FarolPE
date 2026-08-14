@@ -7102,7 +7102,6 @@ body * {
   color: #d5e6ef;
 }
 
-.sidebar-panel-row:has(.sidebar-link.is-active):hover .sidebar-info-link,
 .sidebar-panel-row:has(.sidebar-link.is-active) .sidebar-info-link:hover,
 .sidebar-panel-row:has(.sidebar-link.is-active) .sidebar-info-link:focus-visible {
   color: var(--brand-yellow);
