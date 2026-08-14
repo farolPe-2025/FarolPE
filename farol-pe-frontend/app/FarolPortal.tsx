@@ -1975,7 +1975,11 @@ function AboutPage({ navigate }: { navigate: Navigate }) {
     role: "Secretária de Desenvolvimento Econômico",
     members: ["Danielle Jar Souto"],
   },
-   {
+  {
+    role: "Chefe de Gabinete da Secretaria de Desenvolvimento Econômico",
+    members: ["Gustavo Martins de Andrade"],
+  },
+  {
     role: "Secretário Executivo de Atração de Investimentos e Estudos Econômicos",
     members: ["Pedro Leonardo Lacerda"],
   },
