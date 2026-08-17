@@ -788,7 +788,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
 
               <button
                 className="button button-ghost"
-                onClick={() => navigate("/resumo")}
+                onClick={() => navigate("/panorama")}
               >
                 <Compass className="action-icon" aria-hidden="true" />
                 <span>Conheça o panorama do estado</span>
@@ -820,7 +820,7 @@ function Home({ navigate, onSearch }: { navigate: Navigate; onSearch: () => void
               Indicadores selecionados para uma leitura objetiva do cenário econômico.
             </span>
           </div>
-          <button onClick={() => navigate("/resumo")}>Ver análise completa <span>→</span></button>
+          <button onClick={() => navigate("/panorama")}>Ver análise completa <span>→</span></button>
         </div>
         <div className="analysis-grid">
           {summaryKpis.map((item, index) => (
@@ -899,7 +899,7 @@ function Sidebar({
   onSearch: () => void;
   onToggleCollapse: () => void;
 }) {
-  const isPanoramaContext = path === "/resumo";
+  const isPanoramaContext = path === "/panorama";
   const isPanelsContext =
     path.startsWith("/paineis/") || path.startsWith("/indicadores/");
   const activePanelSlug =
@@ -987,7 +987,7 @@ function Sidebar({
     setActivePanoramaTopic("__all");
 
     if (!isPanoramaContext) {
-      navigate("/resumo");
+      navigate("/panorama");
       return;
     }
 
@@ -1009,7 +1009,7 @@ function Sidebar({
     setActivePanoramaTopic(topic);
 
     if (!isPanoramaContext) {
-      navigate("/resumo");
+      navigate("/panorama");
       onClose();
       return;
     }
@@ -2248,7 +2248,7 @@ export default function FarolPortal() {
     : undefined;
 
   let content: React.ReactNode;
-  if (pathname === "/resumo") content = <EconomicPanoramaPage />;
+  if (pathname === "/panorama") content = <EconomicPanoramaPage />;
   else if (pathname === "/sobre") content = <AboutPage navigate={navigate} />;
   else if (pathname === "/dicionario-de-dados") content = <DataDictionaryPage />;
   else if (pathname === "/publicacoes") content = <PublicationsPage />;

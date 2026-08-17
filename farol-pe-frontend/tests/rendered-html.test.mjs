@@ -177,7 +177,7 @@ test("remove as faixas multicoloridas do menu e da home", async () => {
 
 test("renderiza rotas internas por URL", async () => {
   for (const path of [
-    "/resumo",
+    "/panorama",
     "/sobre",
     "/publicacoes",
     "/dicionario-de-dados",
@@ -663,7 +663,7 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
   );
   assert.match(
     source,
-    /if \(!isPanoramaContext\) \{\s*navigate\("\/resumo"\);\s*onClose\(\);\s*return;/,
+    /if \(!isPanoramaContext\) \{\s*navigate\("\/panorama"\);\s*onClose\(\);\s*return;/,
   );
   assert.match(source, /aria-label="Acesso rápido aos painéis"/);
   assert.match(source, /className="collapsed-panels-group-toggle"/);
@@ -715,7 +715,7 @@ test("amplia o menu lateral no desktop e preserva sua rolagem", async () => {
 });
 
 test("troca a lateral entre tópicos do panorama e catálogo de painéis", async () => {
-  const panoramaResponse = await render("/resumo");
+  const panoramaResponse = await render("/panorama");
   const panoramaHtml = await panoramaResponse.text();
   const panelsResponse = await render("/paineis/atividade-economica");
   const panelsHtml = await panelsResponse.text();
@@ -929,7 +929,7 @@ test("usa logo horizontal e azul oficial no topo móvel", async () => {
 test("mantém o tema aberto no azul oficial e o mesmo brilho ao painel e panorama ativos", async () => {
   const response = await render("/paineis/atividade-economica");
   const html = await response.text();
-  const panoramaResponse = await render("/resumo");
+  const panoramaResponse = await render("/panorama");
   const panoramaHtml = await panoramaResponse.text();
   const stylesheet = await readFile(
     new URL("../app/globals.css", import.meta.url),

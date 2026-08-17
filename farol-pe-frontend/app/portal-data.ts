@@ -562,7 +562,7 @@ export const panels: Panel[] = [
 
 export const mainLinks = [
   { href: "/", label: "Início" },
-  { href: "/resumo", label: "Panorama Econômico" },
+  { href: "/panorama", label: "Panorama Econômico" },
   { href: "/paineis/atividade-economica", label: "Painéis dos Dados" },
   { href: "/publicacoes", label: "Publicações" },
   { href: "/sobre", label: "Sobre" },
@@ -612,7 +612,7 @@ export const summaryTable = [
 
 export const searchItems = [
   { href: "/", label: "Início" },
-  { href: "/resumo", label: "Panorama" },
+  { href: "/panorama", label: "Panorama" },
   { href: "/paineis/atividade-economica", label: "Painéis" },
   { href: "/dicionario-de-dados", label: "Download dos Dados" },
   { href: "/publicacoes", label: "Publicações" },

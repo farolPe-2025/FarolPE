@@ -16,7 +16,7 @@ instalar Node.js nesta máquina.
 ## Rotas principais
 
 - `/` — página inicial;
-- `/resumo` — panorama econômico;
+- `/panorama` — panorama econômico;
 - `/sobre` — apresentação institucional;
 - `/publicacoes` — página preparada para conteúdo futuro;
 - `/dicionario-de-dados` — catálogo dos painéis e acesso à solicitação de dados;
