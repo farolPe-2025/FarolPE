@@ -216,8 +216,9 @@ const sidebarPanelGroups = [
     slugs: [
       "estoque-de-emprego",
       "fluxo-de-emprego",
-      "outros-indicadores-de-emprego",
     ],
+    nestedLabel: "Mercado de trabalho",
+    nestedSlugs: ["pessoas-e-taxa"],
   },
 ] as const;
 

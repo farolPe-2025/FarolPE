@@ -470,7 +470,8 @@ test("organiza a navegação dos painéis e sinaliza conteúdos em preparação"
   assert.match(html, /Emprego/);
   assert.match(html, /Estoque de Emprego/);
   assert.match(html, /Fluxo de Emprego/);
-  assert.match(html, /Outros indicadores/);
+  assert.match(html, /Mercado de trabalho/);
+  assert.match(html, /Pessoas e taxa/);
   assert.match(html, /Painel em preparação/);
 
   const navigationOrder = [

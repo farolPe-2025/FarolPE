@@ -455,15 +455,17 @@ export const panels: Panel[] = [
     source: "Link a definir",
   },
   {
-    slug: "outros-indicadores-de-emprego",
+    slug: "pessoas-e-taxa",
     legacyId: "bi-outros-emprego",
-    title: "Outros indicadores de emprego",
-    shortTitle: "Outros indicadores",
+    title: "Pessoas e taxa",
+    shortTitle: "Pessoas e taxa",
     category: "Emprego",
     eyebrow: "Mercado de trabalho",
     description:
-      "Espaço reservado para novos indicadores do mercado de trabalho pernambucano.",
-    source: "Link a definir",
+      "Acompanhe indicadores de pessoas e taxas do mercado de trabalho pernambucano.",
+    source: "Microsoft Fabric",
+    embedUrl:
+      "https://app.fabric.microsoft.com/view?r=eyJrIjoiOGRiNzA3OTgtYTZjMy00N2VlLWIzYWEtNjNiZWEwMGQwYTkxIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
   },
   {
     slug: "agricultura",
