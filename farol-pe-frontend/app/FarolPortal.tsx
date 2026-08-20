@@ -203,8 +203,13 @@ const sidebarPanelGroups = [
     icon: Leaf,
     tone: "agriculture",
     slugs: ["agricultura"],
-    nestedLabel: "Pecuária",
-    nestedSlugs: ["aquicultura", "origem-animal", "rebanhos"],
+    subgroups: [
+      {
+        id: "livestock",
+        label: "Pecuária",
+        slugs: ["aquicultura", "origem-animal", "rebanhos"],
+      },
+    ],
   },
   {
     id: "employment",
@@ -213,12 +218,19 @@ const sidebarPanelGroups = [
       "Monitore a evolução do emprego, da ocupação, dos rendimentos e das condições do mercado de trabalho.",
     icon: Users,
     tone: "employment",
-    slugs: [
-      "estoque-de-emprego",
-      "fluxo-de-emprego",
+    slugs: [],
+    subgroups: [
+      {
+        id: "labor-market",
+        label: "Mercado de Trabalho",
+        slugs: ["pessoas-e-taxa", "rendimentos-do-trabalho"],
+      },
+      {
+        id: "formal-employment",
+        label: "Vínculos Formais",
+        slugs: ["estoque-de-emprego", "fluxo-de-emprego"],
+      },
     ],
-    nestedLabel: "Mercado de trabalho",
-    nestedSlugs: ["pessoas-e-taxa"],
   },
 ] as const;
 
@@ -909,26 +921,29 @@ function Sidebar({
     sidebarPanelGroups.find(
       (group) =>
         group.slugs.includes(activePanelSlug as never) ||
-        ("nestedSlugs" in group &&
-          group.nestedSlugs.includes(activePanelSlug as never)),
+        ("subgroups" in group &&
+          group.subgroups.some((subgroup) =>
+            subgroup.slugs.includes(activePanelSlug as never),
+          )),
     )?.id ?? null;
-  const defaultLivestockOpen = ["aquicultura", "origem-animal", "rebanhos"].includes(
-    activePanelSlug,
-  );
+  const activeSubgroup = sidebarPanelGroups
+    .flatMap((group) => ("subgroups" in group ? group.subgroups : []))
+    .find((subgroup) => subgroup.slugs.includes(activePanelSlug as never))?.id ??
+    null;
   const [groupPreference, setGroupPreference] = useState<{
     path: string;
     group: string | null;
   }>({ path, group: activeGroup });
-  const [livestockPreference, setLivestockPreference] = useState<{
+  const [subgroupPreference, setSubgroupPreference] = useState<{
     path: string;
-    open: boolean;
-  }>({ path, open: defaultLivestockOpen });
+    subgroup: string | null;
+  }>({ path, subgroup: activeSubgroup });
   const openGroup =
     groupPreference.path === path ? groupPreference.group : activeGroup;
-  const livestockOpen =
-    livestockPreference.path === path
-      ? livestockPreference.open
-      : defaultLivestockOpen;
+  const openSubgroup =
+    subgroupPreference.path === path
+      ? subgroupPreference.subgroup
+      : activeSubgroup;
   const [activePanoramaTopic, setActivePanoramaTopic] =
     useState<PanoramaTopicKey>("__all");
 
@@ -1196,7 +1211,9 @@ function Sidebar({
                 const GroupIcon = group.icon;
                 const groupSlugs = [
                   ...group.slugs,
-                  ...("nestedSlugs" in group ? group.nestedSlugs : []),
+                  ...("subgroups" in group
+                    ? group.subgroups.flatMap((subgroup) => subgroup.slugs)
+                    : []),
                 ];
                 const isFlyoutGroupOpen = openGroup === group.id;
                 const flyoutGroupId = `collapsed-panels-${group.id}`;
@@ -1288,7 +1305,12 @@ function Sidebar({
                   const GroupIcon = group.icon;
                   const panelCount =
                     group.slugs.length +
-                    ("nestedSlugs" in group ? group.nestedSlugs.length : 0);
+                    ("subgroups" in group
+                      ? group.subgroups.reduce(
+                          (count, subgroup) => count + subgroup.slugs.length,
+                          0,
+                        )
+                      : 0);
                   const containsActivePanel = activeGroup === group.id;
 
                   return (
@@ -1337,34 +1359,48 @@ function Sidebar({
                       {isOpen && (
                         <div className="group-children" id={childrenId}>
                           {group.slugs.map((slug) => panelButtonBySlug(slug))}
-                          {"nestedSlugs" in group && (
-                            <>
-                              <button
-                                className="subgroup-toggle"
-                                onClick={() =>
-                                  setLivestockPreference({
-                                    path,
-                                    open: !livestockOpen,
-                                  })
-                                }
-                                aria-expanded={livestockOpen}
-                                aria-controls={`sidebar-group-${group.id}-livestock`}
-                              >
-                                <span>{group.nestedLabel}</span>
-                                <ChevronRight className="nav-chevron" aria-hidden="true" />
-                              </button>
-                              {livestockOpen && (
+                          {"subgroups" in group &&
+                            group.subgroups.map((subgroup) => {
+                              const isSubgroupOpen = openSubgroup === subgroup.id;
+                              const subgroupId = `sidebar-group-${group.id}-${subgroup.id}`;
+
+                              return (
                                 <div
-                                  className="subgroup-children"
-                                  id={`sidebar-group-${group.id}-livestock`}
+                                  className="sidebar-subgroup"
+                                  key={subgroup.id}
                                 >
-                                  {group.nestedSlugs.map((slug) =>
-                                    panelButtonBySlug(slug, true),
+                                  <button
+                                    className="subgroup-toggle"
+                                    onClick={() =>
+                                      setSubgroupPreference({
+                                        path,
+                                        subgroup: isSubgroupOpen
+                                          ? null
+                                          : subgroup.id,
+                                      })
+                                    }
+                                    aria-expanded={isSubgroupOpen}
+                                    aria-controls={subgroupId}
+                                  >
+                                    <span>{subgroup.label}</span>
+                                    <ChevronRight
+                                      className="nav-chevron"
+                                      aria-hidden="true"
+                                    />
+                                  </button>
+                                  {isSubgroupOpen && (
+                                    <div
+                                      className="subgroup-children"
+                                      id={subgroupId}
+                                    >
+                                      {subgroup.slugs.map((slug) =>
+                                        panelButtonBySlug(slug, true),
+                                      )}
+                                    </div>
                                   )}
                                 </div>
-                              )}
-                            </>
-                          )}
+                              );
+                            })}
                         </div>
                       )}
                     </div>
@@ -1553,9 +1589,12 @@ function PanelPage({ panel, navigate }: { panel: Panel; navigate: Navigate }) {
         </div>
 
         <div className="empty-panel">
-          <span className="empty-beacon" aria-hidden="true">
-            <i />
-          </span>
+          <img
+            className="empty-panel-icon"
+            src="/SDEC_FAROLPE_SÍMBOLO_SITE_v2.png"
+            alt=""
+            aria-hidden="true"
+          />
           <p className="eyebrow dark">{panel.eyebrow}</p>
           <h2>Painel em preparação</h2>
           <p>

@@ -378,7 +378,7 @@ test("resume cada categoria e informa sua quantidade de painéis", async () => {
     "utf8",
   );
 
-  assert.deepEqual(counts, [5, 3, 5, 4, 3]);
+  assert.deepEqual(counts, [5, 3, 5, 4, 4]);
   assert.match(
     stylesheet,
     /\.sidebar-panel-groups \.group-icon,[\s\S]*?\.group-icon\.tone-employment \{[\s\S]*?color: #fff;/,
@@ -387,6 +387,33 @@ test("resume cada categoria e informa sua quantidade de painéis", async () => {
     stylesheet,
     /\.group-toggle \.group-summary \{[\s\S]*?font-size: 11px;[\s\S]*?line-height: 1\.5;/,
   );
+});
+
+test("estrutura Emprego em dois subgrupos e preserva o subgrupo da rota ativa", async () => {
+  const source = await readFile(
+    new URL("../app/FarolPortal.tsx", import.meta.url),
+    "utf8",
+  );
+  const dataSource = await readFile(
+    new URL("../app/portal-data.ts", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /label: "Mercado de Trabalho"[\s\S]*?"pessoas-e-taxa", "rendimentos-do-trabalho"/);
+  assert.match(source, /label: "Vínculos Formais"[\s\S]*?"estoque-de-emprego", "fluxo-de-emprego"/);
+  assert.match(source, /subgroupPreference\.path === path[\s\S]*?subgroupPreference\.subgroup[\s\S]*?: activeSubgroup/);
+  assert.match(dataSource, /shortTitle: "População e taxas"/);
+  assert.match(dataSource, /shortTitle: "Rendimento do trabalho"/);
+  assert.match(dataSource, /shortTitle: "Perfil do emprego formal"/);
+  assert.match(dataSource, /shortTitle: "Dinâmica do emprego formal"/);
+});
+
+test("usa o símbolo atual nos painéis em preparação", async () => {
+  const response = await render("/paineis/estoque-de-emprego");
+  const html = await response.text();
+
+  assert.match(html, /class="empty-panel-icon"/);
+  assert.match(html, /SDEC_FAROLPE_SÍMBOLO_SITE_v2\.png/);
 });
 
 test("mantém na busca os mesmos nomes exibidos no menu", async () => {
@@ -468,10 +495,10 @@ test("organiza a navegação dos painéis e sinaliza conteúdos em preparação"
   assert.match(html, /Produção e Renda/);
   assert.match(html, /Agropecuária/);
   assert.match(html, /Emprego/);
-  assert.match(html, /Estoque de Emprego/);
-  assert.match(html, /Fluxo de Emprego/);
-  assert.match(html, /Mercado de trabalho/);
-  assert.match(html, /Pessoas e taxa/);
+  assert.match(html, /Perfil do emprego formal/);
+  assert.match(html, /Dinâmica do emprego formal/);
+  assert.match(html, /Mercado de Trabalho/);
+  assert.match(html, /Vínculos Formais/);
   assert.match(html, /Painel em preparação/);
 
   const navigationOrder = [

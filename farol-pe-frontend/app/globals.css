@@ -1569,41 +1569,12 @@ kbd {
   line-height: 1.65;
 }
 
-.empty-beacon {
-  position: relative;
-  display: grid;
-  width: 70px;
-  height: 70px;
+.empty-panel-icon {
+  display: block;
+  width: 96px;
+  height: 96px;
   margin-bottom: 24px;
-  place-items: center;
-  border: 1px solid #cfd9e7;
-  border-radius: 50%;
-}
-
-.empty-beacon::before,
-.empty-beacon::after {
-  position: absolute;
-  width: 24px;
-  height: 2px;
-  background: var(--gold);
-  content: "";
-}
-
-.empty-beacon::before {
-  left: 3px;
-  transform: rotate(18deg);
-}
-
-.empty-beacon::after {
-  right: 3px;
-  transform: rotate(-18deg);
-}
-
-.empty-beacon i {
-  width: 12px;
-  height: 30px;
-  border-radius: 5px 5px 2px 2px;
-  background: var(--navy-700);
+  object-fit: contain;
 }
 
 /* Information and About */

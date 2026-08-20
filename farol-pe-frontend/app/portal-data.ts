@@ -436,7 +436,7 @@ export const panels: Panel[] = [
     slug: "estoque-de-emprego",
     legacyId: "bi-estoque-emprego",
     title: "Estoque de Emprego",
-    shortTitle: "Estoque de Emprego",
+    shortTitle: "Perfil do emprego formal",
     category: "Emprego",
     eyebrow: "Emprego formal",
     description:
@@ -447,7 +447,7 @@ export const panels: Panel[] = [
     slug: "fluxo-de-emprego",
     legacyId: "bi-fluxo-emprego",
     title: "Fluxo de Emprego",
-    shortTitle: "Fluxo de Emprego",
+    shortTitle: "Dinâmica do emprego formal",
     category: "Emprego",
     eyebrow: "Movimentação do emprego",
     description:
@@ -458,7 +458,7 @@ export const panels: Panel[] = [
     slug: "pessoas-e-taxa",
     legacyId: "bi-outros-emprego",
     title: "Pessoas e taxa",
-    shortTitle: "Pessoas e taxa",
+    shortTitle: "População e taxas",
     category: "Emprego",
     eyebrow: "Mercado de trabalho",
     description:
@@ -466,6 +466,17 @@ export const panels: Panel[] = [
     source: "Microsoft Fabric",
     embedUrl:
       "https://app.fabric.microsoft.com/view?r=eyJrIjoiOGRiNzA3OTgtYTZjMy00N2VlLWIzYWEtNjNiZWEwMGQwYTkxIiwidCI6ImEzMDA5OGM1LWQ1NDMtNDc2Zi04NTM4LTE3YjhlYmE0MzM4MSJ9",
+  },
+  {
+    slug: "rendimentos-do-trabalho",
+    legacyId: "bi-rendimentos-trabalho",
+    title: "Rendimento do trabalho",
+    shortTitle: "Rendimento do trabalho",
+    category: "Emprego",
+    eyebrow: "Mercado de trabalho",
+    description:
+      "Acompanhe os indicadores de rendimento do trabalho em Pernambuco.",
+    source: "Link a definir",
   },
   {
     slug: "agricultura",
